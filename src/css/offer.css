@@ -1,0 +1,58 @@
+
+.offer  {
+	/* max-width: 400px;	 */
+}
+.offer .count  {
+	font-style: italic;
+	font-size: small;
+	margin-top: .3rem;
+	margin-left:.2rem;
+}
+
+
+.offer .count span {
+	/* color:  #fa0114;   */
+	font-weight: 700;
+}
+.offer .form-row {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.offer .total {
+	color: #2bbb19;
+	font-weight: 700;
+}
+
+.offer-total-row {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.offer-total-row div {
+	margin-right: 0;
+	/* margin-bottom: .3rem; */
+}
+
+.offer .btn {
+	border-radius: 9999px !important;
+	width: 80%;
+	margin: 0 auto;
+}
+
+.offer .btn svg {
+	margin-top: .1rem;
+	
+}
+.offer .submitting {
+	cursor: not-allowed;
+	opacity: .7;
+	
+}
+.offer .qty-msg {
+	text-align: center;
+}
+.offer .price-msg {
+	text-align: center;
+}

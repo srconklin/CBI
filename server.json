@@ -1,0 +1,16 @@
+{
+    "follow":true,
+    "web":{
+        "http":{
+            "port":"63707"
+        },
+        "rewrites":{
+            "enable":true
+        }
+    },
+    "rules":[
+        "set(attribute='%{o,Access-Control-Allow-Origin}', value='http://localhost:3000')",
+        "set(attribute='%{o,Access-Control-Allow-Headers}', value= 'origin, x-requested-with, content-type')",
+        "set(attribute='%{o,Access-Control-Allow-Methods }', value='PUT, GET, POST, DELETE, OPTIONS')"
+    ]
+}

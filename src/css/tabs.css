@@ -1,0 +1,68 @@
+
+.tabs  {
+   min-width: 1px;
+}
+.tabs > ul {
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    flex-direction: column;
+    display: flex;
+    border-bottom: 1px solid   #c2c3c5;
+  
+}
+
+.tabs > ul li {
+  margin-bottom: 0.5rem;
+  text-align: center;
+ }
+
+
+.tabs > ul li a {
+    text-transform: uppercase;
+    background-color: white;
+    display: block;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+   
+}
+
+.tabs .activeBtn {
+    /* color:white; */
+    color: #fa0114;
+    border: 1px solid  #c2c3c5;
+    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem; 
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    background-color:#f7f7f7
+}
+
+.tabs .inActiveBtn { 
+    color: #4b5563;
+}
+
+.tabs .inActiveBtn:hover { 
+  color: rgba(156, 163, 175, 1.0);
+}
+
+.tabcontent {
+    /* margin-left: 0.75rem;
+    margin-top: 0.5rem;
+     */
+
+   
+    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem; 
+    background-color: #f7f7f7;
+    padding: 1rem;
+    height: 100%;
+    min-height: 20rem;
+    border-left: 1px solid #c2c3c5;
+    border-right: 1px solid #c2c3c5;
+    border-bottom: 1px solid #c2c3c5;
+    text-align: left;
+}

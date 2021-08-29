@@ -1,0 +1,398 @@
+
+/*****************
+facet placeholders
+******************/
+
+#mfr {
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+  
+   }
+  
+   #searchbox {
+	/* margin-bottom: 2rem; */
+	/* height: 64px; */
+	width: 80vw;
+  }
+  
+  #searchbox.searchbox-abbr {
+	width: 40vw;
+	display:none;
+  }
+  
+  #stats, #statsfilter {
+	font-weight: bold;
+	font-style: italic;
+	margin-right: 1rem;
+  }
+  
+  /* #sort-by {
+	margin-right: 1rem;
+  } */
+   
+  #clear-refinements {
+	/* margin-right:2rem; */
+	display: flex;
+    justify-content: flex-end; 
+	
+  } 
+  
+  .refinement-container {
+	overflow-y: auto;
+    height: 90%;
+    padding-right: .5rem;
+  }
+
+  #pagination {
+	margin: 2rem auto;
+	text-align: center;
+  }
+  
+  .clear-filters {
+	align-items: center;
+	display: flex;
+	margin-bottom: 0.5rem;
+  }
+  
+  /* #clear-refinements .btn-small {
+	font-weight: 500;
+  } */
+  
+  /********************* 
+  breadcrumb
+*********************/
+  
+.breadcrumb {
+	/* padding: .5rem 2rem .5rem 2rem; */
+	/* background-color: #ffeb00; */
+	 /* background-color: #e5e7eb;  */
+	 /* background-color: #eceef3; */
+	 /* display:flex; */
+	 /* align-items: center; */
+	
+	 /* border-bottom:  solid 1px #e5e7eb; */
+	/* border-color: rgba(209, 213, 219, 1.0); */
+	/* box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px */
+  }
+
+  .ais-Breadcrumb {
+	/* padding: .5rem 2rem .5rem 2rem; */
+	padding: 0 0 0 0;
+	/* overflow-y: auto; */
+	padding-bottom: .5rem;
+  }
+
+  .ais-Breadcrumb-link {
+	font-size: .9rem;  
+	text-decoration: underline !important;
+  }
+
+  .ais-Breadcrumb-item {
+	font-size: .9rem;
+	display: inline;
+  }
+
+  .noCrumbs {
+	  display: none;
+  }
+
+ .bc-container {
+	position: relative;
+  } 
+  
+  .togglebc {
+	position: absolute;
+	top: 7px;
+	left: 13px;
+	bottom: 1px;
+	visibility: hidden;
+  }
+  
+  .togglebc-closed-pos {
+	top: 8px;
+  }
+
+
+  
+/********************* 
+ hit results article
+*********************/
+
+ .hit {
+	/* color: #21243d; */
+	font-size: 14px;
+	line-height: 18px;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+  
+  }
+  
+  .headline {
+	font-size: 14px;
+  }
+  
+  /**********
+	hit header 
+  ************/
+  
+  
+  /* image */
+  .hit-image {
+	align-items: center;
+	display: flex;
+	height: 174px; 
+	justify-content: center;
+	margin: auto;
+	/* width: 174px; */
+	width: 90%;
+	border-bottom: 1px solid rgba(229, 231, 235, 1.0);
+	/* box-shadow: 0 2px 5px 0 #e3e5ec; */
+	padding: .5rem;
+  }
+  
+  .hit-image img {
+	height: auto;
+	max-height: 100%;
+	max-width: 100%;
+  }
+  
+  .hit-svg {
+	width: 1rem;
+	height: 1rem;
+	color: rgb(134 139 146);
+	float: right;
+
+  } 
+  /*******
+   hit main 
+   *******/
+  .hit main {
+	flex-grow: 1; 
+	margin-top: .5rem;
+  }
+  
+  
+  /* detail */
+  .hit-detail {
+	overflow-wrap: break-word;
+	word-break: break-word;
+  }
+  
+   .category {
+	color: #192ebb;
+	font-size: 12px;
+	font-weight: 800;
+	line-height: 1;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	opacity: 0.8;
+	text-transform: uppercase;
+  }
+  
+  .hit-detail .description {
+	 margin-top: 3px;
+	 overflow: hidden;
+	 max-height: 6.0rem;
+	 min-height: 4.0rem;
+  }
+  
+  /*******
+   hit footer
+   *******/
+  .hit footer {
+	flex-grow: 0;
+	line-height: 19px;
+  }
+  
+  .hit-mfr span {
+	font-weight: 600;
+  }
+  
+  .hit-model {
+	overflow: hidden; 
+	text-overflow: ellipsis;
+	white-space: nowrap;
+  }
+  
+  .hit-model span {
+	font-weight: 600;
+	overflow: hidden; 
+	text-overflow: ellipsis;
+	white-space: nowrap;
+  }
+  
+  .hit-price {
+	/* margin-top:  .5rem; */
+	letter-spacing: 0.05em;
+	color: rgba(75, 85, 99, 1.0);
+	font-weight: 600;
+	color: #fa0114;
+  }
+  
+  .hit-qty {
+	letter-spacing: 0.05em;
+   
+  }
+  
+  /* footer */
+  .hit-footer {
+	font-weight: 600;
+	display: flex;
+	justify-content: space-between;
+	/* padding-bottom: 0.5rem; */
+	padding-top: 0.5rem;
+	flex-wrap: wrap;
+	border-top: 1px solid rgba(229, 231, 235, 1.0);
+	font-size: 0.875rem;
+	line-height: 1.25rem;
+	margin-top: .5rem;
+  }
+  
+  
+  .hit-footer .itemno {
+	color: rgba(107, 114, 128, 1.0);
+  }
+  
+  /**************************
+   algolia theme overrides
+   *************************/
+  
+   .ais-SearchBox-loadingIndicator, .ais-SearchBox-reset, .ais-SearchBox-submit { 
+	 z-index: 0;
+   }
+  
+  
+   .ais-RefinementList-showMore, .ais-Pagination-item--selected .ais-Pagination-link {
+	background-color: #fa0114;
+	border-color: #fa0114;
+  }
+  
+  .ais-ClearRefinements-button:focus, .ais-ClearRefinements-button:hover, .ais-CurrentRefinements-reset:focus, .ais-CurrentRefinements-reset:hover, .ais-GeoSearch-redo:focus, .ais-GeoSearch-redo:hover, .ais-GeoSearch-reset:focus, .ais-GeoSearch-reset:hover, .ais-HierarchicalMenu-showMore:focus,  .ais-InfiniteHits-loadMore:focus, .ais-InfiniteHits-loadMore:hover, .ais-InfiniteHits-loadPrevious:focus, .ais-InfiniteHits-loadPrevious:hover, .ais-InfiniteResults-loadMore:focus, .ais-InfiniteResults-loadMore:hover, .ais-Menu-showMore:focus, .ais-Menu-showMore:hover  {
+	background-color: transparent;
+	opacity: .7;
+	cursor: pointer;
+  }
+  
+  .ais-RefinementList-showMore:hover {
+	background-color: #fa0114;
+	opacity: .7;
+  }
+  .ais-SortBy-select {
+	padding: .2rem 2rem .2rem .3rem;
+	border: none;
+  }
+  .ais-SortBy-select, .ais-SortBy-option {
+	font-size: .9rem;
+  
+  }
+  .ais-Panel-header {
+	color: #fa0114;
+	font-size: 1rem;
+	display: flex;
+    align-items: center;
+    justify-content: space-between;
+	background-color: #f1f1f1;
+    padding: .5rem;
+    border-radius: 4px;
+	border-bottom: none;
+  }
+  
+
+  .ais-Panel--collapsible .ais-Panel-collapseButton {
+	  position: unset;
+  }
+  
+  /* .ais-SearchBox-input:focus {
+	outline-color: #FF0000;
+  } */
+  
+  .ais-SearchBox-input {
+	padding-left: 2.1rem;
+	padding-right: 1.5rem;
+	padding-top: 0.75rem;
+	padding-bottom: 0.75rem;
+	line-height: 1.25;
+	color: rgba(55, 65, 81, 1.0);
+  
+  }
+  
+  .ais-SearchBox-submit {
+	color:  #192ebb;
+  }
+  
+  .ais-Panel-collapseButton {
+	font-size: 2rem;
+	  color: rgb(134 139 146);
+	  /* top: -11px; */
+	  margin-top: -11px;
+  }
+  
+  /* Hits */
+  .ais-Hits-item {
+	border: 1px solid #e5e7eb;
+	box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+	border-radius: 0.5rem;
+	width: 100%;
+    /* max-width: 22rem; */
+	/* width: calc(33% - 1rem); */
+	/* max-width: 20rem; */
+	/* min-width: 18rem; */
+	/* margin-left: 0rem; */
+	margin:0
+  
+  }
+  
+  .ais-Hits-list {
+	/* justify-content: center;
+	margin-left: 0 */
+	margin:0;
+	display: grid;
+	grid-gap: 20px;
+	justify-content: center;
+	grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+  
+  .ais-HierarchicalMenu-showMore {
+  
+	margin-top: .5rem;
+  }
+  
+  .ais-HierarchicalMenu-link, .ais-Menu-link, .ais-Pagination-link, .ais-RatingMenu-link {
+	color: #000066;
+  }
+  
+  .ais-Breadcrumb-link {
+	color: #444;
+  }
+
+  .ais-Breadcrumb-link:hover, .ais-HierarchicalMenu-link:hover, .ais-Menu-link:hover, .ais-Pagination-link:hover, .ais-RatingMenu-link:hover {
+	color: #FF0000
+  }
+  
+  .ais-Breadcrumb, .ais-ClearRefinements, .ais-CurrentRefinements, .ais-GeoSearch, .ais-HierarchicalMenu, .ais-Hits, .ais-HitsPerPage, .ais-InfiniteHits, .ais-InfiniteResults, .ais-Menu, .ais-MenuSelect, .ais-NumericMenu, .ais-NumericSelector, .ais-Pagination, .ais-Panel, .ais-PoweredBy, .ais-RangeInput, .ais-RangeSlider, .ais-RatingMenu, .ais-RefinementList, .ais-Results, .ais-ResultsPerPage, .ais-SearchBox, .ais-SortBy, .ais-Stats, .ais-ToggleRefinement {
+	color: #444;
+  }
+  
+  .ais-Breadcrumb-separator {
+	margin-right: .2rem;
+	margin-left: 0;
+  }
+  
+  .ais-Breadcrumb-link {
+	margin-right: .3rem;
+  }
+  
+  .ais-Breadcrumb-list {
+	/* flex-wrap: nowrap;
+	flex-direction: row;
+	align-items: flex-start; */
+	display: block;
+	line-height: 1.35rem;
+	/* white-space: nowrap; */
+  }
+  
+
+  .ais-ClearRefinements-button--disabled {
+	  display: none;
+  }
