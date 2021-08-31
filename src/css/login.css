@@ -76,6 +76,13 @@
 	opacity: .7;
  }
 
+ .snap {
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+}
+.snap > div {
+    scroll-snap-align: start;
+}
  
 /* 
   @media (min-width: 768px) {

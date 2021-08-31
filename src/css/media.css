@@ -314,6 +314,9 @@ media queries
 		width: 24rem;
 		height: 24rem;
 	}
+	.carousel-slider {
+        width: 24rem;
+    }
 
 	.dashboard {
 		justify-content: flex-end;

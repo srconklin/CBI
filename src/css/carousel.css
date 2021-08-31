@@ -56,6 +56,28 @@
     background-color:#f3f5f9;
 	height: 14rem;
 }
+ .carousel-slider {
+    overflow-x: scroll;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 75ms;
+}
+
+.carousel-slide,
+.carousel-slider {
+    width: 14rem;
+    display: flex;
+}
+.carousel-slide {
+    height: 14rem;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    background-color: #f3f5f9;
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+    position: relative;
+}
 
 .carousel-slide img { 
 	object-fit: cover;
@@ -69,9 +91,11 @@
 	display: flex;
 	flex-flow: wrap;
 }
+.carousel-pager {
+    font-weight: 700;
+}
 
-
-.carousel-nav-btn {
+/* .carousel-nav-btn {
 		transition-duration: 200ms;
 		transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 		transition-property: background-color, border-color, color, fill, stroke;
@@ -90,19 +114,19 @@
 		border-radius: 10px;
 		background-color: transparent;
 		border: 1px solid rgba(209, 213, 219, 1.0);
-}
-
+} */
+/* 
 .carousel-nav-btn-active {
 	background-color: #fa0114; 
 }
 
 .carousel-nav-btn:hover {
 	opacity: .7;
- }
+ } */
 
 
 /* IMAGE MODAL FULLSCREEN WITH ZOOM */
-.carousel-modal {
+/* .carousel-modal {
 	z-index: 50;
 	width: 100%;
 	top: 0px;
@@ -116,6 +140,13 @@
 	align-items: center;
 	display: flex;
 	background-color: rgba(8, 31, 49, 1.0);
+} */
+
+.carousel-modal,
+.carousel-modal-main {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
 }
 
 .carousel-modal-main {
@@ -127,12 +158,23 @@
 	flex-direction: column;
 	display: flex;
 }
-.carousel-modal-main .zoom {
+/* .carousel-modal-main .zoom {
 	color: rgba(255, 255, 255, 1.0);
 	outline: 2px solid transparent;
 	outline-offset: 2px;
 	float: left;
 	color: white;
+} */
+
+.carousel-modal-main .zoom {
+    float: left;
+}
+
+.carousel-modal-main .close,
+.carousel-modal-main .zoom {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    color: #fff;
 }
 
 .carousel-modal-main .close {
@@ -142,6 +184,10 @@
 	float: right;
 	color: white;
 }	
+
+.carousel-modal-main .close {
+    float: right;
+}
 
 .carousel-modal-main .zoomed {
 	color: black;
