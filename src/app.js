@@ -302,13 +302,31 @@ Spruce.store('tabs', () => {
 })
 
 Spruce.store('carousel', () => {
+  var e = document.getElementById("slider");
+  // return {
+  //   direction: 'leftoright', 
+  //   activeSlide: 0, 
+  //   slides: [], 
 
+  // }
   return {
-    direction: 'leftoright', 
-    activeSlide: 0, 
-    slides: [], 
-
-  }
+    slides: [],
+    active: 0,
+    pageX: 0,
+    pageEndX: 0,
+    mousedown: function(e) {
+        e.stopPropagation(),
+        this.pageX = e.pageX
+    },
+    mouseup: function(t) {
+        t.stopPropagation();
+        var r = t.pageX - this.pageX;
+        r < -3 ? e.scrollLeft = e.scrollLeft + e.scrollWidth / this.slides.length : r > 3 && (e.scrollLeft = e.scrollLeft - e.scrollWidth / this.slides.length)
+    },
+    mousemove: function(e) {
+        e.preventDefault()
+    }
+}
 })
 // showItem details in modal
 Spruce.store('imodal', () => {

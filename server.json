@@ -9,7 +9,7 @@
         }
     },
     "rules":[
-        "set(attribute='%{o,Access-Control-Allow-Origin}', value='http://localhost:3000')",
+        "set(attribute='%{o,Access-Control-Allow-Origin}', value='http://sandbox.dynaprice.com')",
         "set(attribute='%{o,Access-Control-Allow-Headers}', value= 'origin, x-requested-with, content-type')",
         "set(attribute='%{o,Access-Control-Allow-Methods }', value='PUT, GET, POST, DELETE, OPTIONS')"
     ]

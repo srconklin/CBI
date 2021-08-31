@@ -9,12 +9,14 @@
 
   <!--- <link rel="manifest" href="/dist/manifest.webmanifest"> --->
   <link rel="shortcut icon" href="/images/favicon.ico">
+  <!--- <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/modern-normalize@1/modern-normalize.min.css,npm/suitcss-base@5/lib/base.min.css,npm/instantsearch.css@7/themes/algolia-min.min.css"> --->
+  <!--- <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/modern-normalize@1,npm/suitcss-base@5/index.min.css,npm/instantsearch.css@7/themes/algolia-min.min.css"> --->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/modern-normalize@1/modern-normalize.min.css,npm/suitcss-base@5/lib/base.min.css,npm/instantsearch.css@7/themes/algolia-min.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17/build/css/intlTelInput.min.css">
- <!--- prod --->
- <link rel="stylesheet" href="/dist/styles.66baca2b.css"> 
  <!--- dev --->
- <!--- <link rel="stylesheet" href="/dist/styles.css">   --->
+ <link rel="stylesheet" href="/dist/styles.css">
+ <!--- prod --->
+ <!--- <link rel="stylesheet" href="/dist/index.7ee60d53.css">  --->
   <title>CBI</title>
 </head>
 
@@ -73,9 +75,12 @@
   </footer>
 
  <!--- <script src="https://cdn.jsdelivr.net/combine/npm/algoliasearch@4/dist/algoliasearch.umd.min.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/@ryangjchandler/spruce@2.x.x/dist/spruce.umd.js,npm/alpinejs@2,npm/intl-tel-input@17/build/js/intlTelInput.min.js"></script>  --->
-<script src="https://cdn.jsdelivr.net/combine/npm/instantsearch.js@4.17.0,npm/algoliasearch@4.9.0,npm/@ryangjchandler/spruce@2.x.x/dist/spruce.umd.js,npm/alpinejs@2,npm/intl-tel-input@17/build/js/intlTelInput.min.js"></script> 
-  <!--- dev --->
- <script src="/dist/app.6b441cd7.js"></script>   
+<!--- <script src="https://cdn.jsdelivr.net/combine/npm/instantsearch.js@4.17.0,npm/algoliasearch@4.9.0,npm/@ryangjchandler/spruce@2.x.x/dist/spruce.umd.js,npm/alpinejs@2,npm/intl-tel-input@17/build/js/intlTelInput.min.js"></script>  --->
+
+ <script src="https://cdn.jsdelivr.net/combine/npm/algoliasearch@4,npm/instantsearch.js@4,npm/@ryangjchandler/spruce@2,npm/alpinejs@2,npm/intl-tel-input@17/build/js/intlTelInput.min.js"></script>
+ <!--- dev --->
+ <script src="/dist/app.js" type="module" ></script>
+    
   <!--- prod --->
  <!--- <script src="/dist/app.0e2fd435.js"></script>  --->
 </body>
