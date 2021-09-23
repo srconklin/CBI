@@ -41,7 +41,7 @@
 			index.setSettings(settings={ 
 				'searchableAttributes' : ['headline', 'description', 'category', 'mfr', 'model', 'price', 'keywords'],
 				'customRanking': ['desc(popular)', 'desc(isFeatured)',  'desc(unixTimeStamp)'],
-				'attributesForFaceting' : ['searchable(categories.lvl0)', 'searchable(categories.lvl1)',  'searchable(categories.lvl2)', 'searchable(mfr)'],
+				'attributesForFaceting' : ['searchable(categories.lvl0)', 'searchable(categories.lvl1)',  'searchable(categories.lvl2)',  'searchable(categories.lvl3)',  'searchable(categories.lvl4)',  'searchable(categories.lvl5)', 'searchable(mfr)'],
 				'replicas' : [
 					'recently_added'
 				]

@@ -114,6 +114,7 @@
   
   const stateMapping = {
 	stateToRoute(uiState) {
+		
 		const indexUiState = uiState['cbi'] || {};
 	  // refer to uiState docs for details: https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
 	  return {
@@ -126,6 +127,7 @@
 	},
   
 	routeToState(routeState) {
+		//console.log('routeToState', routeState);
 	  // refer to uiState docs for details: https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
 	  return {
 		// eslint-disable-next-line camelcase

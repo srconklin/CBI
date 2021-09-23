@@ -2,10 +2,7 @@
 <cfsetting requesttimeout="240" />
 <cfsetting showDebugOutput = "no" enablecfoutputonly="true" >
 <cfparam name="url.itemno" default="" />
-
-
-<cfset items = [] /> 
-<cfset cacheMenu = {} /> 
+<cfset vtid = 1546 />
 
 <cfscript>
 	string function stripCRLFAndMultipleSpaces(required string theString) {
@@ -15,10 +12,14 @@
 	}
 </cfscript>
 
+<cfset items = [] /> 
+<cfset cacheMenu = {} /> 
+
+
 <cffunction name="getMenus">
 	<cfargument name="classTID" required="true" type="numeric" />
 	<cfargument name="MenuID" required="false"  default="" type="string" />
-	<cfargument name="lvlThreshold" required="false" default="4" type="numeric" />
+	<cfargument name="lvlThreshold" required="false" default="7" type="numeric" />
 	<cfargument name="delimeter" required="false" default=">" type="string" />
 	<cfquery name="qry" datasource="dp_cat" >
 
@@ -28,7 +29,7 @@
 			-- Anchor member
 			SElECT oh.TID, oh.lnm, oh.MenuID, oh.ParentMenuID, oh.lvl, left(oh.MenuID, 3) as base
 			FROM [dp_cat].[dbo].[OpsHierarchy2] oh
-			WHERE  oh.vtid = 63160  
+			WHERE  oh.vtid = #variables.vtid#
 			and oh.tid = #arguments.classTID#
 			<cfif len(arguments.MenuID)>
 				and ParentMenuID = '#arguments.MenuID#'
@@ -40,12 +41,12 @@
 			SELECT o.TID,o.lnm, o.MenuID, o.ParentMenuID, o.lvl, cte.base 
 			FROM [dp_cat].[dbo].[OpsHierarchy2] o
 			INNER JOIN cte_bredcrumb cte on cte.ParentMenuID =  o.MenuID
-			WHERE  o.vtid = 63160  and o.lvl > 0 
+			WHERE  o.vtid = #variables.vtid#  and o.lvl > 0 
 		)
 
 		SELECT MenuID, lnm, base, lvl
 		FROM cte_bredcrumb 
-		where lvl < #arguments.lvlThreshold#
+		--where lvl < #arguments.lvlThreshold#
 		order by base, lvl
 
 		-- select base,
@@ -87,7 +88,7 @@
 
 	geo.citySnm, geo.stSnm, geo.CySnm
 	FROM Items I WITH (NOLOCK)
-	INNER JOIN OpsClasses C on C.VTID=63160 AND C.classTID=I.dataTID AND C.vizPagetop <= 0
+	INNER JOIN OpsClasses C on C.VTID=#vtid# AND C.classTID=I.dataTID AND C.vizPagetop <= 0
 	INNER JOIN CoVenues VP ON VP.VTID=I.VTID
 	LEFT JOIN ItemsImages II on II.ItemNo=I.Itemno  AND II.ArchDt IS NULL 
 	OUTER APPLY dbo.getGeoData(I.LLocGID,I.LStPGID,I.LCyGID) as geo
@@ -98,8 +99,13 @@
 	AND I.IVTID=108 AND (I.vizPub>=9 OR (I.PNo=0 AND 9 <= VP.viz))  AND (I.Qty>0 OR I.inAuction=1 OR 0 >= 3)  AND (I.Qty>0 OR I.OfferBid=1 OR I.inAuction>0 ) AND I.OfferBid=0
 	ORDER BY I.DataTID, I.Itemno
 		
-  </cfquery>
+</cfquery>
 	
+<cfdirectory name="datadir" directory="#expandpath('../data')#">
+<cfloop query="datadir">
+	<cfset cffile_file = "#expandpath('../data')#/#name#">
+	<cffile action="delete" file="#cffile_file#">
+</cfloop>
 
 <cfoutput query="getItem" group="itemno" >
 
@@ -145,7 +151,7 @@
 		<cfset AllowVendorAliases = 0>
 		<cfsavecontent variable="specs">
 			<table border="0" cellpadding="2">
-			<cfinclude template="#variables.DescrTemplateDir#iformC.cfm">
+			<cfinclude template="#variables.DescrTemplateDir#iformC.cfm"> 
 			</table>
 		</cfsavecontent>
 		<cfset specs = #trim(REReplaceNoCase(specs,'(&nbsp;|<img src="/dpimages/s.gif" width=1 height=1>|valign="?top"?|<!-- (.+?) -->)', ' ','All'))#>

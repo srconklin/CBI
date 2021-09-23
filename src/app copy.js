@@ -54,13 +54,14 @@ window.formatCurrency = (val, blur) => {
     }
 }
 
-import { data } from 'autoprefixer';
+// Import of the Dropdown.js file
+import { createDropdown } from './js/dropdown';
 import searchRouting from './js/search-routing';
 
 /************************ 
 algolia instantsearch
 **********************/
-
+let rootpath;
 const algoliaClient = algoliasearch(
   'S16PTK744D',
   'de0e3624732a96eacb0ed095dd52339c'
@@ -82,7 +83,6 @@ const searchClient = {
         
         document.getElementById('home').style.display = 'none'
         document.getElementById('algolia').classList.add('show');
-        
       // prevent results (save $$$) and show landing page
       } else {
 
@@ -110,7 +110,53 @@ const search = instantsearch({
   indexName: 'cbi',
   searchClient,
   routing: searchRouting,
+
+  // searchFunction(helper) {
+  //  // console.log('helper', helper);
+  //   const state= helper.state;
+  //   // rootpath = state.hierarchicalFacetsRefinements['categories.lvl0'][0];
+  //   //console.log(rootpath);
+  //   // if (helper.state.query) {
+  //   //   helper.search();
+  //   // }
+  //   helper.search();
+  // }
+  // onStateChange({ uiState, setUiState }) {
+  //    // uiState.cbi.hasOwnProperty('hierarchicalMenu') ? document.getElementById('togglebc').style.visibility = 'visible' : document.getElementById('togglebc').style.visibility = 'hidden';
+  //   console.log('uiState', uiState);
+  //    setUiState(uiState);
+  // }
+
 });
+
+
+function middleware({ instantSearchInstance }) {
+  return {
+    
+    // subscribe() {
+    //  //  console.log('subscribe', instantSearchInstance);
+    //   const rootpath = instantSearchInstance.helper.state.hierarchicalFacetsRefinements.hasOwnProperty('categories.lvl0') ? instantSearchInstance.helper.state.hierarchicalFacetsRefinements['categories.lvl0'][0] : '';
+
+    //  //instantSearchInstance.removeWidgets([HMWithPanel]);
+    //   instantSearchInstance.addWidgets([
+
+    //     HMWithPanel({
+    //       container: '#categories',
+    //       attributes: [
+    //         'categories.lvl0',
+    //         'categories.lvl1',
+    //         'categories.lvl2'
+    //       ],
+    //       rootPath: rootpath,
+    //       showParentLevel: false,
+    //       limit:15,
+    //               // sortBy: ['count:desc'],
+    //     })
+
+    //   ])
+    // }
+  }
+}
 
 // widgets
 const refinementListWithPanel =  instantsearch.widgets.panel({
@@ -120,125 +166,22 @@ const refinementListWithPanel =  instantsearch.widgets.panel({
   },
 })(instantsearch.widgets.refinementList);
 
-
-
-// Create the render function
-const renderList = ({ items, createURL }) =>  {
-  if (!items) return '';
-  
-  const findChildren = (arr, nest=0) => {
-    console.log(arr);
-    for (const item of arr) {
-      if (item.isRefined ) {
-        if (item.data) 
-          return findChildren(item.data,1);
-      } 
-      else if (nest === 1)  {
-        return arr;
-      } 
-  }
-}
-const childItems = findChildren(items);
-if (!childItems) return '';
-
-return `
-  <ul class="ais-HierarchicalMenu-list">
-    ${childItems
-      .map(
-        item => `
-          <li class="ais-HierarchicalMenu-item">
-            <div>
-                <a href="${createURL(item.value)}"
-                  data-value="${item.value}"
-                  class="ais-HierarchicalMenu-link">
-                    <span class="ais-HierarchicalMenu-label">${item.label}</span>
-                    <span class="ais-HierarchicalMenu-count">${item.count}</span>              
-                </a>
-            </div>
-          </li>
-        `
-      )
-      .join('')}
-  </ul>
-`;
-}
-
-
-
-const renderHierarchicalMenu = (renderOptions, isFirstRender) => {
-  const {
-    items,
-    isShowingMore,
-    canRefine,
-    refine,
-    toggleShowMore,
-    createURL,
-    widgetParams,
-  } = renderOptions;
-
-  // const rootElem = document.querySelector(widgetParams.container);
-
-  if (isFirstRender) {
-    const panel = `
-      <div class="ais-Panel ais-Panel--collapsible">
-      <div class="ais-Panel-header">
-        <span>Categories</span>
-      </div>
-      <div id="catpanel" class="ais-Panel-body">
-        <div class="ais-HierarchicalMenu"></div>
-      </div>
-    </div>`;
-    document.querySelector(widgetParams.container).innerHTML = panel;
-    // const list = document.createElement('div');
-    // list.className = "ais-HierarchicalMenu";
-    // document.querySelector("#catpanel").appendChild(list);
-  }
-
-
-  const childItems = renderList({ items, createURL });
-  
-  if (!childItems) 
-    document.querySelector(widgetParams.container).style.display = 'none';
-    
-  else
-  {
-
-      const panel = `
-      <div class="ais-Panel ais-Panel--collapsible">
-      <div class="ais-Panel-header">
-        <span>Categories</span>
-      </div>
-      <div id="catpanel" class="ais-Panel-body">
-        <div class="ais-HierarchicalMenu">${childItems}</div>
-      </div>
-    </div>`;
-    document.querySelector(widgetParams.container).innerHTML = panel;
-    const hm = document.querySelector("#catpanel > .ais-HierarchicalMenu");
-    //hm.innerHTML = childItems;
-    [...hm.querySelectorAll('a')].forEach(element => {
-      element.addEventListener('click', event => {
-        event.preventDefault();
-        const anchor = event.target.closest('a');
-        refine(anchor.dataset.value);
-      });
-    });
-    document.querySelector(widgetParams.container).style.display = 'block';
-
-  }
-};
-
-// Create the custom widget
-const customHierarchicalMenu = instantsearch.connectors.connectHierarchicalMenu(
-  renderHierarchicalMenu
-);
-
 const HMWithPanel =  instantsearch.widgets.panel({
   collapsed: true,
+  //dispose(){},
   templates: {
     header: `Categories`,
   },
 })(instantsearch.widgets.hierarchicalMenu);
 
+// Creation of the refinementListDropdown widget
+const categoriesDropdown = createDropdown(
+  instantsearch.widgets.hierarchicalMenu,
+  {
+    closeOnChange: true,
+    buttonText: 'Categories'
+  }
+)
 
 const searchbox =  instantsearch.widgets.searchBox({
   container: '#searchbox',
@@ -282,9 +225,6 @@ if(document.getElementById('breadcrumb')) {
           'categories.lvl0',
           'categories.lvl1',
           'categories.lvl2',
-          'categories.lvl3',
-          'categories.lvl4',
-          'categories.lvl5'
         ],
       
       }),
@@ -325,34 +265,27 @@ if(document.getElementById('breadcrumb')) {
 
       }),
       
-      customHierarchicalMenu({
+      HMWithPanel({
         container: '#categories',
         attributes: [
           'categories.lvl0',
           'categories.lvl1',
-          'categories.lvl2',
-          'categories.lvl3',
-          'categories.lvl4',
-          'categories.lvl5'
+          'categories.lvl2'
         ],
         showParentLevel: false,
-        //limit: 15
+        limit:15,
+                // sortBy: ['count:desc'],
       }),
-      // HMWithPanel({
-      //   container: '#categories',
-      //   attributes: [ 
-      //     'categories.lvl0',
-      //     'categories.lvl1',
-      //     'categories.lvl2',
-      //     'categories.lvl3',
-      //     'categories.lvl4',
-      //     'categories.lvl5'
-      //   ],
-      //   showParentLevel: false,
-      //   //limit:15,
-      //   // sortBy: ['count:desc'],
-      // }),
 
+      categoriesDropdown({
+        container: '#thecat',
+        attributes: [
+          'categories.lvl0',
+          'categories.lvl1',
+          'categories.lvl2'
+        ]
+
+      })
 
       instantsearch.widgets.stats({
         container: '#stats',
@@ -434,6 +367,9 @@ if(document.getElementById('breadcrumb')) {
 }
 
 search.start();
+
+// Use your middleware function
+//search.use(middleware);
 
 /*****************
  Spruce Stores

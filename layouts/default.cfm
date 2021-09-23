@@ -14,9 +14,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/modern-normalize@1/modern-normalize.min.css,npm/suitcss-base@5/lib/base.min.css,npm/instantsearch.css@7/themes/algolia-min.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17/build/css/intlTelInput.min.css">
  <!--- dev --->
- <link rel="stylesheet" href="/dist/styles.css">
+ <!--- <link rel="stylesheet" href="/dist/styles.css"> --->
  <!--- prod --->
- <!--- <link rel="stylesheet" href="/dist/index.7ee60d53.css">  --->
+ <link rel="stylesheet" href="/dist/index.c1362ebd.css">
   <title>CBI</title>
 </head>
 
@@ -28,6 +28,13 @@
 		#view( 'common/fragment/header', { "route" =  getItem() } )#
 	</cfoutput>
 
+  <cfoutput>
+    #view( 'common/fragment/megamenu')#
+   </cfoutput>
+   <!--- <cfoutput>
+    #view( 'common/fragment/megamenu')#
+   </cfoutput>
+    --->
 
   <main class="main" x-data="{ blurred: false }"  @blur-bg.window="$event.detail?blurred = true:blurred=false;" :class="{ 'blur-bg': blurred }">
 	<cfoutput>#body#</cfoutput>
@@ -79,10 +86,11 @@
 
  <script src="https://cdn.jsdelivr.net/combine/npm/algoliasearch@4,npm/instantsearch.js@4,npm/@ryangjchandler/spruce@2,npm/alpinejs@2,npm/intl-tel-input@17/build/js/intlTelInput.min.js"></script>
  <!--- dev --->
- <script src="/dist/app.js" type="module" ></script>
+ <!--- <script src="/dist/app.js" type="module" ></script> --->
     
   <!--- prod --->
- <!--- <script src="/dist/app.0e2fd435.js"></script>  --->
+  <script src="/dist/index.04bf21d8.js" type="module"></script>
+  <script src="/dist/index.e62b8022.js" nomodule="" defer></script>
 </body>
 
 </html>

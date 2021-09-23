@@ -1,2 +1,3 @@
 
 docker-compose -f docker-compose.yml -f docker-compose-mssql.yml up 
+sudo docker cp ./build/mssql/dp-cat-9-15.bak cbi_mssql_1:/var/backups

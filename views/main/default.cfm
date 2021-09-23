@@ -19,6 +19,12 @@
 
 <!--- </div> --->
 
+<div id="home">
+  <h1>Hello There!</h1>
+  <p>Welcome to the CBI online</p>
+</div>
+
+<div id="algolia">
 <!--- breadcrumb --->
 <div class="breadcrumb">
   <div id="breadcrumb"></div>
@@ -65,6 +71,7 @@
     <!--- </div> --->
   </div>
 
+</div>
 </div>
 
 <cfoutput>

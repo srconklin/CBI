@@ -1,0 +1,210 @@
+/* navigation bar */
+nav {
+  background-color: #fa0114;
+  padding: 0 1rem;
+  display: grid;
+  place-items: center;
+  z-index: 10;
+}
+
+/* All ul descendants */
+nav ul {
+  display: grid;
+}
+
+/* nav ul li {
+  padding: 0;
+} */
+
+/* nav container UL only */
+nav > ul {
+  grid-auto-flow: column;
+}
+
+nav > ul > li {
+  margin: 0 0.5rem;
+  padding: 0;
+}
+
+/* menu buttons/anchors and anchors on dropdown canvas */
+
+/* nav > ul > li .dropdown__title, */
+nav > ul > li a {
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* nav > ul > li a:focus, */
+/* nav > ul > li .dropdown__title:focus  */
+
+/* nav > ul > li a:focus {
+  outline: none;
+} */
+
+/* menu buttons only  */
+nav > ul > li > .dropdown__title {
+  padding: .5rem 0.5rem;
+  color: white;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-top: 3px solid transparent;
+}
+
+/* nav > ul > li > a:hover,
+nav > ul > li > a:focus, */
+nav > ul > li .dropdown__title:hover,
+nav > ul > li .dropdown__title:focus {
+  /* background-color: rgb(240, 228, 229); */
+  /* background-color: rgb(222 24 24 / 80%); */
+  border-top-color: white;
+  /* color:white; */
+}
+
+/* a dropdown item enbabled menu button  */
+.dropdown {
+  position: relative;
+}
+/* upward pointing arrow that pointd to title */
+.dropdown:after {
+  content: "";
+  border: 0.5rem solid transparent;
+  border-bottom-color: #fff;
+  position: absolute;
+  top: calc(100% - 1.10rem);
+  left: 50%;
+  transform: translateX(-50%);
+  /* transition: 180ms all 120ms ease-out; */
+  opacity: 0;
+  will-change: opacity;
+}
+
+.dropdown__title {
+  /* neeed if you wanted to adda down arrow using :after  */
+  display: inline-flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  font-family: inherit;
+}
+
+/* .dropdown .dropdown__title::after {
+    content: "";
+    border: 0.35rem solid transparent;
+    border-top-color:rgba(25, 39, 230,.60);
+    margin-left: 0.25em;
+    transform: translateY(0.15em);
+}  */
+
+/* the menu button/achnor text */
+/* .dropdown__title {
+    background-color: transparent;
+    border: none;
+    font-family: inherit;
+  } */
+
+/* the dropdown menu canvas */
+.dropdown__menu {
+  visibility: hidden;
+  opacity: 0.3;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.15em 0.25em rgba(0, 0, 0, 0.25);
+  padding: 0.5em 0;
+  min-width: 15ch;
+  background-color: rgb(252, 252, 252);
+  white-space: nowrap;
+}
+
+/* animation  */
+.dd-ease-out {
+  /* 2nd value will prevent drive by mouseovers */
+  /* transition: 180ms all 120ms ease-out; */
+}
+
+/* veritical positioning */
+.dd-vertical {
+  position: absolute;
+  /* Pull up to overlap the parent list item very slightly */
+  top: calc(100% - 0.10rem);
+  /* top:100%; */
+}
+
+/* horizontal centering class */
+.dd-horiz-center {
+  /*  Use the left from absolute position to shift the left side */
+  left: 50%;
+  /*  Use translateX to shift the menu 50% of it's width back to the left  */
+  /*  transform: rotateX(-90deg) translateX(-50%);  
+        transform-origin: top center; 
+   */
+  transform: translateX(-50%);
+}
+
+/* left positioning class  */
+.dd-left {
+  left: 0;
+  right: auto;
+}
+/* right positioning class  */
+.dd-right {
+    right: 0;
+    left: auto;
+  }
+
+  
+.dropdown:hover .dropdown__menu {
+/* .dropdown:focus-within .dropdown__menu { */
+  opacity: 1;
+  /* transform: rotateX(0) translateX(-50%); */
+  visibility: visible;
+}
+
+.dropdown:hover .dropdown__menu a {
+/* .dropdown:focus-within .dropdown__menu a { */
+  opacity: 1;
+}
+
+.dropdown:hover:after
+/* .dropdown:focus-within:after { */ {
+  opacity: 1;
+}
+
+/* links on the dropdown canvas either direct or in a mega group */
+.dropdown__menu > li > a,
+.dropdown__mglinks > li > a {
+  color: rgb(55 91 187 / 1);
+  line-height: 27px;
+  opacity: 0;
+  /* transition: 180ms all 120ms ease-out; */
+  /* font-size: 15px; */
+}
+
+.dropdown__menu > li > a:hover,
+.dropdown__mglinks > li > a:hover {
+  text-decoration: underline;
+}
+/* .dropdown__menu > li > a:focus,
+.dropdown__mglinks > li > a:focus {
+    background-color: rgba(172, 178, 189, 0.25); 
+} */
+
+/* li containers on the dropdown canvas */
+.dropdown__menu > li,
+.dropdown__mglinks > li {
+  padding: 0 1rem;
+}
+/* no highlighting on a mega group layout */
+/* .dropdown__menu:not(.dd-mega-group) >  li:hover {
+  background-color: rgb(240, 228, 229);
+} */
+
+.dd-mega-group{
+    padding: 30px;
+}
+
+.dropdown__mglinks{
+    display: inline-block;
+    margin-right: 40px;
+    vertical-align: top;
+}

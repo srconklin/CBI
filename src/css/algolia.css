@@ -2,9 +2,33 @@
 /*****************
 facet placeholders
 ******************/
+#algolia {
+	visibility: hidden;
+	opacity: 0;
+	-webkit-transition: opacity 0.75s ease-in-out;
+    -moz-transition: opacity 0.75s ease-in-out;
+    transition: opacity 0.75s ease-in-out;
+	width:0px;
+	height:0px;
+	margin-top: -99999px;
+}
+
+#algolia.show {
+	visibility: visible;
+	opacity: 1;
+	height: auto;
+	width: auto;
+	margin-top: 0;
+  
+  }
+  
+
+#categories {
+	margin-bottom: 2rem;
+}
 
 #mfr {
-	margin-top: 2rem;
+	/* margin-top: 2rem; */
 	margin-bottom: 2rem;
   
    }
