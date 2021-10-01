@@ -266,13 +266,14 @@
 .categoryheader .slider {
   background-color: #fa0114;
   position: absolute;
-  left: -125px;
+  left: -127px;
   transition: 0.3s;
   padding: 8px;
   width: 157px;
   color: white;
   border-radius: 0 5px 5px 0;
   display: flex;
+  justify-content: space-between;
 }
 
 .categoryheader .slider:hover, .categoryheader .slider:active {

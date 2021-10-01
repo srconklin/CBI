@@ -118,7 +118,7 @@
     <cfoutput>
       <div class="categoryheader">
       <div class="slider">
-          <a href="##" @click="$dispatch('open-megamenu', { open: true })" >Shop Categories</a>&nbsp;<a class="anchor" href="##">&##10132;</a> 
+          <a href="##" @click="$dispatch('open-megamenu', { open: true })" >Shop Categories</a><a class="anchor" href="##">&##10132;</a> 
       </div>
     </div>
     <div id="megamenu-sidepanel" class="megamenu-sidepanel" x-data="{open: false}" @open-megamenu.window="open = $event.detail.open" @keydown.escape="open = false">

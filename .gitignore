@@ -18,9 +18,7 @@ WEB-INF
 
 ## Ignored Dependencies
 build/mssql/*.bak
-node_modules
-
 **/admin/classFiles/*
 **/admin/clientSites/*
 data/**
-**dist/*
+dist/**
