@@ -121,7 +121,8 @@ body {
   min-height: 100vh;
   height: 100%;
   flex-direction: column;
-  color: #555
+  color: #555;
+  overflow-y: auto;
 }
 
 ::placeholder {
@@ -154,9 +155,23 @@ textarea:focus {
 .justify-center {
   justify-content: center;
 }
+.justify-around {
+  justify-content: space-around;
+}
+.justify-between {
+  justify-content: space-between;
+}
 
 .align-center {
   align-items: center;
+}
+
+.inline {
+  display: inline !important;
+}
+
+.block {
+  display: block !important;
 }
 
 .hidden {
@@ -168,6 +183,9 @@ textarea:focus {
   height: 0;
 }
 
+.no-scroll {
+  overflow-y: hidden;
+}
 .vertical {
   display: flex;
   flex-direction: column;
@@ -380,12 +398,11 @@ hr {
   margin-top: .2rem;
 }
 
+
 .processing {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
-  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
-  transition-duration: .15s;
   transition-timing-function: cubic-bezier(.4, 0, .2, 1);
   transition-duration: .15s;
 }

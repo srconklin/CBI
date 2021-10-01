@@ -14,13 +14,13 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/modern-normalize@1/modern-normalize.min.css,npm/suitcss-base@5/lib/base.min.css,npm/instantsearch.css@7/themes/algolia-min.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17/build/css/intlTelInput.min.css">
  <!--- dev --->
- <!--- <link rel="stylesheet" href="/dist/styles.css"> --->
+ <link rel="stylesheet" href="/dist/styles.css">
  <!--- prod --->
- <link rel="stylesheet" href="/dist/index.c1362ebd.css">
+<!--- <link rel="stylesheet" href="/dist/index.ab7fdc42.css"> --->
   <title>CBI</title>
 </head>
 
-<body>
+<body  x-data="{hidden: false}" @blur-bg.window="$event.detail?hidden = true:hidden=false; window.scroll({top: 0, left: 0, behavior: 'smooth'});" :class="{ 'no-scroll': hidden }"> 
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <script>if (document.documentMode)  alert('This browser is not suported.\n Please upgrade');</script>
   
@@ -86,11 +86,11 @@
 
  <script src="https://cdn.jsdelivr.net/combine/npm/algoliasearch@4,npm/instantsearch.js@4,npm/@ryangjchandler/spruce@2,npm/alpinejs@2,npm/intl-tel-input@17/build/js/intlTelInput.min.js"></script>
  <!--- dev --->
- <!--- <script src="/dist/app.js" type="module" ></script> --->
+ <script src="/dist/app.js" type="module" ></script>
     
   <!--- prod --->
-  <script src="/dist/index.04bf21d8.js" type="module"></script>
-  <script src="/dist/index.e62b8022.js" nomodule="" defer></script>
+  <!--- <script src="/dist/index.29fe6f2e.js" type="module"></script>
+  <script src="/dist/index.0c796ebd.js" nomodule="" defer></script> --->
 </body>
 
 </html>

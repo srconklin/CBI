@@ -1,48 +1,48 @@
-/* navigation bar */
-nav {
+
+
+.megamenu-container.megamenu-hidden {
+  display: none;
+}
+
+.megamenu {
   background-color: #fa0114;
   padding: 0 1rem;
-  display: grid;
+  display: none; 
   place-items: center;
   z-index: 10;
 }
 
-/* All ul descendants */
-nav ul {
+.megamenu ul {
   display: grid;
 }
 
-/* nav ul li {
-  padding: 0;
-} */
 
-/* nav container UL only */
-nav > ul {
+.megamenu > ul {
   grid-auto-flow: column;
 }
 
-nav > ul > li {
+.megamenu > ul > li {
   margin: 0 0.5rem;
   padding: 0;
 }
 
 /* menu buttons/anchors and anchors on dropdown canvas */
 
-/* nav > ul > li .dropdown__title, */
-nav > ul > li a {
+/* .megamenu > ul > li .dropdown__title, */
+.megamenu > ul > li a {
   text-decoration: none;
   display: inline-block;
 }
 
-/* nav > ul > li a:focus, */
-/* nav > ul > li .dropdown__title:focus  */
+/* .megamenu > ul > li a:focus, */
+/* .megamenu > ul > li .dropdown__title:focus  */
 
-/* nav > ul > li a:focus {
+/* .megamenu > ul > li a:focus {
   outline: none;
 } */
 
 /* menu buttons only  */
-nav > ul > li > .dropdown__title {
+.megamenu > ul > li > .dropdown__title {
   padding: .5rem 0.5rem;
   color: white;
   font-size: 1.125rem;
@@ -52,14 +52,10 @@ nav > ul > li > .dropdown__title {
   border-top: 3px solid transparent;
 }
 
-/* nav > ul > li > a:hover,
-nav > ul > li > a:focus, */
-nav > ul > li .dropdown__title:hover,
-nav > ul > li .dropdown__title:focus {
-  /* background-color: rgb(240, 228, 229); */
-  /* background-color: rgb(222 24 24 / 80%); */
+
+.megamenu > ul > li .dropdown__title:hover,
+.megamenu > ul > li .dropdown__title:focus {
   border-top-color: white;
-  /* color:white; */
 }
 
 /* a dropdown item enbabled menu button  */
@@ -117,10 +113,10 @@ nav > ul > li .dropdown__title:focus {
 }
 
 /* animation  */
-.dd-ease-out {
+/* .dd-ease-out {
   /* 2nd value will prevent drive by mouseovers */
   /* transition: 180ms all 120ms ease-out; */
-}
+/* } */
 
 /* veritical positioning */
 .dd-vertical {
@@ -136,8 +132,8 @@ nav > ul > li .dropdown__title:focus {
   left: 50%;
   /*  Use translateX to shift the menu 50% of it's width back to the left  */
   /*  transform: rotateX(-90deg) translateX(-50%);  
-        transform-origin: top center; 
-   */
+      transform-origin: top center; 
+  */
   transform: translateX(-50%);
 }
 
@@ -207,4 +203,148 @@ nav > ul > li .dropdown__title:focus {
     display: inline-block;
     margin-right: 40px;
     vertical-align: top;
+}
+
+/********************
+ slide megamenu
+********************/
+.megamenu-sidepanel > .blackout {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;  
+  background-color: rgba(0,0,0,.6);
+  position: fixed;
+}
+
+.megamenu-sidepanel > .panel-container {
+  transition-duration: .3s;
+  background-color: #efefef;
+  overflow: hidden;
+  max-width: 20rem;
+  width: 100%;
+  height: 100vh;
+  left:0;
+  top: 0;
+  position: fixed;
+  z-index: 10
+}
+
+.megamenu-sidepanel > .panel-container > .closebutton {
+  width: 1.5rem;
+  z-index: 50;
+  right: 1rem;
+  top: 1rem;
+  position: fixed;
+	color: rgba(156, 163, 175, 1.0);
+}
+
+.megamenu-sidepanel > .panel-container > .closebutton:hover {
+	color:#fa0114;  
+}
+
+.megamenu-sidepanel > .panel-container > .content {
+  /* padding-left: 1.5rem;
+  padding-right: 1.5rem; */
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  position: absolute;
+
+}
+
+/* show categories */
+.categoryheader {
+  padding-bottom: 2rem;
+  margin-top: -16px;
+}
+
+/* Style the links inside the sidenav */
+.categoryheader .slider {
+  background-color: #fa0114;
+  position: absolute;
+  left: -125px;
+  transition: 0.3s;
+  padding: 8px;
+  width: 157px;
+  color: white;
+  border-radius: 0 5px 5px 0;
+  display: flex;
+}
+
+.categoryheader .slider:hover, .categoryheader .slider:active {
+  left: 0; /* On mouse-over, make the elements appear as they should */
+}
+.categoryheader a {
+  text-decoration: none;
+  color:white;
+}
+
+.megamenu-sidepanel nav .accordian {
+  border-top: 1px solid #c8c4c0;
+}
+
+.megamenu-sidepanel nav .accordian > div.active {
+  background-color: #fa0114;
+  
+}
+
+.megamenu-sidepanel nav .accordian > div.active a {
+  color: white;
+}
+
+.megamenu-sidepanel nav .accordian:last-child {
+  border-bottom: 1px solid #c8c4c0;
+}
+
+.megamenu-sidepanel nav a {
+  padding: 14px 28px 14px 30px;
+  color: rgb(55 91 187 / 1);
+  line-height: 27px;
+  display: block;
+  /* transition: 0.4s;  */
+  text-decoration: none;
+  outline: none;
+}
+
+.megamenu-sidepanel nav a:hover { 
+  text-decoration: underline;
+}
+
+/* .megamenu-sidepanel .accordian-title {
+  
+}   */
+
+.megamenu-sidepanel nav .accordian a > svg {
+  width: 22px;
+  height: 22px;
+  font-weight: bold;
+}  
+
+/* .megamenu-sidepanel .chevron-down {
+  display: none;
+} */
+
+/* 
+.megamenu-sidepanel nav .accordian > a:after {
+  content: '\003E';
+  font-weight: bold;
+   color: #fa0114;
+  float: right;
+} */
+
+.megamenu-sidepanel nav .panel {
+  /* display: none; */
+  padding: 10px 18px;
+
+}
+
+.megamenu-sidepanel .nav-header
+{
+  text-align: center;
+  padding: 1rem;
+  color: red;
 }

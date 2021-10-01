@@ -12,7 +12,7 @@
 <!--- dev --->
 <!--- <link rel="stylesheet" href="/dist/styles.css"> --->
 <!--- prod --->
-<link rel="stylesheet" href="/dist/index.c1362ebd.css">
+<link rel="stylesheet" href="/dist/index.ab7fdc42.css">
   
  <title>CBI - Login</title>
 

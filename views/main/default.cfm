@@ -60,7 +60,7 @@
   </div>
 
   <!--- hit results (right panel sidebar) --->
-  <div class="search-panel" :class="{ 'search-panel-hidden': showFilter }">
+  <div class="search-panel" :class="{ 'hidden': showFilter }">
     <!--- <div class="search-panel__results"> --->
       <div class="dashboard">
         <div id="stats"></div>

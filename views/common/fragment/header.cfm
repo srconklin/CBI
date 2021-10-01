@@ -1,5 +1,5 @@
 	<!--- header --->
-	<header class="header" x-data="{showMenu : false, hidden: false}" @blur-bg.window="$event.detail?hidden = true:hidden=false;" :class="{ 'header-hidden': hidden }">
+	<header class="header" x-cloak x-data="{showMenu : false, hidden: false}" @blur-bg.window="$event.detail?hidden = true:hidden=false;" :class="{ 'header-hidden': hidden }">
 		<div class="header-container">
 		  <!--- 2 column  wrapper --->
 		  <div class="header-column">

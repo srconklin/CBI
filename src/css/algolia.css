@@ -10,7 +10,9 @@ facet placeholders
     transition: opacity 0.75s ease-in-out;
 	width:0px;
 	height:0px;
-	margin-top: -99999px;
+	/* margin-top: -99999px; */
+	position: absolute; 
+	top: -99999px;
 }
 
 #algolia.show {
@@ -18,7 +20,9 @@ facet placeholders
 	opacity: 1;
 	height: auto;
 	width: auto;
-	margin-top: 0;
+	/* margin-top: 0; */
+	position: static;
+	top: 0;
   
   }
   

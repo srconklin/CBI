@@ -9,5 +9,6 @@
 @import './css/tabs.css'; 
 @import './css/item.css'; 
 @import './css/offer.css'; 
-@import './css/media.css'; 
-@import './css/menu.css'; 
+@import './css/megamenu.css';  
+/* another comment to force media queries to bottom  */
+ @import './css/media.css'; 

@@ -101,9 +101,7 @@ media queries
 	.header-nav {
 	  display:none;
 	}
-  
-	
-  
+    
 	.flex  {
 	  display: flex;
 	}
@@ -201,6 +199,17 @@ media queries
   
 	.tabs .inActiveTab { 
 		margin-bottom: -0.25rem/* -4px */;
+	}
+
+	.megamenu {
+		display: grid;
+	}
+	.categoryheader {
+		display: none;
+	}
+
+	.megamenu-sidepanel {
+		display: none;
 	}
 
 	/* forms */
@@ -330,9 +339,9 @@ media queries
 		background-color: initial;
 	}
 
-	.header.header-hidden {
+	/* .header.header-hidden {
 		display: block;
-	}
+	} */
 
 	.search-results.filtermode {
 		width: initial;
