@@ -32,7 +32,7 @@
 	//const encodedName = decodedCategories[name] || name;
   
 	return name
-	  .split(' ')
+	  .split(/\s/g)
 	  .map(encodeURIComponent)
 	  .join('+');
   }
@@ -67,7 +67,7 @@
 	createURL({ qsModule, routeState, location }) {
 	  const urlParts = location.href.match(/^(.*?)\/search/);
 	  const baseUrl = `${urlParts ? urlParts[1] : ''}/`;
-  
+	  	    
 	  const categoryPath = routeState.category
 		? `${getCategorySlug(routeState.category)}/`
 		: '';
@@ -101,7 +101,6 @@
 	  );
 	  // `qs` does not return an array when there's a single value.
 	  const allmfrs = Array.isArray(mfrs) ? mfrs : [mfrs].filter(Boolean);
-  
 	  return {
 		query: decodeURIComponent(query),
 		page,
@@ -115,7 +114,7 @@
   const stateMapping = {
 	stateToRoute(uiState) {
 		
-		const indexUiState = uiState['cbi'] || {};
+	  const indexUiState = uiState['cbi'] || {};
 	  // refer to uiState docs for details: https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
 	  return {
 		query: indexUiState.query,

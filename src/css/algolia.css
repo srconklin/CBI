@@ -381,6 +381,10 @@ facet placeholders
 	grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
   }
   
+ .ais-Hits.ais-Hits--empty {
+	 font-size: 18px;
+ }
+
   .ais-HierarchicalMenu-showMore {
   
 	margin-top: .5rem;

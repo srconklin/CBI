@@ -1,5 +1,9 @@
 {
     "follow":true,
+    "jvm": {
+        "heapSize": 1024,
+        "minHeapSize": 1024
+    },
     "web":{
         "http":{
             "port":"63707"

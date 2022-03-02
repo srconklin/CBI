@@ -84,6 +84,10 @@
     scroll-snap-align: start;
 }
  
+/* .snap > div {
+    scroll-snap-align: start;
+} */
+
 /* 
   @media (min-width: 768px) {
 	 .login-panel {

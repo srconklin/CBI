@@ -1,7 +1,8 @@
 <!--- <cfheader name="Access-Control-Allow-Origin" value="http://localhost:3000"> --->
 <cfsetting requesttimeout="240" />
-<cfsetting showDebugOutput = "no" enablecfoutputonly="true" >
+<cfsetting showDebugOutput = "no" enablecfoutputonly="false" >
 <cfparam name="url.itemno" default="" />
+<cfparam name="url.build" default="items,bc" />
 <cfset vtid = 1546 />
 
 <cfscript>
@@ -100,15 +101,29 @@
 	ORDER BY I.DataTID, I.Itemno
 		
 </cfquery>
-	
-<cfdirectory name="datadir" directory="#expandpath('../data')#">
+
+<cfif listfindnocase(url.build, 'items')>
+<p>clearing items dir</p>	
+<cfdirectory name="datadir" directory="#expandpath('../data')#" filter=".json">
 <cfloop query="datadir">
 	<cfset cffile_file = "#expandpath('../data')#/#name#">
 	<cffile action="delete" file="#cffile_file#">
 </cfloop>
+</cfif>
+
+<cfif listfindnocase(url.build, 'bc')>
+<p>clearing bc dir</p>	
+<cfdirectory name="datadir" directory="#expandpath('../data/bc')#" >
+<cfloop query="datadir">
+	<cfset cffile_file = "#expandpath('../data/bc')#/#name#">
+	<cffile action="delete" file="#cffile_file#">
+</cfloop>
+</cfif>
 
 <cfoutput query="getItem" group="itemno" >
 
+	<cfset breadcrumb = "" />
+	<cfset breadcrumbUI = "" />
 	<cfset colheadList = ''>
 	<cfset selectList = ''>
 
@@ -116,6 +131,7 @@
 
 	<cfset item['itemno'] =  "#getItem.Itemno#" />   
 	<cfset item['headline'] = "#trim(REReplaceNoCase(getItem.headline,"(<[^>]*>|&nbsp;|<br>)", " ","All"))#" />   
+	<cfset item['pagetitle'] =  len(getItem.pagetitle) gt 0 ?  trim(REReplaceNoCase(getItem.pagetitle,"(<[^>]*>|&nbsp;|<br>)", " ","All")) : item['headline'] />   
 	<cfset item['description'] = "#trim(REReplaceNoCase(getItem.descr,"(<[^>]*>|&nbsp;|<br>)", " ","All"))#"  />   
 	<cfset item['mfr'] =  "#getItem.maketxt#" />
 	<cfset item['model'] =  "#getItem.model#" />
@@ -129,13 +145,15 @@
 	<cfset item['popular'] =  "#getItem.popular#" />  
 	<cfset item['isFeatured'] =  "#getItem.isFeatured#" />  
 	<cfset qryMenus = getMenus(getItem.dataTID, getItem.ParentMenuID) />
-	
-	<cfset breadcrumb = "" />
+	<cfset bcpath = '' />
+	<cfset breadcrumbUI = '<ul class="ais-Breadcrumb-list"><li class="ais-Breadcrumb-item"><a class="ais-Breadcrumb-link" href="/search/">All Categories</a></li>' />
 	<cfloop query="qryMenus">
+		<cfset bcpath = listAppend(bcpath, trim(qryMenus.lnm), '_') />
 		<cfset breadcrumb = listAppend(breadcrumb, trim(qryMenus.lnm), '>') />
-		<!--- <cfset breadcrumb = replace(breadcrumb,">", ' > ', 'all') /> --->
 		<cfset item['categories.lvl#qryMenus.currentrow-1#'] = "#replace(breadcrumb,">", ' > ', 'all')#" />
+		<cfset breadcrumbUI = breadcrumbUI & '<li class="ais-Breadcrumb-item"><span class="ais-Breadcrumb-separator" aria-hidden="true">&gt;</span><a class="ais-Breadcrumb-link" href="/search/#encodeForURL(trim(bcpath))#/">#trim(qryMenus.lnm)#</a></li>' />
 	</cfloop>	
+	<cfset breadcrumbUI = breadcrumbUI & '</ul>' />
 
 	<!--- <cfhttp url="https://www.capovani.com/iinfo.cfm?ItemNo=#getItem.Itemno#" charset="utf-8" method="GET" resolveurl="false" throwonerror="no">  
 	<cfset arResults  = reFindNoCase("(<!-- specs -->)(.*?)(<!-- \/specs -->)", CFHTTP.FileContent, 1, true, "1") /> 
@@ -177,12 +195,20 @@
 
 	<cfset arrayAppend(items, item) />
 
-	<cfset fileWrite( ExpandPath( "../" ) & '/data/#getItem.Itemno#.json',  #trim(serializeJSON(item))# ) />
+	<cfif listfindnocase(url.build, 'items')>
+		<cfset fileWrite( ExpandPath( "../" ) & '/data/#getItem.Itemno#.json',  #trim(serializeJSON(item))# ) />
+	</cfif>	
+	<cfif listfindnocase(url.build, 'bc')>
+		<cfset fileWrite( ExpandPath( "../" ) & '/data/bc/#getItem.Itemno#.cfm',  #trim(breadcrumbUI)# ) />
+	</cfif>
 	#getItem.currentrow#  #getItem.Itemno#<br>
 	
 </cfoutput>
 
-<cfset fileWrite( ExpandPath( "../" ) & '/data/items.json',  #trim(serializeJSON(items))# ) />
+<cfif listfindnocase(url.build, 'items')>
+	<cfset fileWrite( ExpandPath( "../" ) & '/data/items.json',  #trim(serializeJSON(items))# ) />
+</cfif>	
+
 <cfoutput>DONE</cfoutput>
 <!--- <cfcontent reset="true"> 
 <cfheader name="Content-Type" value="application/json"> 

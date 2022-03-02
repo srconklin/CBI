@@ -110,6 +110,7 @@
   min-width: 15ch;
   background-color: rgb(252, 252, 252);
   white-space: nowrap;
+  z-index: 10;
 }
 
 /* animation  */

@@ -5,34 +5,145 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no maximum-scale=1, user-scalable=0">
-
-  <!--- <link rel="manifest" href="/dist/manifest.webmanifest"> --->
   <link rel="shortcut icon" href="/images/favicon.ico">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/modern-normalize@1/modern-normalize.min.css,npm/suitcss-base@5/lib/base.min.css,npm/instantsearch.css@7/themes/algolia-min.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17/build/css/intlTelInput.min.css">
- <!--- prod --->
- <link rel="stylesheet" href="/dist/app.c9219f7f.css"> 
- <!--- dev --->
- <!--- <link rel="stylesheet" href="/dist/app.1be6ba01.css">   --->
   <title>CBI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.7.0/dist/cdn.min.js" defer></script>
+  <script>
+
+  </script>
+  <style>
+
+
+    
+/***********
+ scrollbar
+ ***********/
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #f1f1f1 orange;
+}
+
+/* Let's get this party started */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* border: 4px solid transparent; */
+  background-clip: content-box;
+  /* THIS IS IMPORTANT */
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+  background: rgb(204 207 218 / 90%);
+  border: 1px solid #f1f1f1;
+  border-radius: 15px;
+  opacity: .7;
+
+}
+  
+
+
+</style>
 </head>
 
 <body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <script>if (document.documentMode)  alert('This browser is not suported.\n Please upgrade');</script>
 
-  	<div id="searchbox"></div>
-	  <div id="breadcrumb"></div>
-    <div id="categories"></div>
-	<div id="mfr"></div>
-	<div id="sort-by"></div>
-	<div id="clear-refinements"></div>
-	<div id="stats"></div>
-	<div id="hits"></div>
-	<div id="pagination"></div>
-	<script src="https://cdn.jsdelivr.net/combine/npm/algoliasearch@4/dist/algoliasearch.umd.min.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/@ryangjchandler/spruce@2.x.x/dist/spruce.umd.js,npm/alpinejs@2,npm/intl-tel-input@17/build/js/intlTelInput.min.js"></script>
+  <script src="https://unpkg.com/smoothscroll-polyfill@0.4.4/dist/smoothscroll.js"></script>
+  <!--- m-auto --->
+  <div class=" max-w-3xl">
+  <div
+      x-data="{
+          skip: 1,
+          next() {
+              this.to((current, offset) => current + (offset * this.skip))
+          },
+          prev() {
+              this.to((current, offset) => current - (offset * this.skip))
+          },
+          to(strategy) {
+              let slider = this.$refs.slider
+              let current = slider.scrollLeft
+              let offset = slider.firstElementChild.getBoundingClientRect().width
+  
+              slider.scrollTo({ left: strategy(current, offset), behavior: 'smooth' })
+          }
+      }"
+      class="flex flex-col w-full"
+  >
+      <div
+          @keydown.right="next"
+          @keydown.left="prev"
+          tabindex="0"
+          role="region"
+          aria-labelledby="carousel-label"
+          class="flex space-x-6"
+      >
+          <button @click="prev" class="text-6xl ">
+              <span aria-hidden="true">❮</span>
+          </button>
+            
+          <ul
+              x-ref="slider"
+              tabindex="0"
+              role="listbox"
+              aria-labelledby="carousel-content-label"
+              class="flex w-full overflow-x-scroll"
+              style="scroll-snap-type: x mandatory;"
+          >
+              <li id="img_container0" style="scroll-snap-align: start;" class="w-full flex-shrink-0 flex flex-col items-center justify-center p-2" role="option">
+                  <img id="img_0" class="mt-2 w-full" src="/images/photos/1.jpg" alt="placeholder image">
+  
+                  <span class="px-4 py-2 text-sm">this is a description</span>
+              </li>
+              <li style="scroll-snap-align: start;" class="w-full flex-shrink-0 flex flex-col items-center justify-center p-2" role="option">
+                  <img class="mt-2 w-full" src="/images/photos/2.jpg" alt="placeholder image">
+  
+                  <span class="px-4 py-2 text-sm">this is a description</span>
+              </li>
+  
+              <li style="scroll-snap-align: start;" class="w-full flex-shrink-0 flex flex-col items-center justify-center p-2" role="option">
+                  <img class="mt-2 w-full" src="/images/photos/3.jpg" alt="placeholder image">
+  
+                  <span class="px-4 py-2 text-sm">this is a description</span>
+              </li>
+  
+              <li style="scroll-snap-align: start;" class="w-full flex-shrink-0 flex flex-col items-center justify-center p-2" role="option">
+                  <img class="mt-2 w-full" src="/images/photos/4.jpg" alt="placeholder image">
+  
+                  <span class="px-4 py-2 text-sm">this is a description</span>
+              </li>
+              
+              <li style="scroll-snap-align: start;" class="w-full flex-shrink-0 flex flex-col items-center justify-center p-2" role="option">
+                  <img class="mt-2 w-full" src="/images/photos/5.jpg" alt="placeholder image">
+  
+                  <span class="px-4 py-2 text-sm">Do Something</span>
+              </li>
+  
+              <li style="scroll-snap-align: start;" class="w-full flex-shrink-0 flex flex-col items-center justify-center p-2" role="option">
+                  <img class="mt-2 w-full" src="/images/photos/6.jpg" alt="placeholder image">
+  
+                  <span class="px-4 py-2 text-sm">this is a description</span>
+              </li>
+          </ul>
+  
+          <button @click="next" class="text-6xl">
+              <span aria-hidden="true">❯</span>
+          </button>
+      </div>
+  </div>
+</div>  
 
-	<script src="/dist/app.aae7b59a.js"></script>
+
+
+
 </body>
 
 </html>

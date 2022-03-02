@@ -1,0 +1,173 @@
+
+/* IMAGE MODAL FULLSCREEN WITH ZOOM */
+/* .carousel-modal {
+	z-index: 50;
+	width: 100%;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	position: fixed;
+	padding: 0.5rem;
+	overflow: hidden;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	background-color: rgba(8, 31, 49, 1.0);
+} */
+
+/*  full  screen version for on click  */
+/* .carousel-modal {
+	background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    position: fixed;
+    height: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    overflow-y: hidden;
+    overflow-x: hidden;
+	z-index: 50;
+} */
+
+.image-modal {
+    /* background-color: white; */
+     /* left: 618px; */
+    /* right: 10px; */
+	/* top: 50%; */
+    /* transform: translateY(-50%); */
+	/* max-height: 846px;
+	max-width: 886px; */
+
+    background-color: rgba(0, 0, 0, .95);
+    height: 98%;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    position: fixed;
+    overflow: hidden;
+    z-index: 50;
+    box-shadow: rgb(0 0 0 / 25%) 0px 6px 8px 2px;
+    /* border: 1px solid rgb(148, 148, 148); */
+    border-radius: 4px;
+    width: 98%;
+}	
+
+.image-modal-main {
+	padding: .5rem;
+    height: 100%;
+    
+}
+
+/* .image-modal-main {
+	padding: .5rem;
+    height: 100vh;
+    justify-content: space-between;
+    flex-direction: column;
+    display: flex;
+} */
+
+.image-modal-main img {
+	object-fit: contain;
+	max-height: 100%; 
+	height: 100%; 
+	width: 100%;
+	max-width: none;
+}
+
+.image-modal-main img { 
+	cursor: zoom-out;
+}
+
+.image-modal svg {
+	width: 2rem;
+    position: absolute;
+    right: 13px;
+    top: 13px;
+    color: #fa0114;
+    /* border: 2px solid;
+    border-radius: 99999px; */
+    font-weight: 700;
+    cursor: pointer;
+}
+/* .image-modal-main p {
+	color: rgba(255, 255, 255, 1.0);
+	text-align: center;
+} */
+
+
+
+/********************* 
+FULL SCREEN AND ZOOM
+**********************/
+
+/* .image-modal-main .zoom {
+	color: rgba(255, 255, 255, 1.0);
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+	float: left;
+	color: white;
+}
+
+.image-modal-main .zoom {
+    float: left;
+}
+
+.image-modal-main .close,
+.image-modal-main .zoom {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    color: #fff;
+}
+
+.image-modal-main .close {
+	color: rgba(255, 255, 255, 1.0);
+	outline: 2px solid transparent;
+	outline-offset: 2px;
+	float: right;
+	color: white;
+}	
+
+.image-modal-main .close {
+    float: right;
+}
+
+.image-modal-main .zoomed {
+	color: black;
+}
+
+ 
+.image-modal-main svg { 
+	height: 1.5rem;
+}
+
+*/
+
+
+
+/********************* 
+MAGNIFYING AN IMAGE 
+**********************/
+
+/* .image-img-zoom-result {
+	border: 1px solid #d4d4d4;
+	width: 400px;
+	height: 400px;
+	z-index: 50;
+    position: fixed;
+	display: none;
+
+  }
+
+  .image-img-zoom-lens {
+	position: absolute;
+	border: 1px solid #d4d4d4;
+	width: 40px;
+	height: 40px;
+  } */
+

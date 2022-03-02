@@ -12,6 +12,7 @@ component name="items" output="false" {
 		var itemno = getToken(rc.id, 1, '-');
 		try {
 			rc.content =deserializeJSON(fileRead(ExpandPath( "./" ) & '/data/#itemno#.json'));
+			rc.bc =fileRead(ExpandPath( "./" ) & '/data/bc/#itemno#.cfm');
 		} 
 		catch(any e) {
 				variables.fw.setView('main.notFound');

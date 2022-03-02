@@ -16,10 +16,10 @@
 		});
 
 		//reference the replica index
-		replica = algoliaClient.initIndex( 'recently_added' );
+		//replica = algoliaClient.initIndex( 'recently_added' );
 
 		// delete the replica index
-		replica.deleteIndex();
+		// replica.deleteIndex();
 		
 		// delete the priamry index
 		index.deleteIndex();

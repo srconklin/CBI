@@ -30,7 +30,7 @@ component extends="framework.one" output="false" {
 			{ "$GET/faq/$" = "/main/faq" },
 			{ "$GET/about/$" = "/main/about" },
 
-			{ "$GET/items/:id/$" = "/items/show/id/:id" },
+			{ "$GET/items/:id/" = "/items/show/id/:id" },
 
 			{ "$POST/offer/$" = "/offer/create/" },
 

@@ -34,7 +34,7 @@
 <div class="search-results" x-data="{showFilter : false}"  :class="{ 'filtermode': showFilter }">
 
   <!--- show/hide filters (red button) --->
-  <div class="filterbar" :class="{'remove-margin' : showFilter}">
+  <div id="filterbar" class="filterbar" :class="{'remove-margin' : showFilter}">
     <button class="filter btn btn-red" :class="{'opened' : showFilter}" type="button"
       @click.prevent="$dispatch('blur-bg', !showFilter);showFilter = !showFilter">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -47,9 +47,9 @@
   </div>
 
   <!--- refinements (left panel sidebar)  --->
-  <div :class="{ 'hidden': !showFilter }" class="left-panel">
-    <div class="dash">
-      <h3 x-show="!showFilter">Filters</h3>
+  <div id="refinements" :class="{ 'hidden': !showFilter }" class="left-panel">
+    <div class="">
+      <!--- <h3 x-show="!showFilter">Filters</h3> --->
       <div id="statsfilter"></div>
       <div id="clear-refinements"></div>
     </div>

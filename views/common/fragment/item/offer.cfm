@@ -3,7 +3,7 @@
 		<input type="hidden" name="itemno" :value="$store.offer.itemno">
 		
 		<div class="form-row">
-			<label for="priceStated" class="form-label">
+			<label id="myoffer" for="priceStated" class="form-label">
 				My Offer <span>*</span>
 			</label>
 			
