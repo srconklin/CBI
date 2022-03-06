@@ -10,9 +10,9 @@
   <link rel="shortcut icon" href="/images/favicon.ico">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/modern-normalize@1/modern-normalize.min.css,npm/suitcss-base@5/lib/base.min.css">
 <!--- dev --->
-<!--- <link rel="stylesheet" href="/dist/styles.css"> --->
+<link rel="stylesheet" href="/dist/styles.css">
 <!--- prod --->
-<link rel="stylesheet" href="/dist/index.c02df095.css"> 
+<!--- <link rel="stylesheet" href="/dist/index.c02df095.css">  --->
  
  <title>CBI - Login</title>
 

@@ -27,14 +27,12 @@
 .offer-total-row {
 	display: flex;
 	flex-direction: row;
-	/* flex-direction: column; */
 	align-items: center;
-	justify-content: space-between;
+	/* justify-content: space-between; */
 }
 
-.offer-total-row div {
-	margin-right: 0;
-	/* margin-bottom: .3rem; */
+.offer-total-row div:not(:last-child) {
+	margin-right: .3rem;
 }
 
 .offer .btn {

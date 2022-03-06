@@ -33,7 +33,7 @@
 <!--- search results main wrapper --->
 <div class="search-results" x-data="{showFilter : false}"  :class="{ 'filtermode': showFilter }">
 
-  <!--- show/hide filters (red button)   --->
+  <!--- show/hide filters (red button)  --->
   <div id="filterbar" class="filterbar" :class="{'remove-margin' : showFilter}">
     <button class="filter btn btn-red" :class="{'opened' : showFilter}" type="button"
       @click.prevent="$dispatch('blur-bg', !showFilter);showFilter = !showFilter">

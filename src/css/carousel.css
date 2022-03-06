@@ -60,7 +60,7 @@
 
 .carousel-slide  { 
 	scroll-snap-align: start;
-	padding: 0.5rem;
+	/* padding: 0.5rem; */
 	display:flex;
 	justify-content: flex-start;
 	align-items: center;

@@ -15,8 +15,7 @@ component accessors=true {
 
 
     function before( rc ) {
-        if ( structKeyExists( session, "auth" ) && session.auth.isLoggedIn &&
-            variables.framework.getItem() != "logout" ) {
+        if ( structKeyExists( session, "auth" ) && session.auth.isLoggedIn &&  variables.framework.getItem() != "logout" ) {
             variables.framework.redirectCustomURL( "/main" );
         }
     }
