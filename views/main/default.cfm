@@ -33,7 +33,7 @@
 <!--- search results main wrapper --->
 <div class="search-results" x-data="{showFilter : false}"  :class="{ 'filtermode': showFilter }">
 
-  <!--- show/hide filters (red button) --->
+  <!--- show/hide filters (red button)   --->
   <div id="filterbar" class="filterbar" :class="{'remove-margin' : showFilter}">
     <button class="filter btn btn-red" :class="{'opened' : showFilter}" type="button"
       @click.prevent="$dispatch('blur-bg', !showFilter);showFilter = !showFilter">
@@ -48,10 +48,10 @@
 
   <!--- refinements (left panel sidebar)  --->
   <div id="refinements" :class="{ 'hidden': !showFilter }" class="left-panel">
-    <div class="">
+    <div class="dash">
       <!--- <h3 x-show="!showFilter">Filters</h3> --->
       <div id="statsfilter"></div>
-      <div id="clear-refinements"></div>
+      <div id="clear-refinements" @click.prevent="$dispatch('blur-bg', false)"></div>
     </div>
     <div class="refinement-container">
       <div id="categories"></div>
