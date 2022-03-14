@@ -1,12 +1,13 @@
 {
     "follow":true,
-    "jvm": {
-        "heapSize": 1024,
-        "minHeapSize": 1024
+    "jvm":{
+        "heapSize":1024,
+        "minHeapSize":1024
     },
     "web":{
+        "host":"${WEB_HOST:127.0.0.1}",
         "http":{
-            "port":"63707"
+            "port":"${WEB_PORT:8080}"
         },
         "rewrites":{
             "enable":true

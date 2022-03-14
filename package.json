@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "cbi algolia powered venue",
   "scripts": {
-    "start": "export NODE_ENV=development&&parcel ./src/styles.css ./src/app.js",
-    "build": "export NODE_ENV=production&&rm -rf dist .cache .parcel-cache && parcel build ./src/index.html --no-source-maps && cp –Rf /controllers /dist"
+    "start": "set NODE_ENV=development && parcel ./src/styles.css ./src/app.js",
+    "build": "set NODE_ENV=production&&rm -rf dist .cache .parcel-cache && parcel build ./src/index.html --no-source-maps && cp –Rf /controllers /dist"
   },
   "browserslist": "> 0.2%",
   "devDependencies": {
