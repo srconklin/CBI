@@ -1,9 +1,4 @@
 component accessors=true {
-
-    // function init( fw ) {
-    //     variables.fw = fw;
-	// }
-	
 	property framework;
 
 	variables.secrurelist = 'main.about';
@@ -16,7 +11,7 @@ component accessors=true {
 
     function authorize( rc ) {
 		
-		// if resource is not secured then just bail out of aothorize check
+		// if resource is not secured then just bail out of auth check
 		if(!listfindnocase( variables.secrurelist, variables.framework.getFullyQualifiedAction() ))
 			return;
 

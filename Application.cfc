@@ -4,7 +4,7 @@ component extends="framework.one" output="false" {
 	this.sessionManagement = true;
 	this.sessionTimeout = createTimeSpan(0, 2, 0, 0);
 	this.datasource = 'dp_cat';
-
+	
 	// FW/1 settings
 	variables.framework = {
 		action = 'action',
@@ -17,7 +17,7 @@ component extends="framework.one" output="false" {
 		diComponent = "framework.ioc",
 		diLocations = "model, controllers",
 		diConfig = { },
-		reloadApplicationOnEveryRequest = true,
+		reloadApplicationOnEveryRequest = false,
         routes = [
 
 			{ "$GET/login/" = "/login/default" },
@@ -38,11 +38,24 @@ component extends="framework.one" output="false" {
 		 ]
 	};
 
-	public void function setupSession() { 
+	variables.framework.environments = {
+		dev = { 
+				reloadApplicationOnEveryRequest = true
+			},
+		prod = {
+			 password = "supersecret"
+		}
+	};
+
+
+	public void function setupSession() {
+		param session.validated=0;
+		param session.pno=0;
 		controller( 'security.session' );
 	 }
 
 	public void function setupRequest() { 
+		request.DSNCat ='dp_cat';
 		controller( 'security.authorize' );
 	 }
 
@@ -60,5 +73,13 @@ component extends="framework.one" output="false" {
 		return structKeyExists(headers, "X-Requested-With") 
 			   && (headers["X-Requested-With"] eq "XMLHttpRequest");
 	  }
+
+	public function getEnvironment() {
+		if ( findNoCase( "sandbox", CGI.SERVER_NAME ) ) 
+			return "prod";
+		else 
+			return "dev";
+	}
+
 
 }

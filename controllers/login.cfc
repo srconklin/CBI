@@ -39,6 +39,9 @@ component accessors=true {
         session.auth.isLoggedIn = true;
         session.auth.fullname = user.firstname & " " & user.lastname;
         session.auth.user = user;
+        // user logged in; show validated as 2
+        session.validated = 2;
+        session.pno = user.pno;
 
 		if(structKeyExists(rc, 'destination'))
 			variables.framework.redirectCustomURL( "/#rc.destination#" );

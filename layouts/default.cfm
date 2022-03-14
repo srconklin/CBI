@@ -12,9 +12,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/modern-normalize@1/modern-normalize.min.css,npm/suitcss-base@5/lib/base.min.css,npm/instantsearch.css@7/themes/algolia-min.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@17/build/css/intlTelInput.min.css">
  <!--- dev --->
- <!--- <link rel="stylesheet" href="/dist/styles.css"> --->
+ <link rel="stylesheet" href="/dist/styles.css">
  <!--- prod --->
- <link rel="stylesheet" href="/dist/index.88e5e4ab.css"> 
+ <!--- <link rel="stylesheet" href="/dist/index.88e5e4ab.css">  --->
   <title>CBI</title>
 </head>
 
@@ -82,10 +82,10 @@
  <script src="https://unpkg.com/smoothscroll-polyfill@0.4.4/dist/smoothscroll.js"></script>
 
  <!--- dev --->
- <!--- <script src="/dist/app.js" type="module" ></script> --->
+ <script src="/dist/app.js" type="module" ></script>
     
   <!--- prod --->
-  <script src="/dist/index.4edc4906.js" type="module"></script><script src="/dist/index.7ab985ea.js" nomodule="" defer></script>
+  <!--- <script src="/dist/index.4edc4906.js" type="module"></script><script src="/dist/index.7ab985ea.js" nomodule="" defer></script> --->
 
 </body>
 

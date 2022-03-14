@@ -106,7 +106,9 @@
 			
 		</div>
 		<div x-show="$store.tabs.openTab === 3">
-			<p>Coming Soon.</p>
+			<cfoutput>
+				#view( 'common/fragment/item/inquiry')#
+			</cfoutput>
 		</div>
 		<div x-show="$store.tabs.openTab === 4">
 
