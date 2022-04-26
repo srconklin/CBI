@@ -1,18 +1,23 @@
 <div class="offer">
-	<form id="offerfrm" action="/inquiry" method="post" x-data  @submit.prevent="$store.offer.submit()">
+	<form id="inquiryfrm" method="post" x-data  @submit.prevent="$store.offer.ttypeno=10;$store.offer.submit()">
 		<input type="hidden" name="itemno" :value="$store.offer.itemno">
+		<input type="hidden" name="ttypeno" value="10">
+		<input type="hidden" name="qtyShown" :value="$store.offer.qtyShown">
+		<input type="hidden" name="priceShown" :value="$store.offer.priceShown">
+
 
 		<div class="form-row">
-			<label for="message" class="form-label">
-				Message
-			</label>
+			<cfoutput>
+				<label for="message" class="form-label">
+					Message <cfif structKeyExists(session, 'auth') and session.auth.isLoggedIn><a href="##" class="user">(as #session.auth.fullname#)</a></cfif>
+				</label>
+			</cfoutput>
 			<!---  @blur="$store.offer.message = stripHTML($store.offer.message);"  --->
 			<textarea cols="50" rows="3" name="message" id="message" wrap="soft" class="form-control" @blur="$store.offer.validateMessage()" x-model="$store.offer.message" maxlength="250"></textarea>
 			<p class="count" x-cloak>
 				<span x-text="$store.offer.messageRemain"></span> characters remaining.
 		   </p>
 		</div>
-
 		
 		<cfoutput>
 			#view( 'common/fragment/item/personal')#
