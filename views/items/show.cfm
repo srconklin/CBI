@@ -1,5 +1,5 @@
 <cfoutput>
-	  <div id="item" itemno="#rc.content.itemno#" itemct="#arraylen(rc.content.imagesXtra)+1#">
+	  <div id="item" itemno="#rc.content.itemno#" itemct="#arraylen(rc.content.imagesXtra)+1#" qty=#rc.content.qty# price="#rc.content.price#">
   
 		  <!--- cookie crumb --->
 		  <div class="breadcrumb">
@@ -42,6 +42,10 @@
 									<span>Location:</span>
 									<span >#rc.content.location#</span>
 								</p>
+								<p itemprop="productID" class="itemno">
+									<span>Item ID:</span>
+									<span>#rc.content.itemno#</span>
+								</p>
 							</div>
 						</div>
 				  </div>
@@ -56,8 +60,11 @@
 							</svg>Share</a>
 					  </div>
 				  </div>
+				  <cfoutput>
+					#view( 'common/fragment/item/tabs')#
+				</cfoutput>
 
-
+<!--- 
 				  <div class="item-nav-wrapper" >
 					<div class="item-nav-sizer">
 					  <ul class="item-nav">
@@ -159,7 +166,7 @@
 					</div>
 				</div>
 			 </section>
-
+ --->
 		  </article> 					
   
 	  </div>

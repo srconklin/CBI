@@ -97,7 +97,11 @@
 
 	<div class="tabcontent">
 		<div x-show="$store.tabs.openTab === 1">
-			<div class="specs" x-html="$store.tabs.content.specstable" ></div> 
+			<!--- x-html="$store.tabs.content.specstable" --->
+			<cfoutput>
+				<div class="specs" x-html="$store.tabs.content.specstable"></div> 
+				<div class="specs">#rc.content.specstable#</div> 
+			</cfoutput>
 		</div>
 		<div x-show="$store.tabs.openTab === 2">
 			<cfoutput>
