@@ -1,9 +1,11 @@
 component extends="framework.one" output="false" {
+	this.name = "cbi"
 	this.applicationTimeout = createTimeSpan(2, 0, 0, 0);
 	this.setClientCookies = true;
 	this.sessionManagement = true;
 	this.sessionTimeout = createTimeSpan(0, 2, 0, 0);
 	this.datasource = 'dp_cat';
+
 	
 	// FW/1 settings
 	variables.framework = {
@@ -33,6 +35,7 @@ component extends="framework.one" output="false" {
 			{ "$GET/items/:id/" = "/items/show/id/:id" },
 
 			{ "$POST/offer/$" = "/offer/create/" },
+			{ "$POST/inquiry/$" = "/inquiry/create/" },
 
 			{ "$GET/test/" = "/test/default" }
 		 ]
@@ -51,6 +54,8 @@ component extends="framework.one" output="false" {
 	public void function setupSession() {
 		param session.validated=0;
 		param session.pno=0;
+		param session.vwrcorelatno=0;
+		
 		controller( 'security.session' );
 	 }
 

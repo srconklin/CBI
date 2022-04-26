@@ -39,7 +39,7 @@
             "PRIMARY":"physical",
             "READONLY":"false"
         },
-        "/capovani":{
+        "/cbilegacy":{
             "INSPECTTEMPLATE":"",
             "PHYSICAL":"C:\\Users\\scott\\Projects\\dynaprice\\dynaClients\\107\\63160",
             "PRIMARY":"physical",

@@ -9,8 +9,8 @@ component output="false" {
 	// this.mappings["/clientSites"]= "C:\inetpub\wwwroot\DynaClients";
  
 
-	this.mappings["/classFiles"]= "/app/admin/classFiles";
-	this.mappings["/clientSites"]= "/app/admin/clientSites";
+	// this.mappings["/classFiles"]= "/app/admin/classFiles";
+	// this.mappings["/clientSites"]= "/app/admin/clientSites";
  
 
 
