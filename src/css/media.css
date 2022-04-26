@@ -382,7 +382,7 @@ media queries
 
 }		 
 
-@media (min-width: 868px) {
+@media (min-width: 1001px) {
 	.item .detail {
 		text-align: left;
 		align-items: flex-start; 

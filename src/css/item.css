@@ -212,13 +212,14 @@ article.item {
     border-bottom: 1px solid #ccc;
     margin-bottom: 15px; */
 }
-
+/* 
 #item #myoffer {
     display: none;
-}
+} */
 #item .tabcontent {
-       border: none;
+       /* border: none; */
        height: auto;
+       min-height: 50rem;
 }
 
 /* #item .item .userprefs { 

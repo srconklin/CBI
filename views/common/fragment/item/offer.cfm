@@ -1,12 +1,16 @@
 <div class="offer">
-	<form id="offerfrm" action="/offer" method="post" x-data  @submit.prevent="$store.offer.submit()">
+	<form id="offerfrm" method="post" x-data  @submit.prevent="$store.offer.ttypeno=11;$store.offer.submit()">
 		<input type="hidden" name="itemno" :value="$store.offer.itemno">
-		
+		<input type="hidden" name="ttypeno" value="11">
+		<input type="hidden" name="qtyShown" :value="$store.offer.qtyShown">
+		<input type="hidden" name="priceShown" :value="$store.offer.priceShown">
+
 		<div class="form-row">
-			<label id="myoffer" for="priceStated" class="form-label">
-				My Offer <span>*</span>
-			</label>
-			
+			<cfoutput>
+				<label id="myoffer" for="priceStated" class="form-label">
+					My Offer <cfif structKeyExists(session, 'auth') and session.auth.isLoggedIn><a href="##" class="user">(as #session.auth.fullname#)</a></cfif> <span>*</span>
+				</label>
+			</cfoutput>
 			<div class="offer-total-row">
 				<!--- https://stackoverflow.com/questions/19233415/how-to-make-type-number-to-positive-numbers-only --->
 				<div>

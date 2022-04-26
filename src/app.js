@@ -77,11 +77,21 @@ async function fetchItemAsJSON(itemno) {
   return data;
 }
 
+function configureItem() {
+  if (!document.getElementById('item')) 
+    return;
+  
+  loadImageCount();
+  Spruce.store('offer').qtyStated.value =  document.getElementById('item').getAttribute('qty');
+  Spruce.store('offer').maxqty =  document.getElementById('item').getAttribute('qty');
+  Spruce.store('offer').itemno =  document.getElementById('item').getAttribute('itemno');
+  Spruce.store('offer').priceStated.value =  document.getElementById('item').getAttribute('price') == 'Best Price' ? '' : document.getElementById('item').getAttribute('price').replace('$', '');
+  
+}
+
 function loadImageCount() {
-  if (document.getElementById('item')) {
     const ct = document.getElementById('item').getAttribute('itemct');
     Spruce.store('carousel').slides = Array(parseInt(ct));
-  }
 }
 
 /*****************
@@ -164,18 +174,29 @@ Spruce.store('offer', () => {
   const textLimit = 250;
   // intl-tel-input plugin
   const itiBlur = iti('phone1');
-  
-  
+    
   return  { 
-    qtyStated :  {blurred: false, errorMessage: '', value:1},
-    priceStated: {blurred: false, errorMessage: '', value:''},
+
+    // offer fields
+    qtyStated :  {offer: true, blurred: false, errorMessage: '', value:1},
+    priceStated: {offer: true, blurred: false, errorMessage: '', value:''},
+    
+    qtyShown :  '',
+    priceShown: '',
+    
+    // personal fields
     firstName : {blurred: false, errorMessage: ''},
     lastName : {blurred: false, errorMessage: ''},
     email : {blurred: false, errorMessage: ''},
     phone1: {blurred: false, errorMessage: ''},
     terms: '',
+
+    // inquiry and offer field
     message: '',
+
     maxqty: 1,
+    //default is inquiry 
+    ttypeno: 10,
     submitting: false,
     submitted: false,
     validate (e) {
@@ -230,26 +251,40 @@ Spruce.store('offer', () => {
     },
     submit() {
 
-      const data = new FormData(document.getElementById("offerfrm"))
-      let error  
+      // determine which form is submitting
+      const offer = this.ttypeno == 11;
+      const form = this.ttypeno == 11 ? document.getElementById("offerfrm") : document.getElementById("inquiryfrm");
+      const route = this.ttypeno == 11 ? '/offer' : '/inquiry';
+      const data = new FormData(form);
+    
+      let error;  
       // get the inputs that are to be validated (they have a blurred property)
-      const inputs = Object.entries(this).filter((ele) => ele[1].hasOwnProperty('blurred'));
+      const inputs = Object.entries(this).filter((ele) => {
+        if (!ele[1].hasOwnProperty('blurred')) 
+          return false;
+        if (!document.getElementById(ele[0]))
+          return false;
+        let target=true;
+        if (this.ttypeno == 10 && ele[1].hasOwnProperty('offer'))
+           target = false;
+        return target;   
+      });
       // for those inputs, call any custom methods for validation otherwise call standard validateele
-      inputs.forEach(ele => {
-          this.toTarget(document.getElementById(ele[0]));
-       }); 
+      inputs.forEach(ele => this.toTarget(document.getElementById(ele[0]))); 
+
        const errors = inputs.find((ele) => ele[1].errorMessage);
        if (!errors ) {
          this.submitting = true;
          let success =false;
             try {
-              fetch('/offer', {
+              fetch(route, {
                   method: 'POST',
                   body: data 
                 })
               .then(response => response.json())
               .then(data => {
                 if (!data.res) {
+                  console.log(data);
                     for (const [key, value] of Object.entries(data.errors)) {
                       this[key].blurred = true;
                       this[key].errorMessage = value;
@@ -287,7 +322,7 @@ Spruce.watch('imodal.modal', value => {
       Spruce.store('carousel').slides = [],
       Spruce.store('carousel').scrolling =false,
       Spruce.store('carousel').active = 0;
-      Spruce.store('offer').priceStated.value = '';
+      //Spruce.store('offer').priceStated.value = '';
       Spruce.store('offer').submitted = false;
       Spruce.store('offer').priceStated = {...Spruce.store('offer').priceStated, ...reset, ...{value:''}}
       Spruce.store('offer').qtyStated = {...Spruce.store('offer').qtyStated, ...reset}
@@ -296,11 +331,12 @@ Spruce.watch('imodal.modal', value => {
  // when new content is fetched for the item; pass image/tab data off to their respective components for mgmt.
 Spruce.watch('imodal.content', content => {
     if (content) {
-        
       Spruce.store('carousel').slides = [ `${content.imgbase}${content.imgMain}`, ... content.imagesXtra.map( image => `${content.imgbase}${image}`)]
       Spruce.store('tabs').content.specstable =  content.specstable;
       Spruce.store('offer').qtyStated.value =  content.qty;
-      
+      Spruce.store('offer').priceStated.value =  content.price == 'Best Price' ? '' : content.price.replace('$', '');
+      Spruce.store('offer').qtyShown =  content.qty;
+      Spruce.store('offer').priceShown =  content.price == 'Best Price' ? '' : content.price.replace(/[\$,]/g, '');
       Spruce.store('offer').maxqty =  content.qty;
       Spruce.store('offer').itemno =  content.itemno;
       content = {... content, specstable:undefined, imagesXtra:undefined, imgMain:undefined };
@@ -310,10 +346,13 @@ Spruce.watch('imodal.content', content => {
         document.getElementById('slider').scrollLeft=0;  
       },100);
     
-    
     }
   })
   
+  Spruce.watch('tabs.openTab', value => {
+    Spruce.store('offer').submitted = false;
+  })
+
 /***********************
   Helper functions
 ***********************/
@@ -325,7 +364,8 @@ let domReady = (cb) => {
 
 domReady(() => {
     setTimeout(() => {
-        loadImageCount();
+        configureItem()
+        
      }, 200);
 
 });

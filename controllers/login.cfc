@@ -41,7 +41,10 @@ component accessors=true {
         session.auth.user = user;
         // user logged in; show validated as 2
         session.validated = 2;
+        // interface to legacy system for use in dynabuilt include files
         session.pno = user.pno;
+        session.vwrCorelatno = Max(Session.vwrCoRelatNo,max(user.pvcorelatno, user.corelatno));
+
 
 		if(structKeyExists(rc, 'destination'))
 			variables.framework.redirectCustomURL( "/#rc.destination#" );

@@ -56,3 +56,10 @@
 .offer .price-msg {
 	text-align: center;
 }
+
+.offer .user {
+	font-size: small;
+	text-decoration: none;
+    color: rgba(156, 163, 175, 1);
+	font-style: italic;
+}

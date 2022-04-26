@@ -7,9 +7,11 @@ component accessors=true extends="model.base.personal" {
    
  
     function isValid( ){
-
-     super.isValid();
-          
+     // base handler for offer is the personal one. 
+     // only called the isvalid on the base component  when the user is not logged in.
+     if (session.pno eq 0)
+        super.isValid();
+         
     
     //qty 
     if ( !len(getQtyStated()) ) {
