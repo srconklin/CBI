@@ -15,8 +15,8 @@ component accessors=true {
 
 
     function before( rc ) {
-        if ( structKeyExists( session, "auth" ) && session.auth.isLoggedIn &&  variables.framework.getItem() != "logout" ) {
-            variables.framework.redirectCustomURL( "/main" );
+            if (variables.userService.isloggedIn() &&  variables.framework.getItem() != "logout" ) {
+                variables.framework.redirectCustomURL( "/main" );
         }
     }
 
@@ -35,15 +35,22 @@ component accessors=true {
             rc.message = ["Invalid Username or Password"];
             variables.framework.redirectCustomURL( "/login", "message" );
         }
-        // set session variables from valid user
-        session.auth.isLoggedIn = true;
-        session.auth.fullname = user.firstname & " " & user.lastname;
-        session.auth.user = user;
-        // user logged in; show validated as 2
-        session.validated = 2;
-        // interface to legacy system for use in dynabuilt include files
-        session.pno = user.pno;
-        session.vwrCorelatno = Max(Session.vwrCoRelatNo,max(user.pvcorelatno, user.corelatno));
+
+        //user authenticated
+        user.validated = 2;
+
+        // set up user session
+        variables.userService.setUserSession(user)
+                
+        // // set session variables from valid user
+        // session.auth.isLoggedIn = true;
+        // session.auth.fullname = user.firstname & " " & user.lastname;
+        // session.auth.user = user;
+        // // user logged in; show validated as 2
+        // session.validated = 2;
+        // // interface to legacy system for use in dynabuilt include files
+        // session.pno = user.pno;
+        // session.vwrCorelatno = Max(Session.vwrCoRelatNo,max(user.pvcorelatno, user.corelatno));
 
 
 		if(structKeyExists(rc, 'destination'))
@@ -52,11 +59,15 @@ component accessors=true {
         	variables.framework.redirectCustomURL( "/" );
     }
 
+   
     function logout( rc ) {
+        // tear down user session
+        variables.userService.defaultUserSession();
+
         // reset session variables
-        session.auth.isLoggedIn = false;
-        session.auth.fullname = "";
-        structdelete( session.auth, "user" );
+        // session.auth.isLoggedIn = false;
+        // session.auth.fullname = "";
+        // // structdelete( session.auth, "user" );
         variables.framework.redirectCustomURL( "/");
     }
 

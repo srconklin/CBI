@@ -12,7 +12,8 @@
 <!--- dev --->
 <!--- <link rel="stylesheet" href="/dist/styles.css"> --->
 <!--- prod --->
-<link rel="stylesheet" href="/dist/index.0f205b7a.css"> 
+<!--- <link rel="stylesheet" href="/dist/index.0f205b7a.css">  --->
+<link rel="stylesheet" href="/dist/index.d01acb1f.css">
  
  <title>CBI - Login</title>
 
@@ -29,10 +30,10 @@
 				<img alt="CBI" src="images/logo_short.png">
 			</div>
 
-			<div class="login-panel box-shadow">
+			<div class="login-panel box-shadow2">
 				
 				<div class="login-title">
-				  <h1>LOG IN</h1>
+				  <h1>SIGN IN</h1>
 				</div>
 				
 				<cfif structKeyExists(rc, 'message')>
@@ -43,10 +44,10 @@
 				
 					<form action="/login" method="post">
 						<div class="form-row">
-							<input class="form-control" type="text" placeholder="username" name="username"/>
+							<input class="form-control" type="text" placeholder="username" name="username" required/>
 						</div>
 						<div class="form-row">
-							<input class="form-control" type="password" placeholder="password" name="password"/>
+							<input class="form-control" type="password" placeholder="password" name="password" required/>
 						</div>	
 				
 					 <div>
@@ -55,7 +56,7 @@
 					  </p>
 					</div>
 				
-					<button type="submit" class="btn btn-red login-submit">SIGN IN</button>
+					<button type="submit" class="btn btn-red login-submit">Log In</button>
 					<cfif structKeyExists(rc, 'destination')>
 					 	<input type="hidden" value="#rc.destination#" name="destination" />
 					</cfif>

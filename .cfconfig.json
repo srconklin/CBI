@@ -5,12 +5,11 @@
 	"requestTimeout": "0,0,20,0",
     "mailservers" : [
       {
-
      "smtp": "mail.dynaprice.com",
      "host": "mail.dynaprice.com",
 	  "port": 587,
-	  "username": "sysadmin@dynparice.com",
-	  "password": "encrypted:93dc961db7f565604634725501de0367185ac59c85b96e8b87e65c31adb7bd84",
+	  "username": "sysadmin@dynaprice.com",
+	  "password": "encrypted:734f569a11b133cb0f41c3a26bebf85e3142a8255e53a62d5d1a63f9f65d3eb0",
   	  "ssl": false,
 	  "tls": true
     }],

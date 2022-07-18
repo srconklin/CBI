@@ -33,7 +33,7 @@
 			  </button>
 			</div>
 		  </div>
-<!--- 	
+		<!--- 	
 		 <cfif local.route neq 'default'>
 			<div id="searchbox" class="searchbox-abbr"></div>
 		</cfif> --->
@@ -49,7 +49,8 @@
 			<a href="/faq">
 			  FAQ
 			</a>
-			<cfif structKeyExists(session, 'auth') and session.auth.isLoggedIn >
+			<!--- <cfif structKeyExists(session, 'auth') and session.auth.isLoggedIn > --->
+			<cfif rc.userSession.isLoggedIn >
 				<!--- <a href="/logout">
 					<cfoutput>#session.auth.user.firstname#</cfoutput>
 				</a> --->
@@ -58,11 +59,15 @@
 
 					<!-- button or link -->
 					<a class="usericon" href="#">
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+						<!--- <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
 							stroke-linecap="round" stroke-linejoin="round">
 							<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
 							<circle cx="12" cy="7" r="4" />
-						</svg>
+						</svg> ---><cfoutput>
+							<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 64 64" version="1.1">
+								<circle fill="##FFFFFF" cx="32" width="64" height="64" cy="32" r="32"/>
+								<text x="50%" y="50%" fill="##fa0114" style="color: ##fa0114; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="30" font-weight="600" dy=".1em" dominant-baseline="middle" >#rc.userSession.avatar#</text></svg>
+						</cfoutput>
 					</a>
 
 					<!-- drop down menu -->
@@ -76,16 +81,17 @@
 						x-transition:leave-end="opacity-0 translate-y-1">
 						<!-- <div class="shadow-xs rounded-lg overflow-hidden"> -->
 						<!-- items -->
-						<a href="" class="entry">
-							<p class="emphasize">Scott Conklin</p>
+						<a href="" class="entry"><cfoutput>
+							<p class="emphasize">#rc.userSession.name#</p>
+						</cfoutput>
 						</a>
 						<div class="divide"></div>
-						<a href="" class="entry">
+						<a href="/myprofile" class="entry">
 							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 								<path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
 								<path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
 							  </svg>
-							<p>My Profile</p>
+							<p>My Account</p>
 						</a>
 					
 						<a href="/logout" class="entry">
@@ -101,7 +107,7 @@
 				<a href="/login">
 					Log In
 				</a>
-				<button class="btn btn-wy o80" type="button">Register</button>
+				<button class="btn btn-wy o80" type="button" onclick="location.href='/register'">Register</button>
 			</cfif>
 			
 			

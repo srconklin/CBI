@@ -76,4 +76,5 @@
 
 <cfoutput>
   #view( 'common/fragment/item/QuickView')#
+  #view( 'common/fragment/toasts')#
 </cfoutput>

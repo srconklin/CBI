@@ -1,18 +1,18 @@
-
-<cfif not structKeyExists(session, 'auth') or not session.auth.isLoggedIn >
+<cfparam name="phoneid" default="phone1">
+<cfif not rc.userSession.isLoggedIn >
     <div class="form-row">
         <label for="firstName" class="form-label">
             First Name <span>*</span>
         </label>
-        <input name="firstName" id="firstName" type="text" class="form-control" :class="{'invalid':$store.offer.firstName.errorMessage && $store.offer.firstName.blurred}"  placeholder="John" maxlength="25" required  @blur="$store.offer.validate($event)"/>
-        <p class="helper error-message" x-cloak x-show="$store.offer.firstName.errorMessage && $store.offer.firstName.blurred" x-text="$store.offer.firstName.errorMessage" ></p>
+        <input name="firstName"  type="text" class="form-control" :class="{'invalid':$store.forms.firstName.errorMessage && $store.forms.firstName.blurred}"  placeholder="John" maxlength="20" required  @blur="$store.forms.validate($event)" oninput="this.value=validInput(this.value);" x-model="$store.forms.firstName.value" />
+        <p class="helper error-message" x-cloak x-show="$store.forms.firstName.errorMessage && $store.forms.firstName.blurred" x-text="$store.forms.firstName.errorMessage" ></p>
     </div>
     <div class="form-row">
         <label for="lastName" class="form-label">
             Last Name <span>*</span>
         </label>
-        <input name="lastName" id="lastName"  type="text" class="form-control" :class="{'invalid':$store.offer.lastName.errorMessage && $store.offer.lastName.blurred}" placeholder="Doe"  maxlength="25" required @blur="$store.offer.validate($event)"  />
-        <p class="helper error-message" x-cloak x-show="$store.offer.lastName.errorMessage && $store.offer.lastName.blurred" x-text="$store.offer.lastName.errorMessage" class="error-message"></p>
+        <input name="lastName"   type="text" class="form-control" :class="{'invalid':$store.forms.lastName.errorMessage && $store.forms.lastName.blurred}" placeholder="Doe"  maxlength="30" required @blur="$store.forms.validate($event)" oninput="this.value=validInput(this.value);" x-model="$store.forms.lastName.value" />
+        <p class="helper error-message" x-cloak x-show="$store.forms.lastName.errorMessage && $store.forms.lastName.blurred" x-text="$store.forms.lastName.errorMessage" class="error-message"></p>
     </div>
     <div class="form-row">
         <label for="email" class="form-label">
@@ -24,20 +24,19 @@
                     <path fill-rule="evenodd" d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z" clip-rule="evenodd" />
                 </svg>
             </span>
-            <input name="email" id="email" type="email" class="form-control input-group-ele-svg" :class="{'invalid':$store.offer.email.errorMessage && $store.offer.email.blurred}" placeholder="example@email.com"  maxlength="50" required @blur="$store.offer.validate($event)"/>
+            <input name="email"  type="email" class="form-control input-group-ele-svg" :class="{'invalid':$store.forms.email.errorMessage && $store.forms.email.blurred}" placeholder="example@email.com"  maxlength="50" required @blur="$store.forms.validate($event)"/>
         </div>
-        <p class="helper error-message" x-cloak x-show="$store.offer.email.errorMessage && $store.offer.email.blurred" x-text="$store.offer.email.errorMessage" class="error-message"></p>
+        <p class="helper error-message" x-cloak x-show="$store.forms.email.errorMessage && $store.forms.email.blurred" x-text="$store.forms.email.errorMessage" class="error-message"></p>
     </div>
     <div class="form-row">
         <label for="coname" class="form-label">
             Company
         </label>
-        <input name="coname" id="coname" type="text" class="form-control"  placeholder="Google, Inc"  maxlength="50" />
+        <input name="coname"  type="text" class="form-control" @blur="$store.forms.validateConame()"  placeholder="Google, Inc"  maxlength="50" x-model="$store.forms.coname" />
+        <!--- <p class="helper error-message" x-cloak x-show="$store.forms.coname.errorMessage && $store.forms.coname.blurred" x-text="$store.forms.coname.errorMessage" class="error-message"></p> --->
     </div>
     <div class="form-row ">
-        <label for="phone1" class="form-label">
-            Phone <span>*</span>
-        </label>
+       
         <!--- <div class="input-group">
             <span class="input-group-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -49,18 +48,15 @@
             --->
     
         </div> --->
-        <input name="phone1" id="phone1" type="tel" class="form-control input-group-ele-svg" :class="{'invalid':$store.offer.phone1.errorMessage && $store.offer.phone1.blurred}" maxlength="25" required oninput="this.value=validTelNumber(this.value)" @blur="$store.offer.validate($event)"   />
-        <p class="helper error-message" x-cloak x-show="$store.offer.phone1.errorMessage && $store.offer.phone1.blurred" x-text="$store.offer.phone1.errorMessage" class="error-message"></p>
+        <cfoutput>
+			#view( 'common/fragment/item/phone',  {phone = local.phone})#
+		</cfoutput>
+
     </div>
 
 <cfelse>
     <cfoutput>
-        <input type="hidden" name="FirstName" value="#session.auth.user.firstname#">
-        <input type="hidden" name="LastName" value="#session.auth.user.lastname#">
-        <input type="hidden" name="email" value="#session.auth.user.email#">
-        <input type="hidden" name="coname" value="#session.auth.user.coname#">
-        <input type="hidden" name="phone1" value="#session.auth.user.phone1#">
-        
+        <input type="hidden" name="email" value="#rc.userSession.email#">
     </cfoutput>
 </cfif>    
 
