@@ -7,8 +7,8 @@ component accessors=true {
 					ISNULL(Permits.CoRelatNo,0) as corelatno,
 					p.emailverified, p.emailHash, p.emailSalt
 					FROM people p 
-					INNER join Permits PV ON PV.PNo = P.PNo AND PV.VTID=63160	
-					INNER JOIN Permits ON (Permits.PNo = P.PNo AND Permits.VTID IN (63160,107,2))
+					INNER join Permits PV ON PV.PNo = P.PNo AND PV.VTID=#application.VTID#	
+					INNER JOIN Permits ON (Permits.PNo = P.PNo AND Permits.VTID IN (#application.VTID#,#application.COTID#,2))
 					WHERE deactivated is null ';
 					
   

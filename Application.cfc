@@ -1,13 +1,15 @@
 component extends="framework.one" output="false" accessors=true {
-	this.name = "cbi"
+	this.name = "63160"
 	this.applicationTimeout = createTimeSpan(2, 0, 0, 0);
 	this.setClientCookies = true;
 	this.sessionManagement = true;
 	this.sessionTimeout = createTimeSpan(0, 2, 0, 0);
 	this.datasource = 'dp_cat';
+	this.COTID = "107";
 
 	property userService;
 		
+
 	// FW/1 settings
 	variables.framework = {
 		// action = 'action',
@@ -63,6 +65,8 @@ component extends="framework.one" output="false" accessors=true {
 
 	public void function setupApplication() {
 		application.captchaKey = '6LcpOp0UAAAAAKhGFvYiNw5i85DHgAdem3nGoLwc'
+		application.VTID = this.name;
+		application.COTID = this.cotid;
 	 }
 
 	public void function setupSession() {
@@ -70,8 +74,7 @@ component extends="framework.one" output="false" accessors=true {
 	 }
 
 	public void function setupRequest() { 
-		request.DSNCat ='dp_cat';
-		
+		request.DSNCat =this.datasource;
 		controller( 'security.authorize' );
 	 }
 
