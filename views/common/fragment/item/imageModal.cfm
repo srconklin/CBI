@@ -4,9 +4,7 @@
 // rightBoundary =  document.getElementById('slider').getBoundingClientRect().right;
 --->
 <div x-data="{ imgModalSrc : '', zoom: false, rightBoundary : 0}" >
-    <template @img-modal.window="{
-            imgModalSrc = $event.detail.imgModalSrc;
-          }" x-if="imgModalSrc">
+    <template @img-modal.window="imgModalSrc = $event.detail.imgModalSrc" x-if="imgModalSrc">
         <div x-ref="imageModal" id="imageModal" class="image-modal"
             x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" 
             x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 transform scale-100" 

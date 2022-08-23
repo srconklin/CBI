@@ -1,8 +1,20 @@
 	<!--- item quick view as a modal --->
-	<div class="modal-container" style="display:none;" x-data x-show="$store.imodal.modal"  @show-modal.window="$store.imodal.showModal();$store.imodal.showItem($event.detail.itemno);">
+	<div class="modal-container"  
+		x-cloak
+		x-data 
+		x-show="$store.imodal.modal"  
+		@keydown.escape.prevent.stop="$store.imodal.closeModal($event)"
+		@show-modal.window="$store.imodal.showItem($event.detail.itemno);"
+		x-trap.noscroll.inert="$store.imodal.modal"
+		role="dialog"
+		aria-modal="true"
+		x-id="['headline']"
+		:aria-labelledby="$id('headline') ">
 
 		<!--- A basic modal dialog with title, body and one button to close --->
 		<div class="modal" @click.away="$store.imodal.closeModal();">
+
+			<!--- modal header --->
 			<div class="modal-header">
 				<button @click.prevent="$store.imodal.closeModal($event)" class="carousel-button">
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -10,6 +22,7 @@
 					</svg>
 				 </button>
 			</div>
+
 			<!--- modal body --->
 			<!--- <template x-if="true"> --->
 				<article class="item">
@@ -27,7 +40,7 @@
 						<div class="detail">
 							<!--- left column: headline, class, description --->
 							<div>
-								<h1 itemprop="name" class="headline" x-text="$store.imodal.content.headline"></h1> 
+								<h1 :id="$id('headline')" itemprop="name" class="headline" x-text="$store.imodal.content.headline"></h1> 
 								<p itemprop="category" class="category" x-text="$store.imodal.content.category"></p> 
 								<p itemprop="description" class="description" x-text="$store.imodal.content.description"></p> 
 								<p itemprop="offers" class="offers" itemscope itemtype="http://schema.org/Offer">

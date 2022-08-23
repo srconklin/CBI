@@ -1,3 +1,8 @@
+import 'modern-normalize/modern-normalize.css';
+import "suitcss-base";
+//import 'instantsearch.css/themes/reset.css';
+import 'instantsearch.css/themes/algolia.css';
+import 'intl-tel-input/build/css/intlTelInput.css';
 import './css/site.css'; 
 import './css/algolia.css'; 
 import './css/carousel.css'; 

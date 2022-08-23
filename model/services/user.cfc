@@ -1,7 +1,7 @@
 component accessors=true {
 
 	property beanFactory;
-
+	// the base sql string for all queries for all functions
 	baseAuthUserSQL  = 'select p.Pno, p.userID, p.email, p.firstname, p.lastname, p.coname, p.phone1, p.regstat,
 					ISNULL(PV.CoRelatNo, 0) as pvcorelatno,
 					ISNULL(Permits.CoRelatNo,0) as corelatno,
@@ -13,6 +13,7 @@ component accessors=true {
 					
   
 	function defaultUserSession( ) {
+		// defult session
 		session.validated=0;
 		session.pno=0;
 		session.vwrcorelatno=0;
@@ -30,6 +31,7 @@ component accessors=true {
 			session.validated = 2;
 		}
 	}
+
 	function syncValidatedUser( rc={}  ) { 
 		var result = {};
 		session.email = rc.email;
@@ -42,8 +44,8 @@ component accessors=true {
 		session.isNewPerson = rc.newperson
 
 		// return for payload use
-		//result["isNewPerson"] = session.isNewPerson;
-		//result["regstat"] =  session.regstat;
+		// result["isNewPerson"] = session.isNewPerson;
+		// result["regstat"] =  session.regstat;
 		result["firstName"] =  gettoken(session.name, 1, " ");
 
 		if (session.isNewPerson)
@@ -174,7 +176,7 @@ component accessors=true {
 		} else if (arguments.token neq hash(arguments.email & arUser[1].emailSalt, 'SHA-256')) {
 			result['success']=false;
 		} else {
-			//update authentication bit
+			//update authentication bit for user
 			sql = 'update peopleOrig set emailverified=1 WHERE email = :email'
 			queryExecute( sql, {email: arguments.email});
 			result['user']=arUser[1];

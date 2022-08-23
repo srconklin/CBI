@@ -89,7 +89,7 @@ site css
     border-color: #e5e7eb;
 } */
 
-/* turned on my modern normalize */
+/* turned on in my modern normalize */
 :-moz-focusring {
   outline: none;
 }
@@ -107,10 +107,20 @@ button,
 
 a:focus,
 button:focus,
+svg:focus,
 input,
 textarea {
-  outline: 2px solid transparent;
+  /* outline: 2px solid transparent;
+  outline-offset: 2px; */
+  outline: none;
+}
+
+a:focus-visible, button:focus-visible, ul:focus-visible {
+  outline: 2px solid #fa0114;
   outline-offset: 2px;
+}
+svg:focus-visible {
+  color: #fa0114;
 }
 
 input,
@@ -957,6 +967,7 @@ hr {
   border-radius: 0.5rem;
   border-color: rgba(229, 231, 235, 1.0);
   background-color: rgba(255, 255, 255, 1.0);
+  z-index: 1;
 }
 
 .header-user .userdd a {

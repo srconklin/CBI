@@ -28,7 +28,7 @@
 							$
 						</span>
 						<!--- pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"  --->
-						<input name="priceStated" id="priceStated" type="text" class="form-control input-group-ele currency-ele" :class="{'invalid':$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred}"  placeholder="999,999.00" oninput="this.value=formatCurrency(this.value);"  @blur="$store.forms.validate($event)" maxlength="10"  x-model="$store.forms.priceStated.value" data-msg='["valueMissing:Please enter a valid price"]' required/>
+						<input  name="priceStated" id="priceStated" type="text" class="form-control input-group-ele currency-ele" :class="{'invalid':$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred}"  placeholder="999,999.00" oninput="this.value=formatCurrency(this.value);"  @blur="$store.forms.validate($event)" maxlength="10"  x-model="$store.forms.priceStated.value" data-msg='["valueMissing:Please enter a valid price"]' required/>
 					</div>
 					<!--- <p class="helper error-message" x-cloak x-show="$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred" x-text="$store.forms.priceStated.errorMessage" class="error-message"></p> --->
 				</div>

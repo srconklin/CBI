@@ -1,9 +1,9 @@
 /* global instantsearch */
-//import instantsearch from 'instantsearch.js';
+// import instantsearch from 'instantsearch.js';
 
-// import {
-// 	history as historyRouter
-//   } from 'instantsearch.js/es/lib/routers';
+import {
+	history as historyRouter
+  } from 'instantsearch.js/es/lib/routers';
  
  // import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
 
@@ -48,9 +48,8 @@
 	  .map(decodeURIComponent)
 	  .join(' ');
   }
-  
-  // const router = historyRouter({
-   const router = instantsearch.routers.history({
+    
+   const router = historyRouter({
 
 	windowTitle(routeState) {
 

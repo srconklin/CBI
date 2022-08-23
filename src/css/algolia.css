@@ -428,3 +428,10 @@ facet placeholders
   .ais-ClearRefinements-button--disabled {
 	  display: none;
   }
+
+  .ais-SearchBox-submit {
+     left: unset; 
+	 right: .6rem;
+
+}
+  

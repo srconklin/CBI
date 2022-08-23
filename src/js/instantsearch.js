@@ -1,3 +1,6 @@
+import algoliasearch from 'algoliasearch/lite';
+import instantsearch from 'instantsearch.js';
+import {hierarchicalMenu, refinementList, searchBox, pagination, configure, hits, panel, breadcrumb, clearRefinements, sortBy, stats} from 'instantsearch.js/es/widgets';
 import searchRouting from './search-routing';
 
 
@@ -50,7 +53,7 @@ const algoliaClient = algoliasearch(
   });
 
   
-  const searchbox =  instantsearch.widgets.searchBox({
+  const searchbox =  searchBox({
 	container: '#searchbox',
 	placeholder: 'keyword, category, make, model...',
 	searchAsYouType: (document.getElementById('breadcrumb')) ? true : false,
@@ -93,7 +96,7 @@ const algoliaClient = algoliasearch(
   if(document.getElementById('breadcrumb')) {
 
 		
-	const refinementListWithPanel =  instantsearch.widgets.panel({
+	const refinementListWithPanel =  panel({
 		collapsed: true,
 		hidden(options) {
 			return options.results.nbHits === 0;
@@ -101,9 +104,9 @@ const algoliaClient = algoliasearch(
 		templates: {
 		header: 'Manufacturer',
 		},
-	})(instantsearch.widgets.refinementList);
+	})(refinementList);
 	
-	const HMWithPanel =  instantsearch.widgets.panel({
+	const HMWithPanel =  panel({
 		collapsed: true,
 		hidden(options) {
 			return options.results.nbHits === 0;
@@ -111,12 +114,12 @@ const algoliaClient = algoliasearch(
 		templates: {
 		header: `Categories`,
 		},
-	})(instantsearch.widgets.hierarchicalMenu);
+	})(hierarchicalMenu);
 	
 
 	search.addWidgets([
 		
-		instantsearch.widgets.breadcrumb({
+		breadcrumb({
 		  container: '#breadcrumb',
 		  templates: {
 			home: `All Categories`,
@@ -135,7 +138,7 @@ const algoliaClient = algoliasearch(
 		
 		}),
   
-		instantsearch.widgets.clearRefinements({
+		clearRefinements({
 		  container: '#clear-refinements',
 		  templates: {
 			resetLabel: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -152,7 +155,7 @@ const algoliaClient = algoliasearch(
 		}),
   
   
-		instantsearch.widgets.sortBy({
+		sortBy({
 		  container: '#sort-by',
 		  items: [
 			{ label: 'Most relevant', value: 'cbi' },
@@ -185,7 +188,7 @@ const algoliaClient = algoliasearch(
   
 		}),
   
-		instantsearch.widgets.stats({
+		stats({
 		  container: '#stats',
 		  templates: {
 			text: `
@@ -196,7 +199,7 @@ const algoliaClient = algoliasearch(
 		  }
 		}),
   
-		instantsearch.widgets.stats({
+		stats({
 		  container: '#statsfilter',
 		  templates: {
 			text: `
@@ -207,7 +210,7 @@ const algoliaClient = algoliasearch(
 		  }
 		}),
   
-		instantsearch.widgets.hits({
+		hits({
 		  container: '#hits',
 		  templates: {
 			 empty (results) {
@@ -270,12 +273,12 @@ const algoliaClient = algoliasearch(
 		  }
 		 },
 		}),
-		instantsearch.widgets.pagination({
+		pagination({
 		  container: '#pagination',
 		}),
   
   
-		instantsearch.widgets.configure({
+		configure({
 		  hitsPerPage: 16
 		})
   
