@@ -62,4 +62,16 @@
 	text-decoration: none;
     color: rgba(156, 163, 175, 1);
 	font-style: italic;
+	display: flex;
+    align-items: center;
+	margin-bottom: .6rem;
 }
+
+
+.offer .user svg {
+	margin-left: .3rem;
+	width: .8rem;
+	height: .8rem;
+	color: rgb(134 139 146);
+	
+  }

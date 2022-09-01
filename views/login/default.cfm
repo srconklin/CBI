@@ -8,12 +8,12 @@
 
   <!--- <link rel="manifest" href="/manifest.webmanifest"> --->
   <link rel="shortcut icon" href="/images/favicon.ico">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/modern-normalize@1/modern-normalize.min.css,npm/suitcss-base@5/lib/base.min.css">
+  <!--- <link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/modern-normalize@1/modern-normalize.min.css,npm/suitcss-base@5/lib/base.min.css"> --->
 <!--- dev --->
-<!--- <link rel="stylesheet" href="/dist/styles.css"> --->
+<link rel="stylesheet" href="/dist/styles.css">
 <!--- prod --->
 <!--- <link rel="stylesheet" href="/dist/index.0f205b7a.css">  --->
-<link rel="stylesheet" href="/dist/index.d01acb1f.css">
+<!--- <link rel="stylesheet" href="/dist/index.d01acb1f.css"> --->
  
  <title>CBI - Login</title>
 
@@ -37,7 +37,9 @@
 				</div>
 				
 				<cfif structKeyExists(rc, 'message')>
-					#view( 'common/fragment/errorbox', { messages =  rc.message } )#
+					<div style="margin-top: 1rem; margin-bottom: 1rem;"> 
+						#view( 'common/fragment/errorbox', { messages =  rc.message } )#
+					</div>
 				</cfif>
 				
 				<div>
@@ -52,7 +54,7 @@
 				
 					 <div>
 					  <p>
-						<a href="##" class="login-fp">Forgot Password?</a>
+						<a href="/forgotpassword" class="login-fp">Forgot Password?</a>
 					  </p>
 					</div>
 				
@@ -65,7 +67,7 @@
 
 				<div class="login-footnote flex justify-center mx-3 mt-1">
 				  <p>Don't have an account? 
-					<a href="##">Sign up</a>
+					<a href="/register">Sign up</a>
 				  </p>
 				</div>
 			  </div>

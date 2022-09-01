@@ -6,6 +6,7 @@ component extends="framework.one" output="false" accessors=true {
 	this.sessionTimeout = createTimeSpan(0, 2, 0, 0);
 	this.datasource = 'dp_cat';
 	this.COTID = "107";
+	
 
 	property userService;
 		
@@ -31,12 +32,13 @@ component extends="framework.one" output="false" accessors=true {
 
 			{ "$GET/register/$" = "/register/default" },
 			{ "$GET/verify_email/" = "/register/verify_email" },
-			{ "$GET/verify/:token/:email/" = "/register/verifyemail/token/:token/email/:email" },
+			{ "$GET/verify/:token/" = "/register/verifyemail/token/:token/" },
 			{ "$POST/resendlink/" = "/register/resendlink" },
 			{ "$POST/register/" = "/register/register" },
 
 			{ "$GET/myprofile/$" = "/myprofile/default" },
-			{ "$POST/myprofile/" = "/myprofile/myprofile" },
+
+			{ "$GET/forgotpassword/$" = "/myprofile/forgotpassword", "$POST/forgotpassword/$" = "/myprofile/forgotpassword" },
 
 			{ "$GET/search/" = "/main/default" },
 
@@ -64,6 +66,7 @@ component extends="framework.one" output="false" accessors=true {
 	};
 
 	public void function setupApplication() {
+		application.AESKey = "XyekJNxLAIv2LlmULBkxNw==";
 		application.captchaKey = '6LcpOp0UAAAAAKhGFvYiNw5i85DHgAdem3nGoLwc'
 		application.VTID = this.name;
 		application.COTID = this.cotid;
@@ -72,6 +75,10 @@ component extends="framework.one" output="false" accessors=true {
 	public void function setupSession() {
 		controller( 'security.session' );
 	 }
+
+	 function before( struct rc ) {
+		rc.userSession = userService.getUserSession();
+	}
 
 	public void function setupRequest() { 
 		request.DSNCat =this.datasource;

@@ -5,10 +5,11 @@ component accessors=true {
 	baseAuthUserSQL  = 'select p.Pno, p.userID, p.email, p.firstname, p.lastname, p.coname, p.phone1, p.regstat,
 					ISNULL(PV.CoRelatNo, 0) as pvcorelatno,
 					ISNULL(Permits.CoRelatNo,0) as corelatno,
-					p.emailverified, p.emailHash, p.emailSalt
+					isnull(s.verifyVerified, 0) as verifyVerified, s.verifyHash, isnull(s.verifyDateTime, ''1990-01-01'') as verifyDateTime
 					FROM people p 
 					INNER join Permits PV ON PV.PNo = P.PNo AND PV.VTID=#application.VTID#	
 					INNER JOIN Permits ON (Permits.PNo = P.PNo AND Permits.VTID IN (#application.VTID#,#application.COTID#,2))
+					LEFT JOIN securityHashes s ON s.email = p.email
 					WHERE deactivated is null ';
 					
   
@@ -22,8 +23,14 @@ component accessors=true {
 		session.name = '';
 		session.email = '';
 		session.avatar = '';
+		session.verifyVerified=0;
 	}
 
+	function logout( ) {
+		structClear(session);
+		this.defaultUserSession();
+
+	}
 	
 	function elevateUserStatus( ) { 
 		// under these conditions then authenticate fully; why do partial login only for users who have/can login?
@@ -66,6 +73,7 @@ component accessors=true {
 		session.name =  user.firstname & " " & user.lastname;
 		session.avatar =  left(ucase(user.firstname),1) &  left(ucase(user.lastname),1);
 		session.email = user.email;
+		session.verifyVerified = user.verifyVerified;
 		session.regstat = user.regstat;
         session.vwrCorelatno = Max(session.vwrCoRelatNo,max(user.pvcorelatno, user.corelatno));
 		// user logged in; 0 = guest, logged in = 2, recognized = 1
@@ -87,17 +95,17 @@ component accessors=true {
 			isLoggedIn : isLoggedIn(),
 			name: session.name,
 			avatar: session.avatar,
-			email: session.email
+			email: session.email,
+			isEmailVerified: (session.regstat or session.verifyVerified) ? true: false
 		}
 
 	}
-	
     
     function validateUser( required string username,  required string password ) {
 		
 		// get a user bean
 		//var user = variables.beanFactory.getBean( "userbean" );
-		var user;
+		var user ='';
 		
 		var params = {
 			username: arguments.username,
@@ -107,10 +115,28 @@ component accessors=true {
 		var sql = baseAuthUserSQL & ' AND p.userID = :username and password = :password;'
 		var arUser = queryExecute( sql, params,  { returntype="array" });
 		// there should be only one row returned, but always take the first one if we somehow get more than one.
-		user=arUser[1];
+
+			
+		if(arUser.len() eq 1) {
+			user=arUser[1];
+		}
 			
         return user;
     }
+
+	function resetForgotenPwd(required string email ) {
+
+		var result = {};
+		result['message']='';
+
+		if (!isValid('email', arguments.email)) {
+			result['message']='Invalid Email Address';
+			return result;
+		}	
+	
+		return result;
+
+	}
 
 	function resendLink( required string email ) {
 
@@ -121,7 +147,6 @@ component accessors=true {
 			email: arguments.email
 		};
 			
-		// var sql = 'select  emailHash, firstname, lastName, email FROM peopleOrig p WHERE p.email = :email'
 		var sql = baseAuthUserSQL & ' AND p.email = :email'
 											
 		var qryEmail = queryExecute( sql, params);
@@ -132,19 +157,20 @@ component accessors=true {
 		} else {
 			try {
 
-				domain = cgi.https eq 'on'? 'https://' : "http://" & cgi.http_host;
-				verifylink =  "#domain#/verify/#qryEmail.emailhash#/#qryEmail.email#";
-
 				//interface with required variables
+				variables.domain = cgi.https eq 'on'? 'https://' : "http://" & cgi.http_host;
+				variables.aeskey = application.AESKey;
 				form.email = qryEmail.email;
 				form.firstname = qryEmail.firstname;
 				form.lastname = qryEmail.lastname;
+				// use procreg2 to only resend verify link
+				form.resendVerifyLink = true;
 
 				include "/cbilegacy/legacySiteSettings.cfm"
-				include "/cbilegacy/sendVerifyEmail.cfm"
+				include "/cbilegacy/procreg2.cfm"
 				
 			} catch (e) {
-				response["res"] = false;
+				response["result"] = false;
 				writeDump(e);
 				abort;
 			}
@@ -155,31 +181,55 @@ component accessors=true {
 
 	}
 	// verify email is secured by salted hash; we can return something back (pno) to be used to pass to other functions for longing in.
-    function verifyEmail( required string email,  required string token ) {
+    function verifyEmail(required string token ) {
 		var result = {};
 		result['success']=true;
+		var email = '';
+		var secretGuid = '';
 
+		try {
+			// replace the _ back with slashes
+			arguments.token = replace(arguments.token, "_", "/", "all");
+			decryptedToken=decrypt(arguments.token, application.AESKey, "AES", "Base64")
+			secretGuid = getToken(decryptedToken, 1, '|');
+			email = getToken(decryptedToken, 2, '|');
+
+		} catch (e) {
+			secretGuid = '';
+			email = '';
+
+		}
+		
 		var params = {
-			email: arguments.email,
-			token: hash(arguments.token)
+			email: email
 		};
 			
 		var sql = baseAuthUserSQL & ' AND p.email = :email'
 						
 		var arUser = queryExecute( sql, params, { returntype="array" });
 		
+		// email found in encryption package comes back as not being in the db. fishy or broken link
 		if (arUser.len() neq 1) {
 			result['success']=false;
-		} else if (arUser[1].emailverified) {	
+		// already verified	
+		} else if (arUser[1].verifyVerified) {	
 			result['success']=false;
 			result['alreadyVerified']=true;
-		} else if (arguments.token neq hash(arguments.email & arUser[1].emailSalt, 'SHA-256')) {
+		// link expired
+		} else if (datediff('n', arUser[1].verifyDateTime, now()) gt 60 ) {	
+			result['success']=false;
+			result['expired']=true;
+			result['email']=email;
+		// hash is invalid; something fishy
+		} else if (! Argon2CheckHash( secretGuid, arUser[1].verifyHash)) {
 			result['success']=false;
 		} else {
 			//update authentication bit for user
-			sql = 'update peopleOrig set emailverified=1 WHERE email = :email'
-			queryExecute( sql, {email: arguments.email});
+			sql = 'update securityHashes set verifyVerified=1, verifyHash=null, verifyGUID=null, verifyDateTime=null  WHERE email = :email'
+			queryExecute( sql, {email: email});
 			result['user']=arUser[1];
+			// sync verified email status with db change above.
+			result['user']['verifyVerified'] = 1;
 		}
 
 		return result;

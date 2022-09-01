@@ -1,137 +1,130 @@
-
-.login  {
-	background-color: rgb(55 91 187 / .9);
-	padding-top: 3rem;
-	padding-bottom: 3rem;
-	line-height: 1.5;
-  }
-
-  .login .container {
-	height: 100%;
-  }
-
-  .login-wrapper {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-content: center;
-	align-items: center;
-  }
-  .login-logo {
-	text-align: center;
-	margin-bottom: 2.5rem;
-  }
-
-  .login-panel {
-	display: flex;
-	flex-direction: column;
-	border-radius: 0.25rem;
-	background-color: rgba(255, 255, 255, 1.0);
-	width: 88%;
-	max-width: 450px;
-	padding: 2rem 1.5rem 2rem 1.5rem;
-
-  }
-
-  .login-title {
-	margin-bottom: 1.5rem;
-	text-align: center;
-	/* /color: rgba(75, 85, 99, 1.0); */
-	font-weight: 700;
-    font-size: 1.5rem;
-	font-size: 16px;
-  }
-
-  .login-fp {
-	text-decoration: none;
-	color: #fa0114;  
-  }
-
-  .login-fp:hover { 
-	 opacity: .7;
-  }
-
-  .login-submit {
-	width: 100%;
-	margin-top: 1.5rem !important;
-	border-radius: 9999px !important;
-  }
-  
-  .login-footnote {
-		display: flex;
-		justify-content: center;
-		margin-top: 1.25rem;
-		margin-left: .75rem;
-		margin-right: .75rem;
-		font-size: .875rem;
-    	line-height: 1.25rem;
-  }
-	
-  .login-footnote a {
-	text-decoration: none;
-	color: #fa0114;  
-  }
-
-  .login-footnote a:hover { 
-	opacity: .7;
- }
-
- .snap {
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-}
-.snap > div {
-    scroll-snap-align: start;
+.login {
+  background-color: rgb(55 91 187 / .9);
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  line-height: 1.5;
 }
 
+.login .container {
+  height: 100%;
+}
 
-  /* register */
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
 
-  .register-wrapper {
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-    align-items: center;
-	margin-top: 2rem;
-  }
+.login-logo {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
 
-   #register-account  {
-	margin-bottom: 2rem;
-  }
-  .register .login-title  {
-	  text-align: left;
-  }
-  .register .login-title h1  {
-	  position: relative;
-  }
-  .register .login-title h1:before  {
-	content: " ";
-    margin: 0 auto;
-    position: absolute;
-    transform: rotate(0deg);
-    vertical-align: top;
-    height: 2px;
-    background: #fa0114
-  }
+.login-panel {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.25rem;
+  background-color: rgba(255, 255, 255, 1.0);
+  width: 88%;
+  max-width: 450px;
+  min-width: 350px;
+  padding: 1.5rem;
 
-  .login-panel {
-	min-width: 350px;
-  }
+}
 
-  #register-account .login-title h1:before  {
-	width: 219px;
-    bottom: -12px;
-  }
-  #register-login .login-title h1:before  {
-	width: 86px;
-    bottom: -12px;
-  }
-  
-  .register .login-title h1 {
-	  font-size: 26px;
-  } 
-  .register-lead {
-	margin-bottom: 2rem;
+.login-title {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  /* /color: rgba(75, 85, 99, 1.0); */
+  font-weight: 700;
+  font-size: 1.5rem;
+  font-size: 16px;
+}
+
+.login-fp {
+  text-decoration: none;
+  color: #fa0114;
+}
+
+.login-fp:hover {
+  opacity: .7;
+}
+
+.login-submit {
+  width: 100%;
+  margin-top: 1.5rem !important;
+  border-radius: 9999px !important;
+}
+
+.login-footnote {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+  margin-left: .75rem;
+  margin-right: .75rem;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+
+.login-footnote a {
+  text-decoration: none;
+  color: #fa0114;
+}
+
+.login-footnote a:hover {
+  opacity: .7;
+}
+
+/* register */
+
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+#register-account {
+  margin-bottom: 2rem;
+}
+
+.register .login-title {
+  text-align: left;
+}
+
+.register .login-title h1 {
+  position: relative;
+}
+
+.register .login-title h1:before {
+  content: " ";
+  margin: 0 auto;
+  position: absolute;
+  transform: rotate(0deg);
+  vertical-align: top;
+  height: 2px;
+  background: #fa0114
+}
+
+#register-account .login-title h1:before {
+  width: 219px;
+  bottom: -12px;
+}
+
+#register-login .login-title h1:before {
+  width: 86px;
+  bottom: -12px;
+}
+
+.register .login-title h1 {
+  font-size: 26px;
+}
+
+.register-lead {
+  margin-bottom: 2rem;
 }
 
 /* end of register */

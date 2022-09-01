@@ -58,17 +58,26 @@
 				<div x-data="{showUM : false}" class="header-user" @mouseenter="showUM = true" @mouseleave="showUM = false">
 
 					<!-- button or link -->
-					<a class="usericon" href="#">
-						<!--- <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-							stroke-linecap="round" stroke-linejoin="round">
-							<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-							<circle cx="12" cy="7" r="4" />
-						</svg> ---><cfoutput>
-							<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 64 64" version="1.1">
-								<circle fill="##FFFFFF" cx="32" width="64" height="64" cy="32" r="32"/>
-								<text x="50%" y="50%" fill="##fa0114" style="color: ##fa0114; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="30" font-weight="600" dy=".1em" dominant-baseline="middle" >#rc.userSession.avatar#</text></svg>
-						</cfoutput>
-					</a>
+						<a class="usericon" href="#">
+							
+							<!--- <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+								stroke-linecap="round" stroke-linejoin="round">
+								<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+								<circle cx="12" cy="7" r="4" />
+							</svg> --->
+							
+							<cfoutput>
+								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 64 64" version="1.1">
+									<circle fill="##FFFFFF" cx="32" width="64" height="64" cy="32" r="32"/>
+									<text x="50%" y="50%" fill="##fa0114" style="color: ##fa0114; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="30" font-weight="600" dy=".1em" dominant-baseline="middle" >#rc.userSession.avatar#</text></svg>
+							</cfoutput>
+							<!--- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="notify-badge" style="width: 1.4rem;height: 1.4rem;">
+								<path fill-rule="evenodd" d="M10.339 2.237a.532.532 0 00-.678 0 11.947 11.947 0 01-7.078 2.75.5.5 0 00-.479.425A12.11 12.11 0 002 7c0 5.163 3.26 9.564 7.834 11.257a.48.48 0 00.332 0C14.74 16.564 18 12.163 18 7.001c0-.54-.035-1.07-.104-1.59a.5.5 0 00-.48-.425 11.947 11.947 0 01-7.077-2.75zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+							  </svg>
+							   --->
+							
+						</a>
+						<cfif !rc.userSession.isEmailVerified><a href="/myprofile" title="Verify your eamil" style="opacity:1;"><div class="notify-badge" >!</div></a></cfif>
 
 					<!-- drop down menu -->
 					<div x-show="showUM"

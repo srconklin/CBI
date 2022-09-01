@@ -192,8 +192,9 @@ facet placeholders
 	float: right;
 
   } 
+  
   /*******
-   hit main 
+     hit main 
    *******/
   .hit main {
 	flex-grow: 1; 
@@ -336,7 +337,7 @@ facet placeholders
   } */
   
   .ais-SearchBox-input {
-	padding-left: 2.1rem;
+	padding-left: 1.5rem;
 	padding-right: 1.5rem;
 	padding-top: 0.75rem;
 	padding-bottom: 0.75rem;
@@ -431,7 +432,7 @@ facet placeholders
 
   .ais-SearchBox-submit {
      left: unset; 
-	 right: .6rem;
+	 right: 1.6rem;
 
 }
   

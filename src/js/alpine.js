@@ -120,9 +120,9 @@ Alpine.store('toasts', {
         if (sessionStorage.getItem('inquiry'))
             this.createToast('Success! Your message was recieved', 'Someone will contact you soon.', 'success');
         if (sessionStorage.getItem('isNewPerson'))
-            this.createToast('Welcome ' + sessionStorage.getItem('firstName') + '!. We created a user account for you', 'Consider setting a password and completing your profile to enjoy all the benefits of a membership by visiting <a href="/myprofile">My Account</a>.', 'info');
+            this.createToast('Welcome ' + sessionStorage.getItem('firstName') + ', We created a user account for you!', 'Consider verifying your email, setting a password and completing your profile to enjoy all the benefits of a membership by visiting <a href="/myprofile">My Account</a>.', 'info');
         else if (sessionStorage.getItem('hasNotLoggedIn'))
-            this.createToast('Welcome Back ' + sessionStorage.getItem('firstName') + '!', 'We noticed you have made an offer/inquiry before. Consider setting a password and completing your profile to enjoy all the benefits of a membership by visiting <a href="/myprofile">My Account</a>.', 'info');
+            this.createToast('Welcome Back ' + sessionStorage.getItem('firstName') + '!', 'We noticed you have made an offer/inquiry before. Consider verifying  your email, setting a password and completing your profile to enjoy all the benefits of a membership by visiting <a href="/myprofile">My Account</a>.', 'info');
         else if (sessionStorage.getItem('loginviaForm'))
             this.createToast('Welcome Back ' + sessionStorage.getItem('firstName') + '!', 'We have logged you in to simplify making additional inquiries and offers. You can view or change your membership by visiting <a href="/myprofile">My Account</a>.', 'info');
 
@@ -172,7 +172,7 @@ Alpine.store('forms', {
 
     init() {
 
-        // initialiase with the intl-tel-input plugin
+        // initialize with the intl-tel-input plugin
         this.onBlurPhone1 = window.iti('phone1');
         this.onBlurPhone2 = window.iti('phone2');
 
@@ -239,13 +239,13 @@ Alpine.store('forms', {
     },
 
     validatePhone1(el) {
-        const result = onBlurPhone1(el.value);
+        const result = this.onBlurPhone1(el.value);
         this[el.name].blurred = true;
         result.success ? this.validateEle(el) : this[el.name].errorMessage = result.error;
     },
 
     validatePhone2(el) {
-        const result = onBlurPhone2(el.value);
+        const result = this.onBlurPhone2(el.value);
         this[el.name].blurred = true;
         result.success ? this.validateEle(el) : this[el.name].errorMessage = result.error;
     },
@@ -288,9 +288,14 @@ Alpine.store('forms', {
 
             const theform = this.form;
 
-            // get the properties of this alpine store an filter out ones that do not have blurred property, then get either ones that are specfic to the form being submitted or does 
+          
+            // get the properties of this alpine store and filter out ones that do not have blurred property, then get either ones that are specfic to the form being submitted or does 
             // not have the form prop at all which means it is belongs to all forms.
-            const toBeValidated = Object.entries(this).filter(([key, value]) => value.hasOwnProperty('blurred') && (!value.hasOwnProperty('form') || value.form == theform));
+            const toBeValidated = Object.entries(this).filter(([key, value]) => {
+                    return value && value.hasOwnProperty('blurred') && (!value.hasOwnProperty('form') || value.form == theform)
+                }
+            );
+            
 
             // for those inputs, call any custom methods for validation otherwise call standard validateele
             toBeValidated.forEach(ele => {
@@ -363,7 +368,7 @@ Alpine.store('forms', {
         this.validateCaptcha(route)
             .then(token => { data.append('g-recaptcha-response', token); })
             .then(processForm)
-            .catch(this.captchaError);
+        //    .catch(this.captchaError);
 
     }
 

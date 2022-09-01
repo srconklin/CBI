@@ -10,7 +10,13 @@ component accessors=true {
 
 	
 	public void function default(struct rc = {}) {
-		request.layout =false;
+        // default login in view is full screen login page with no layout
+		//request.layout =false;
+        // set to the register page version with register modal suppressed
+        rc.loginonly= true;
+        
+        variables.framework.setview('register.default');
+        
 	}
 
 
@@ -62,7 +68,8 @@ component accessors=true {
    
     function logout( rc ) {
         // tear down user session
-        variables.userService.defaultUserSession();
+        variables.userService.logout();
+       // variables.userService.defaultUserSession();
 
         // reset session variables
         // session.auth.isLoggedIn = false;
