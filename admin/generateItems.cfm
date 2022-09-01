@@ -3,6 +3,7 @@
 <cfsetting showDebugOutput = "no" enablecfoutputonly="false" >
 <cfparam name="url.itemno" default="" />
 <cfparam name="url.build" default="items,bc" />
+<!--- vtid to use get menu structure data which is sbx in dynaspecs --->
 <cfset vtid = 1546 />
 
 <cfscript>

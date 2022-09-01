@@ -7,34 +7,31 @@
 
 		<div class="form-row">
 			<cfoutput>
-
-				
-				<label id="myoffer" for="priceStated" class="form-label">
-					My Offer <cfif rc.userSession.isLoggedIn><a href="##" class="user">(as #rc.userSession.name#)</a></cfif> <span>*</span>
-					<!--- My Offer <cfif structKeyExists(session, 'auth') and session.auth.isLoggedIn><a href="##" class="user">(as #session.auth.fullname#)</a></cfif> <span>*</span> --->
+					<label id="myoffer" for="priceStated" class="form-label">
+					My Offer<span>&nbsp;*</span> <cfif rc.userSession.isLoggedIn><a href="/myprofile" class="user">as #rc.userSession.name# <svg xmlns="http://www.w3.org/2000/svg" class="hit-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a></cfif> 
 				</label>
 			</cfoutput>
 			<div class="offer-total-row">
-				<!--- https://stackoverflow.com/questions/19233415/how-to-make-type-number-to-positive-numbers-only --->
-				<div>
-					<input name="qtyStated" id="qtyStated" oninput="validity.valid||(value='');" class="form-control qty-ele" :class="{'invalid':$store.forms.qtyStated.errorMessage && $store.forms.qtyStated.blurred}" type="number" placeholder="qty" step="1" min="1" :max="$store.forms.maxqty" maxlength="3" :readonly="$store.forms.maxqty==1"  @blur="$store.forms.validate($event)" x-model="$store.forms.qtyStated.value" required data-msg='["valueMissing:Please enter a valid quantity"]'/>
-				</div>
-
-				<div style="padding: .2rem 0">@</div>
-				
-				<div>
-					<div class="input-group">
-						<span class="input-group-icon">
-							$
-						</span>
-						<!--- pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"  --->
-						<input  name="priceStated" id="priceStated" type="text" class="form-control input-group-ele currency-ele" :class="{'invalid':$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred}"  placeholder="999,999.00" oninput="this.value=formatCurrency(this.value);"  @blur="$store.forms.validate($event)" maxlength="10"  x-model="$store.forms.priceStated.value" data-msg='["valueMissing:Please enter a valid price"]' required/>
+					<!--- https://stackoverflow.com/questions/19233415/how-to-make-type-number-to-positive-numbers-only --->
+					<div>
+						<input name="qtyStated" id="qtyStated" oninput="validity.valid||(value='');" class="form-control qty-ele" :class="{'invalid':$store.forms.qtyStated.errorMessage && $store.forms.qtyStated.blurred}" type="number" placeholder="qty" step="1" min="1" :max="$store.forms.maxqty" maxlength="3" :readonly="$store.forms.maxqty==1"  @blur="$store.forms.validate($event)" x-model="$store.forms.qtyStated.value" required data-msg='["valueMissing:Please enter a valid quantity"]'/>
 					</div>
-					<!--- <p class="helper error-message" x-cloak x-show="$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred" x-text="$store.forms.priceStated.errorMessage" class="error-message"></p> --->
+
+					<div style="padding: .2rem 0">@</div>
+					
+					<div>
+						<div class="input-group">
+							<span class="input-group-icon">
+								$
+							</span>
+							<!--- pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"  --->
+							<input  name="priceStated" id="priceStated" type="text" class="form-control input-group-ele currency-ele" :class="{'invalid':$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred}"  placeholder="999,999.00" oninput="this.value=formatCurrency(this.value);"  @blur="$store.forms.validate($event)" maxlength="10"  x-model="$store.forms.priceStated.value" data-msg='["valueMissing:Please enter a valid price"]' required/>
+						</div>
+						<!--- <p class="helper error-message" x-cloak x-show="$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred" x-text="$store.forms.priceStated.errorMessage" class="error-message"></p> --->
+					</div>
+					<div>=</div>
+					<div class="total" x-text="$store.forms.total"></div>
 				</div>
-				<div>=</div>
-				<div class="total" x-text="$store.forms.total"></div>
-			</div>
 			<p class="helper error-message qty-msg" x-cloak x-show="$store.forms.qtyStated.errorMessage && $store.forms.qtyStated.blurred" x-text="$store.forms.qtyStated.errorMessage" ></p>
 			<p class="helper error-message price-msg" x-cloak x-show="$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred" x-text="$store.forms.priceStated.errorMessage" class="error-message"></p>
 		</div>

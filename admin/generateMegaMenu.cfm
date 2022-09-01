@@ -1,7 +1,8 @@
 <!--- <cfheader name="Access-Control-Allow-Origin" value="http://localhost:3000"> --->
 <cfsetting requesttimeout="240" />
-<cfsetting showDebugOutput="no" enablecfoutputonly="true">
+<cfsetting showDebugOutput="no" enablecfoutputonly="false">
 <cfset variables.itemColTolerance=10 />
+<cfset variables.vtid = 1546 />
 
 <cfscript>
 	string function stripCRLFAndMultipleSpaces(required string theString) {
@@ -37,9 +38,10 @@
   <cfquery name="getMenuTwoLevels" datasource="dp_cat">
     select lnm, anm, parLnm, Oseq, TypeID, MenuID, ParentMenuID, lvl
     FROM [dp_cat].[dbo].[OpsHierarchy2] oh
-    WHERE oh.vtid = 1546 and lvl in (1,2)
+    WHERE oh.vtid = #variables.vtid# and lvl in (1,2)
     order by line
   </cfquery>
+
 
   <cfquery name="getMenuFirstLevel" dbtype="query">
     select lnm, anm, parLnm, Oseq, TypeID, MenuID, ParentMenuID
@@ -178,6 +180,8 @@
    </cfoutput>
   </cfsavecontent>
   
+  
+
   <cfsavecontent variable="themenues">
     <cfoutput>
       <div class="megamenu-container" x-cloak x-data="{hidden: false}" @blur-bg.window="$event.detail?hidden = true:hidden=false;" :class="{ 'megamenu-hidden': hidden }">

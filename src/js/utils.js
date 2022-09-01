@@ -69,25 +69,6 @@ window.formatter = new Intl.NumberFormat('en-US', {
     return data;
   }
   
-  window.makeToast = (store) => {
-   
-     if (sessionStorage.getItem('register'))
-       store.createToast('Welcome! Your new profile was sucessfully created', 'You can view or change your membership by visiting <a href="/myprofile">My Account</a>.', 'info');
-     if (sessionStorage.getItem('offer'))
-       store.createToast('Success! Your offer was recieved', 'Someone will contact you soon.', 'success');
-     if (sessionStorage.getItem('inquiry'))
-       store.createToast('Success! Your message was recieved', 'Someone will contact you soon.', 'success');
-     if (sessionStorage.getItem('isNewPerson'))
-       store.createToast('Welcome ' + sessionStorage.getItem('firstName') + '!. We created a user account for you', 'Consider setting a password and completing your profile to enjoy all the benefits of a membership by visiting <a href="/myprofile">My Account</a>.', 'info');
-     else if (sessionStorage.getItem('hasNotLoggedIn'))
-       store.createToast('Welcome Back ' + sessionStorage.getItem('firstName') + '!', 'We noticed you have made an offer/inquiry before. Consider setting a password and completing your profile to enjoy all the benefits of a membership by visiting <a href="/myprofile">My Account</a>.', 'info');
-     else if (sessionStorage.getItem('loginviaForm'))
-       store.createToast('Welcome Back ' + sessionStorage.getItem('firstName') + '!', 'We have logged you in to simplify making additional inquiries and offers. You can view or change your membership by visiting <a href="/myprofile">My Account</a>.', 'info');
-     
-     sessionStorage.clear();
-   
-   }
-  
   window.domReady = (cb) => {
     document.readyState === 'interactive' || document.readyState === 'complete'
       ? cb()
