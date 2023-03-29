@@ -2,11 +2,10 @@ component accessors=true extends="model.base.personal" {
 
   property itemno;
   property message;
-
-  property utilsService;
-
+  property utils;
+  property config;
    
-  function isValid( ){
+  function isValid(){
      // base handler for offer is the personal one. 
      // only called the isvalid on the base component  when the user is not logged in.
      if (session.pno eq 0)
@@ -14,11 +13,11 @@ component accessors=true extends="model.base.personal" {
 
     // message     
     if (! len(getMessage()))
-      variables.errors["message"] = "You must enter a message";
-    else if (utilsService.hasHTML(getMessage())) {
-      variables.errors["message"] = "HTML not allowed";
+      variables.errors["message"] = config.getContent('basicforms', 'missingMessage').instruction; 
+    else if (utils.hasHTML(getMessage())) {
+      variables.errors["message"] = config.getContent('basicforms', 'noHTML').instruction; 
     } else if (len(getMessage()) gt 250)  {
-      variables.errors["message"] = "input too long";
+      variables.errors["message"] = config.getContent('basicforms', 'tooLong').instruction;
     }
       
     return structCount(variables.errors) ? false: true;
