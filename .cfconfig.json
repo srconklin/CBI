@@ -9,7 +9,7 @@
      "host": "mail.dynaprice.com",
 	  "port": 587,
 	  "username": "sysadmin@dynaprice.com",
-	  "password": "encrypted:734f569a11b133cb0f41c3a26bebf85e3142a8255e53a62d5d1a63f9f65d3eb0",
+	  "password": "${MAIL_PASSWORD}",
   	  "ssl": false,
 	  "tls": true
     }],

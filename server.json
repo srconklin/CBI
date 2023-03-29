@@ -1,4 +1,6 @@
 {
+    "trace":true,
+    "console":true,
     "follow":true,
     "jvm":{
         "heapSize":1024,
