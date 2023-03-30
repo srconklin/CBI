@@ -6,7 +6,8 @@ component accessors=true extends="model.base.personal" {
 	property message;
 	property utilsService;
    
- 
+    property config;
+    
     function isValid( ){
 
        
@@ -18,37 +19,37 @@ component accessors=true extends="model.base.personal" {
     
     //qty 
     if ( !len(getQtyStated()) ) {
-        variables.errors["qtyStated"] = "This field is required";
+        variables.errors["qtyStated"] = config.getContent('basicforms', 'qtyMissing').instruction;
     } else if (!isValid('Numeric', replaceNoCase(getQtyStated(), ',', ''))) {
-        variables.errors["qtyStated"] = "not a valid number";
+        variables.errors["qtyStated"] = config.getContent('basicforms', 'invalidNumber').instruction; 
     } else if (getQtyStated() gt 9999)  {
-        variables.errors["qtyStated"] = "Price max reached";
+        variables.errors["qtyStated"] = config.getContent('basicforms', 'maxQty').instruction;
     }
 
     
     // price
     if ( !len(getPriceStated()) ) {
-        variables.errors["priceStated"] = "this field is required";
+        variables.errors["priceStated"] = config.getContent('basicforms', 'priceMissing').instruction; 
     } else if (!isValid('float', replaceNoCase(getPriceStated(), ',', ''))) {
-        variables.errors["priceStated"] = "not a valid price";
+        variables.errors["priceStated"] = config.getContent('basicforms', 'invalidPrice').instruction; 
     } else if (getPriceStated() gt 9999999)  {
-        variables.errors["priceStated"] = "Price max reached.";
+        variables.errors["priceStated"] = config.getContent('basicforms', 'maxPrice').instruction; 
     }
 
 
     // message     
     if(utilsService.hasHTML(getMessage())) {
-        variables.errors["message"] = "HTML not allowed";
+        variables.errors["message"] = config.getContent('basicforms', 'noHTML').instruction; 
     } else if (len(getMessage()) gt 250)  {
-        variables.errors["message"] = "input too long";
+        variables.errors["message"] = config.getContent('basicforms', 'tooLong').instruction; 
     }
 
     // terms     
      if ( len(getTerms()) ) {
             if(utilsService.hasHTML(getTerms())) {
-                variables.errors["terms"] = "HTML not allowed";
+                variables.errors["terms"] = config.getContent('basicforms', 'noHTML').instruction; 
             } else if (len(getTerms()) gt 250)  {
-                variables.errors["terms"] = "input too long";
+                variables.errors["terms"] = config.getContent('basicforms', 'tooLong').instruction; 
             }
      }
 
