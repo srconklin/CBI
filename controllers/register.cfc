@@ -1,210 +1,194 @@
-component  accessors=true extends="model.base.personal" {
+component accessors=true extends="controllers.base.common" {
 
-	property framework;
-	property beanFactory;
-    property userService;
-	property utils;
+	// property framework;
+    // property userService;
+	// property config;
+
+	/************************************
+	 GET METHODS
+	*************************************/
 
 
+	/******************************
+	 register (GET)
+	 sign up page
+	******************************/
 	public void function default(struct rc = {}) {
+		rc.showregister= true;
 		if (variables.userService.isloggedIn()) {
-			variables.framework.redirectCustomURL( "/myprofile" );
-		}
-		
-	}
-
-
-
-	public void function register(struct rc = {}) {
-
-		var response = {};
-		response["req"] = rc;
-		response["payload"] = {};
-
-		if(not utils.validateCaptcha(rc)) {
-			response["res"] = false;
-			response["errors"] = {};
-			response["errors"]["captcha"] = 'Sorry, but we do not think you are human';
-		} else {
-
-			// get the bean and populate it from form fields
-			var register = variables.beanFactory.getBean( "registerbean" );
-			variables.framework.populate( cfc=register, key=rc.fieldnames, trim=true );
-
-			// Validate form input
-			if ( !register.isValid() ) {
-				//error
-				response["res"] = false;
-				response["errors"] = register.getErrors();
-			} else {
-				
-				response["res"] = true;
-				response["errors"] ={};
-
-				// interface requirements to legacy system
-				variables.domain = cgi.https eq 'on'? 'https://' : "http://" & cgi.http_host;
-				variables.aeskey = application.AESKey;
-
-				// set the session variable to persist the email while relocating to the verify_email screen
-				// set the payload data that we need if successful (or if an error in the case of emailinuse_nv)
-				session.verifyemail = rc.email;
-				response["payload"]["firstname"] = rc.firstname;
-				
-				try {
-					include "/cbilegacy/legacySiteSettings.cfm"
-					include "/cbilegacy/procreg2.cfm"
-					response["payload"]["redirect"] = '/verify_email';
-				} catch (e) {
-					// email not verified. not considering this an error; leave res =true and redirect to verify screen
-					if (e.errorcode eq 'emailinuse_nv') {
-						//using server side message instead.
-						// response["errors"]['emailinuse'] = e.message;
-						response["payload"]["redirect"] = '/verify_email/nv/1';
-					}	
-					//email in use, then don't allow registration to proceed, consider an error and no redirect
-					else if (e.errorcode eq 'emailinuse') {
-						response["res"] = false;
-						response["errors"]['emailinuse'] = e.message;
-					}
-					else {
-						response["res"] = false;
-						writeDump(e);
-						abort;
-					}	
-					 
-				}
-				
-			}
+			// flexible config switch to have login and register forms side by side on same page
 			
+			renderResult(rc, '/myprofile');
 		}
 
-		variables.framework.renderData().type( 'json' ).data( response ).statusCode( 200 ).statusText( "Successful" );
 	}
 
-
-	// show instructions page to verify email; redirected here from a first time registration, NOTE: session.verifyemail contains the email to be verified
+	/************************************************************
+	verify_email (get)
+	show instructions page to verify email; redirected here from 
+	a first time registration.
+	NOTE: session.verifyemail contains the email to be verified
+	shares the view from verifyemail - route for when email link 
+	is clicked
+	*************************************************************/
 	public void function verify_email(struct rc = {}) {
-		
+	
 		param name="rc.resendLink" default="false";
+		param name="rc.status" default="default";
+		var status = '';
 		rc.result.success = true;
-
-		// defaults - will remain set to this if session has expired or bot/indexer
-		rc.title = "Hmm, something went wrong with verifying your email address.";
-		rc.instruction = "Looks like there was a problem, likely too much time has passed since the link to verfiy your email was created. You can visit <a href='/myprofile'>My Account</a> to re-verify your email address."
-		
 		// only allow resend if we have an email in session.
 		rc.allowResend=false;
 		rc.svg = '<svg xmlns="http://www.w3.org/2000/svg" class="icon-title" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"</svg>';
-	
-		//  someone somehow clicks a verify email link, but the user is already verified and logged in-- can ignore with an already verified message.
-		if (rc.userSession.isEmailVerified) {
-			rc.title = "Email Already Verified";         
-			rc.instruction = 'This email has already been verified. You can manage your account by visiting <a href="/myprofile">My Account</a>.';         
-		}	
-		// session is still active from a recent registration.	
-		else if (structKeyExists(session, 'verifyemail')) {
-			rc.allowResend= true;
-			
-			// user clicked on resend link while session still active from a registration
-			if (rc.resendLink) {
-				// generate a new hash and send it; make sure old one is removed or replaced
-				rc.result =variables.userService.resendLink(session.verifyemail);
+		
+		// rc.status could be something other than default, if so, then let it flow through to
+		// show error content
+		if (rc.status eq 'default') {
+		
+			// someone, somehow clicks a verify email link, but the user is already verified 
+			// and logged in-- can ignore with an already verified message.
+			if (rc.userSession.isEmailVerified) 
+				status = 'emailAlreadyVerified';
 				
-			}
-			
-			// trying to register again with an email that has been put into verify mode, but was never done
-			if (structKeyExists(rc, 'nv')) {
-					rc.title = "Email Not Yet Verified" ;
-					rc.instruction = "That email address exists but has not been verified. An email was already sent to <strong>#encodeforHTML(session.verifyemail)#</strong> with a link to verify your account. Please click the link in that email.<br>If you did't receive the email, please check your spam folder or request a new link below.";
-			}
-			// show that the email was sent
-			else if (rc.result.success) {
-				rc.title = "Verify Email" ;
-				rc.instruction = "An email has been sent to <strong>#encodeforHTML(session.verifyemail)#</strong> with a link to verify your account.<br>If you don't receive the email, please check your spam folder or request a new link below.";
+			// session is still active from a recent registration.	
+			else if (structKeyExists(session, 'verifyemail')) {
+				rc.allowResend= true;
+				
+				// user clicked on resend link while session still active from a registration
+				if (rc.resendLink)
+					// generate a new hash and send it; make sure old one is removed or replaced
+					rc.result =variables.userService.resendLink(session.verifyemail);
+				
+				// trying to register again with an email that has been put into verify mode, but was never done
+				if (structKeyExists(rc, 'nv')) 
+					status ='notVerified';
+
+				// show that the email was sent
+				else if (rc.result.success) {
+					status ='successfullySent';
+				}
 			}
 		}
-	   		variables.framework.setview('register.verifyemail');
+
+		// get content 
+		status = config.getContent('register', status);
+		rc.title = status.title;
+		rc.instruction = replacenocase(status.instruction, '[EMAIL]', encodeforHTML(session.verifyemail));
+
+		// special view
+		variables.fw.setview('register.verifyemail');
 
    }
 
-	// verify email from link in email. must have token present
+	/************************************************************
+	 verifyemail (get)
+	 verify email from link in email. must have token present
+	************************************************************/
 	public void function verifyemail(struct rc = {}) {
-
-		// default message
-		rc.title = "Hmm, something went wrong with verifying your email address.";         
-		rc.instruction = "looks like there is a problem with the link, try logging into <a href='/myprofile'>My Account</a> to send another one.";         
+		
+		var status = "defaultverify";
 		// assume an error icon
-		rc.svg =  '<svg xmlns="http://www.w3.org/2000/svg" class="icon-title" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> ';
 		// only allow resend if we have an email in session.
 		rc.allowResend=false;
 
 		//  someone somehow clicks a verify email link, but the user is already verified and logged in-- can ignore with an already verified message.
-		if (rc.userSession.isEmailVerified) {
-			rc.title = "Email Already Verified";         
-			rc.instruction = 'This email has already been verified. You can manage your account by visiting <a href="/myprofile">My Account</a>.';         
-		}
+		if (rc.userSession.isEmailVerified) 
+			status = 'emailAlreadyVerified';
+			
 		// meet the requirements of at least having a token
 		else if(structKeyExists(rc, 'token') ) {
 			
-			// we have recieved a token; so attempt authenticate it
+			// we have recieved a token; so attempt to authenticate it
 			rc.result  = variables.userService.verifyemail(rc.token);	
-
+			
+			// Success! email validated
 			if (rc.result.success) {
-				// email validated
 				rc.result.user.validated = 2;
 				variables.userService.setUserSession(rc.result.user);
-				rc.title = "Yah! Email Verified";         
-				rc.instruction = "You are now logged in! Please feel free to browse our inventory.";  
-				rc.svg =  ' <svg xmlns="http://www.w3.org/2000/svg" class="icon-title" style="width:6rem;height:6rem;" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207";</svg> ';
+				status ='successfullyVerified';
 			}		
+			// link expired
 			else if (structKeyExists(rc.result, "expired")) {
-				rc.title = "Verify Link Expired";         
-				rc.instruction = "Sorry, that link is not valid anymore. Please click the button below to send a new one.";         
+				status ='expired';
+				// in the case of expired links do we allow a do-over
 				rc.allowResend=true;
 				session.verifyemail = rc.result.email;
 				
 			}	
+			// already verified
 			else if (structKeyExists(rc.result, "alreadyVerified")) {
-				rc.title = "Email Already Verified";         
-				rc.instruction = 'This email has already been verified. You can manage your account by visiting <a href="/myprofile">My Account</a>.';         
+				status ='emailAlreadyVerified';
 			} 	
 
 		} 
-		
-		// if (!len(rc.title)) {
-		// 	rc.title = "Hmm, something went wrong with verifying your email address.";         
-		// 	rc.instruction = "looks like there is a problem with the link, try logging into <a href='/myprofile'>My Account</a> to send another one.";         
-		// }        
 
-		// if(!structKeyExists(rc, 'token') )
-		// 	variables.framework.redirectCustomURL( "/register" );
-			
-		// validate token; result.success is true or false;if true then we get a user packet to pass to setting up a new session
-		// rc.result  = variables.userService.verifyemail(rc.token);	
-		// already verified, just redirect them to their profile where it shows them the email is already verified
-		// if(structKeyExists(rc.result, 'alreadyVerified')) {
-		// 	variables.framework.redirectCustomURL( "/myprofile" );
-		// }
-		// if(structKeyExists(rc.result, 'expired')) {
-		// 	variables.framework.redirectCustomURL( "/myprofile" );
-		// }
-		// if (rc.result.success) {
-			
-		// 	rc.result.user.validated = 2;
-		// 	variables.userService.setUserSession(rc.result.user);
-		// }
-		
+		// get content 
+		rc.svg = getValidSVGICon('forgotpassword', rc.fpstatus)
+		status = config.getContent('register', status);
+		rc.title = status.title;
+		rc.instruction = status.instruction;
 
 	}
+	/******************************
+	 register (POST)
+	 sbumit a new registration 
+	 ajax :yes
+	******************************/
+	public void function register(struct rc = {}) {
+		param name="rc.agreetandc" default="0";
 
-	// resend email link
+		   /*
+			  validate form by loading into bean.
+			  note:  if ajax is in use on form submit and it errors
+			  then error is rendered and controller aborted	in common.before()
+			*/
+			// register form consists of personal fields + password mgmt widget
+			validateform(rc, 'registerbean');
+			validateform(rc, 'passwordmgrbean');
+			makeLegacyCall(rc, "procreg2",  variables.baseVars);
+
+			//if errors from legacy system
+			if(len(rc.response.errors)) {
+			
+					// email exists but not verified from previous send.
+					// not considering this an error; leave res=true and redirect to verify screen with message
+					if (rc.response.errorcode eq 'emailinuse_nv') {
+						rc["response"]["res"] = true;
+						rc["response"]["payload"]["redirect"] = '/verify_email/nv/1';
+					}	
+					
+			
+			} else {
+
+				// out of security concerns use a session variable to perists the email while relocating
+				// back to the verify_email screen.  
+				// NOTE: this is a JS ajax form submit; so redirect using fw not possible
+				
+				session.verifyemail = rc.email;
+				rc["response"]["payload"]["redirect"] = '/verify_email';
+				rc["response"]["payload"]["firstname"] = rc.firstname;
+
+			}
+
+			renderResult(rc);
+		
+	}
+
+	
+	/************************************************************
+	resendLink (post)
+	resend email link
+	ajax:no
+	************************************************************/
 	public void function resendLink(struct rc = {}) {
 		rc.resendLink = true;
+
+		// captcha
+		if(len(rc.response.errors)) 
+			rc.status = rc.response.errors;	
+			
 		this.verify_email(rc);
 	
 	}
-
-
-
 	
 }
