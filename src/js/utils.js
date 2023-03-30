@@ -68,6 +68,37 @@ window.formatter = new Intl.NumberFormat('en-US', {
     const data = await response.json();
     return data;
   }
+
+  window.validateCaptcha = (route) => {
+    // https://www.delftstack.com/howto/javascript/javascript-wait-for-function-to-finish/
+    return new Promise((res, rej) => {
+        grecaptcha.ready(() => {
+            grecaptcha.execute('6LevHMkfAAAAAInPcjzzNLUUgvmKoeDzcIg4G6qS', { action: route }).then((token) => res(token));
+        });
+    });
+  }
+
+  window.captchaError = (error) => {
+    console.log(`Error recieved in getting captcha token/processing form ${error}`);
+  }
+
+  window.submitCap = (frm, route) => {
+    
+    window.validateCaptcha(route) 
+    .then(token => { 
+      console.log(token);
+      let theForm = document.forms[frm];
+      let input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'g-recaptcha-response';
+      input.value = token;
+      theForm.appendChild(input);
+      theForm.submit();
+    })
+    .catch(window.captchaError)
+
+  }
+
   
   window.domReady = (cb) => {
     document.readyState === 'interactive' || document.readyState === 'complete'
@@ -75,3 +106,17 @@ window.formatter = new Intl.NumberFormat('en-US', {
       : document.addEventListener('DOMContentLoaded', cb);
   };
   
+// // When the user scrolls the page, execute myFunction
+// window.onscroll = function() {
+//   // Get the header
+//   const header = document.getElementById("nav");
+//   // Get the offset position of the navbar
+//   const sticky = header.offsetTop;
+//   if (window.pageYOffset > sticky) {
+//     header.classList.add("sticky");
+//   } else {
+//     header.classList.remove("sticky");
+//   }
+
+// };
+

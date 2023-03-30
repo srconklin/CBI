@@ -109,36 +109,65 @@ import {
 	},
   });
   
-  
+//   
   const stateMapping = {
 	stateToRoute(uiState) {
 		
 	  const indexUiState = uiState['cbi'] || {};
+	  let widgets = {
+			query: indexUiState.query
+		}
+		if(document.getElementById('breadcrumb')) {
+			widgets= {...widgets, 
+				page: indexUiState.page,
+				mfrs: indexUiState.refinementList && indexUiState.refinementList.mfr,
+				category: indexUiState.hierarchicalMenu && indexUiState.hierarchicalMenu['categories.lvl0'].join('_'),}
+		}
+		return {
+			widgets
+		}
 	  // refer to uiState docs for details: https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
-	  return {
-		query: indexUiState.query,
-		page: indexUiState.page,
-		mfrs: indexUiState.refinementList && indexUiState.refinementList.mfr,
-		// category: indexUiState.hierarchicalMenu && indexUiState.hierarchicalMenu.categories
-		category: indexUiState.hierarchicalMenu && indexUiState.hierarchicalMenu['categories.lvl0'].join('_'),
-	  };
+	//   return {
+	// 	query: indexUiState.query,
+	// 	page: indexUiState.page,
+	// 	mfrs: indexUiState.refinementList && indexUiState.refinementList.mfr,
+	// 	// category: indexUiState.hierarchicalMenu && indexUiState.hierarchicalMenu.categories
+	// 	category: indexUiState.hierarchicalMenu && indexUiState.hierarchicalMenu['categories.lvl0'].join('_'),
+	//   };
 	},
   
 	routeToState(routeState) {
-		//console.log('routeToState', routeState);
+		// console.log('routeToState', routeState);
 	  // refer to uiState docs for details: https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
+	  let widgets = { 
+		query: routeState.query
+	  }
+	
+	  if(document.getElementById('breadcrumb')) {
+		widgets = {
+			...widgets, 
+			page: routeState.page,
+			hierarchicalMenu: {
+			'categories.lvl0': routeState.category && routeState.category.split('_')
+			},
+			refinementList: {
+			mfr: routeState.mfrs,
+			}
+		}
+	  }
 	  return {
 		// eslint-disable-next-line camelcase
-		cbi: {
-		  query: routeState.query,
-		  page: routeState.page,
-		  hierarchicalMenu: {
-			'categories.lvl0': routeState.category && routeState.category.split('_')
-		  },
-		  refinementList: {
-			mfr: routeState.mfrs,
-		  },
-		}
+		// cbi: {
+		//   query: routeState.query,
+		//   page: routeState.page,
+		//   hierarchicalMenu: {
+		// 	'categories.lvl0': routeState.category && routeState.category.split('_')
+		//   },
+		//   refinementList: {
+		// 	mfr: routeState.mfrs,
+		//   }
+		// }
+		cbi: widgets
 	  };
 	},
   };

@@ -1,6 +1,8 @@
+import { getConfigSetting } from './config'
 import './utils'
 import Alpine from 'alpinejs';
 import { refinementList } from 'instantsearch.js/es/widgets';
+// import { config } from 'process';
 
 //--------------------
 // TABS
@@ -25,6 +27,7 @@ Alpine.store('tabs', {
     }
 
 });
+
 
 //--------------------
 // CAROUSEL
@@ -88,7 +91,8 @@ Alpine.store('toasts', {
     counter: 0,
     list: [],
 
-    createToast(title, message, type = "info") {
+    //title, message, type = "info"
+    createToast({title, message, type = "info"}) {
         const index = this.list.length
         let totalVisible =
             this.list.filter((toast) => {
@@ -106,6 +110,8 @@ Alpine.store('toasts', {
                 this.destroyToast(index)
             }, 2500 * totalVisible)
         }
+
+        console.log(this.list)
     },
 
     destroyToast(index) {
@@ -113,19 +119,19 @@ Alpine.store('toasts', {
     },
 
     makeToast() {
-        if (sessionStorage.getItem('register'))
-            this.createToast('Welcome! Your new profile was sucessfully created', 'You can view or change your membership by visiting <a href="/myprofile">My Account</a>.', 'info');
-        if (sessionStorage.getItem('offer'))
-            this.createToast('Success! Your offer was recieved', 'Someone will contact you soon.', 'success');
-        if (sessionStorage.getItem('inquiry'))
-            this.createToast('Success! Your message was recieved', 'Someone will contact you soon.', 'success');
-        if (sessionStorage.getItem('isNewPerson'))
-            this.createToast('Welcome ' + sessionStorage.getItem('firstName') + ', We created a user account for you!', 'Consider verifying your email, setting a password and completing your profile to enjoy all the benefits of a membership by visiting <a href="/myprofile">My Account</a>.', 'info');
-        else if (sessionStorage.getItem('hasNotLoggedIn'))
-            this.createToast('Welcome Back ' + sessionStorage.getItem('firstName') + '!', 'We noticed you have made an offer/inquiry before. Consider verifying  your email, setting a password and completing your profile to enjoy all the benefits of a membership by visiting <a href="/myprofile">My Account</a>.', 'info');
-        else if (sessionStorage.getItem('loginviaForm'))
-            this.createToast('Welcome Back ' + sessionStorage.getItem('firstName') + '!', 'We have logged you in to simplify making additional inquiries and offers. You can view or change your membership by visiting <a href="/myprofile">My Account</a>.', 'info');
 
+        let keys = Object.keys(sessionStorage);
+        for(let key of keys) {
+          
+           let toast = getConfigSetting('toasts', key)
+           if (toast) {
+            //this.createToast(toast.title, toast.message, toast.type);
+            // convert placeholders to live data
+            toast.title = toast.title.replace('firstName', sessionStorage.getItem('firstName'))
+            this.createToast(toast);
+           }
+           
+        }
         sessionStorage.clear();
     }
 });
@@ -135,13 +141,15 @@ Alpine.store('toasts', {
 //FORMS
 //--------------------
 Alpine.store('forms', {
-
+     
+    //   properties: presence of blurred property means it has a validation rule; i.e. needs to be validated
+    
     //  the captcha
     captcha: { blurred: false, errorMessage: '' },
 
     // offer fields
-    qtyStated: { offer: true, form: 'offer', blurred: false, errorMessage: '', value: 1 },
-    priceStated: { offer: true, form: 'offer', blurred: false, errorMessage: '', value: '' },
+    qtyStated: { blurred: false, errorMessage: '', value: 1 },
+    priceStated: { blurred: false, errorMessage: '', value: '' },
     qtyShown: '',
     priceShown: '',
 
@@ -149,8 +157,8 @@ Alpine.store('forms', {
     firstName: { blurred: false, errorMessage: '', value: '' },
     lastName: { blurred: false, errorMessage: '', value: '' },
     email: { blurred: false, errorMessage: '', value: '' },
-    phone1: { blurred: false, offer: true, form: 'offer', errorMessage: '', value: '' },
-    phone2: { blurred: false, inquiry: true, form: 'inquiry', errorMessage: '', value: '' },
+    phone1: { blurred: false, errorMessage: '', value: '' },
+    phone2: { blurred: false, errorMessage: '', value: '' },
     coname: '',
     terms: '',
 
@@ -158,10 +166,20 @@ Alpine.store('forms', {
     message: '',
 
     // register
-    password: { blurred: false, form: 'register', errorMessage: '' },
-    emailinuse: { blurred: false, form: 'register', errorMessage: '' },
+    //password: { blurred: false, errorMessage: '' },
+    emailinuse: { blurred: false, errorMessage: '' },
+    agreetandc: { blurred: false, errorMessage: '', value: false },
+
+    // password (reset, register, myaccount change password)
+    pwd1: { blurred: false, errorMessage: '', value: '' },
+    pwd2: { blurred: false, errorMessage: '', value: '' },
+    upper: false,
+    lower: false,
+    number: false,
+    minlength: false,
 
     // general
+    generalError: '',
     maxqty: 1,
     form: '',
     submitting: false,
@@ -195,6 +213,7 @@ Alpine.store('forms', {
         this[el.name].blurred = true;
         if (!el.checkValidity()) {
             // JS form validation https://www.w3schools.com/js/js_validation_api.asp
+            // check for custom message inline on the data element
             const messages = el.dataset.msg ? JSON.parse(el.dataset.msg) : [];
             const msg = messages.find((msg) => el.validity[msg.split(':')[0]]);
             this[el.name].errorMessage = msg != undefined ? msg.split(':')[1] : el.validationMessage;
@@ -204,6 +223,10 @@ Alpine.store('forms', {
             this[el.name].errorMessage = '';
             return true;
         }
+    },
+
+    toggleError(name) { 
+        return this[name].errorMessage.length>0 && this[name].blurred;
     },
 
     validateFirstName(el) {
@@ -249,6 +272,55 @@ Alpine.store('forms', {
         this[el.name].blurred = true;
         result.success ? this.validateEle(el) : this[el.name].errorMessage = result.error;
     },
+    validatePwd2(el) {
+        let error ='';
+
+        if (this.pwd1.value != this.pwd2.value && (this.pwd1.value.length && this.pwd2.value.length))  {
+            error='mustMatch';                
+        } else if (!this.pwd2.value.length) {
+            error='valueMissing';                
+        }
+
+        if (error) {
+            const messages = el.dataset.msg ? JSON.parse(el.dataset.msg) : [];
+            const msg = messages.find((msg) => msg.split(':')[0] === error);
+            this.pwd2.blurred = true;
+            this.pwd2.errorMessage = msg.split(':')[1];
+        }    
+        else {
+            this.pwd2.blurred = false;
+            this.pwd2.errorMessage = '';
+        }
+    },
+    // validateAgreetandc(el) {
+    //         if(!this.agreetandc) {
+    //             const error ='valueMissing';
+    //             const messages = el.dataset.msg ? JSON.parse(el.dataset.msg) : [];
+    //             const msg = messages.find((msg) => msg.split(':')[0] === error);
+    //             this.agreetandc.blurred = true;
+    //             this.agreetandc.errorMessage = msg.split(':')[1];
+    //         } else {
+    //             this.agreetandc.blurred = false;
+    //             this.agreetandc.errorMessage ='';
+    //         }
+            
+    // },
+    pwdtests(e) {
+        //check for one lowercase letter
+        this.lower=this.pwd1.value.match(/[a-z]/g);  
+        //check for one uppercase letter
+        this.upper=this.pwd1.value.match(/[A-Z]/g);  
+        //check for one number
+        this.number=this.pwd1.value.match(/[0-9]/g);  
+        //check for one number
+        this.minlength=this.pwd1.value.length >= 8;  
+
+    },
+
+
+    pwdFailed() {
+        return !(this.upper && this.lower && this.number && this.minlength && (!this.pwd2.errorMessage && this.pwd2.value)  );
+    },
 
     get total() {
         return this.priceStated.value && this.qtyStated.value ? formatter.format(parseFloat(this.priceStated.value.replace(/[^0-9.]/g, '')).toFixed(2) * this.qtyStated.value) : '$0.00';
@@ -262,58 +334,53 @@ Alpine.store('forms', {
         return this.textLimit - this.message.length
     },
 
-    validateCaptcha(route) {
-        // https://www.delftstack.com/howto/javascript/javascript-wait-for-function-to-finish/
-        return new Promise((res, rej) => {
-            grecaptcha.ready(() => {
-                grecaptcha.execute('6LevHMkfAAAAAInPcjzzNLUUgvmKoeDzcIg4G6qS', { action: route }).then((token) => res(token));
-            });
-        });
-    },
-
-    captchaError(error) {
-        console.log(`Error recieved in getting captcha token/processing form ${error}`);
-    },
-
     submit() {
+        // the current route
         const route = `/${this.form}`;
-
+        // get the data on the form by
         const data = new FormData(document.getElementById(`${this.form}frm`));
 
-        // note getElementsByName can returns two fields for the same name (one on each tab) we need to relate the form to an ordinal number to validate the correct one
-        const frmNumber = (this.form == 'inquiry' ? 1 : 0);
+        // add in checkboxes that do not get added to formdata when not checked, excluding checked ones
+        for (const ele of document.querySelectorAll('input[type=checkbox]')) {
 
+            if(this[ele.name] && this[ele.name].hasOwnProperty('blurred') && !data.get(ele.name)) {
+                data.append(ele.name, this[ele.name].value);
+            }
+
+        }
+        // sometimes we have more than one form on the page that shares the same elements. (firstname) we need to capture the
+        // ordinal position of the form to validate the correct one. we expect the form to tell us its position. if not present them assume only one form.
+        const frmNumber = data.get('frmPos') ? data.get('frmPos') : 0;
+        // the elements to be validated
+        const toBeValidated = [];
+       
         // fn to process the form submit (called from promise to captcha below)
         const processForm = () => {
-
-            const theform = this.form;
-
-          
-            // get the properties of this alpine store and filter out ones that do not have blurred property, then get either ones that are specfic to the form being submitted or does 
-            // not have the form prop at all which means it is belongs to all forms.
-            const toBeValidated = Object.entries(this).filter(([key, value]) => {
-                    return value && value.hasOwnProperty('blurred') && (!value.hasOwnProperty('form') || value.form == theform)
-                }
-            );
-            
-
-            // for those inputs, call any custom methods for validation otherwise call standard validateele
-            toBeValidated.forEach(ele => {
-                const el = document.getElementsByName(ele[0]);
-                if (el.length) {
+           
+          /* iterate over the keys of the form fields, find the property in the alpine store, check if it has a blurred property,
+            run the validation routine, return if we have any errors
+            note: sometimes we have more than one form on the page that shares the same elements. (firstname)
+            we need to capture the ordinal position of the form to validate the correct one. 
+            we expect the form to tell us its position. if not present them assume only one form.*/ 
+            for (const [key, value] of data.entries()) {
+                console.log(key)
+                if (this[key] && this[key].hasOwnProperty('blurred')) {
+                    const el = document.getElementsByName(key);
+                  
                     (el.length == 1) ? this.toTarget(el[0]) : this.toTarget(el[frmNumber])
-                };
-            });
-
-
-            // if any of the properites for errorMessage have been set, then abort.
-            if (toBeValidated.find((ele) => ele[1].errorMessage)) return;
+                    if (this[key].errorMessage) 
+                    return;
+                }
+            }
 
             // trigger spinning icon on button and disable it
             this.submitting = true;
-
+         
             try {
                 fetch(route, {
+                    headers: {
+                        'X-Requested-With' : 'XMLHttpRequest'
+                    },
                     method: 'POST',
                     body: data
                 })
@@ -322,17 +389,27 @@ Alpine.store('forms', {
                         console.log(data);
                         // server side errors caught
                         if (!data.res) {
-                            for (const [key, value] of Object.entries(data.errors)) {
-                                this[key].blurred = true;
-                                this[key].errorMessage = value;
-                            }
+
+                            // error is a string from backend then form must have a general error div
+                            if( typeof data.errors === 'string' ) {
+                                this.generalError = data.errors;
+                             // bean errors in the form of object with key values    
+                            } else {
+                              
+                                for (const [key, value] of Object.entries(data.errors)) {
+                                    this[key].blurred = true;
+                                    this[key].errorMessage = value;
+                                }
+                            } 
+                                
                             // create a slight delay  in turning off the spin icon on the submit button.
                             setTimeout(() => { this.submitting = false; }, 700);
                             // success no validation errors    
                         } else {
                             sessionStorage.setItem(this.form, true);
                             // if we have a payload then we have identified a new person; a returning user who has yet to login with a password OR a new registree
-                            if (data.payload) {
+                            
+                            if (Object.keys(data.payload).length > 0) {
 
                                 sessionStorage.setItem('firstName', data.payload.firstName);
 
@@ -345,12 +422,12 @@ Alpine.store('forms', {
                                     location.href = data.payload.redirect;
                                 // refresh and stay on same route to reveal the toast
                                 else
-                                    location.reload();
+                                  location.reload();
 
 
                             } else {
                                 // no refresh so show push method and close the modal if one open
-                                Alpine.store('toast').makeToast();
+                                Alpine.store('toasts').makeToast();
                                 this.submitting = false;
                                 Alpine.store('imodal').closeModal();
 
@@ -365,11 +442,10 @@ Alpine.store('forms', {
 
         }
         // use a promise-based function to get a capatcha token followed by processing the form  
-        this.validateCaptcha(route)
+        window.validateCaptcha(route)
             .then(token => { data.append('g-recaptcha-response', token); })
             .then(processForm)
-        //    .catch(this.captchaError);
-
+            .catch(window.captchaError);
     }
 
 });
@@ -382,7 +458,7 @@ Alpine.effect(() => {
     // when the modal closes, then reset the caroursel and forms back to some defaults       
     if (modal === false) {
 
-        console.log('modal closed');
+       // console.log('modal closed');
         const reset = {
             blurred: false,
             errorMessage: ''
