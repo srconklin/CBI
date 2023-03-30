@@ -1,4 +1,5 @@
-	<!--- header --->
+ <div id= "nav">
+<!--- header --->
 	<header class="header" x-cloak x-data="{showMenu : false, hidden: false}" @blur-bg.window="$event.detail?hidden = true:hidden=false;" :class="{ 'header-hidden': hidden }">
 		<div class="header-container">
 		  <!--- 2 column  wrapper --->
@@ -7,7 +8,7 @@
 			<!--- logo --->
 			<div class="header-logo">
 				<a href="/">	
-					<img alt="Capovani Brothers" class="block" src="/images/logo_short.png">
+					<img alt="Capovani Brothers" class="block" src="/images/logo_short2.png">
 				</a>		
 				<cfif local.route eq 'default'>
 					<h3><span>C</span>apovani <span>B</span>rothers <span>I</span>nc</h3>
@@ -49,15 +50,11 @@
 			<a href="/faq">
 			  FAQ
 			</a>
-			<!--- <cfif structKeyExists(session, 'auth') and session.auth.isLoggedIn > --->
 			<cfif rc.userSession.isLoggedIn >
-				<!--- <a href="/logout">
-					<cfoutput>#session.auth.user.firstname#</cfoutput>
-				</a> --->
 
 				<div x-data="{showUM : false}" class="header-user" @mouseenter="showUM = true" @mouseleave="showUM = false">
 
-					<!-- button or link -->
+						<!-- button or link -->
 						<a class="usericon" href="#">
 							
 							<!--- <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
@@ -125,16 +122,20 @@
 		<!--- search bar --->
 		
 			<div class="header-searchbar">
-				<cfif local.route eq 'default'>
-					<h2 class="header-title"><span style="font-style:italic;color:#ffeb00">equipped to succeed</span> - start your
-						search
-					</h2>
-				</cfif>	
+				
 				<div id="searchbox"></div>
+				<!--- <cfif local.route eq 'default'>
+					<h2 class="header-title"><span style="font-style:italic;color:#ffeb00">Your source for used semiconductor and scientific equipment</span></h2>
+					<!--- <h2 class="header-title"><span style="font-style:italic;color:#ffeb00">equipped to succeed</span> - start your
+						search
+					</h2> --->
+				</cfif>	 --->
 			</div>
 
 			
 			  
 	  </header>
-
-	  
+	  <cfoutput>
+		#view( 'common/fragment/megamenu')#
+	   </cfoutput>
+	</div>    
