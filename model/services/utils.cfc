@@ -1,36 +1,45 @@
 component accessors=true {
-    
+    property config;
+
     function hasHTML(str) {
-        
         return REFindNoCase("<[^>]*>",str);
     }
         
-    function validateCaptcha(rc) {
+    function validateCaptcha(captcha, route) {
 
         var result = false;
 
         // validate the g-captcha-repsonse
-        if (structKeyExists(rc, 'g-recaptcha-response')) {
+        if (len(arguments.captcha)) {
             //validate token with Google
             cfhttp(method="POST", url="https://www.google.com/recaptcha/api/siteverify", result="captchaResponse") {
-                cfhttpparam(name="secret", type="formfield", value="6LevHMkfAAAAAM2ohc3wTWLu8gYj0acuUXaG1_da");
-                cfhttpparam(name="response", type="formfield", value=rc['g-recaptcha-response']);
+                cfhttpparam(name="secret", type="formfield", value=config.getSetting("captchasecret"));
+                cfhttpparam(name="response", type="formfield", value=arguments.captcha);
                 cfhttpparam(name="Accept", type="header", value='application/json');
             }
             var response = deserializeJSON(captchaResponse.filecontent);
+            
+            var route = '/'& gettoken(arguments.route, 1, ".");
+            // writeDump(captcha);
+            // writeDump(route );
             // writeDump(response);
             // abort;
-            var route = '/'& gettoken(rc.action, 1, ".");
-
             if (response.success and response.score gt 0.5 and response.action eq route ) {
                 result = true;	
             }
             
         }
 
+   
         return result;
         
     }
+
+    function isAjaxRequest() {
+		var headers = getHttpRequestData().headers;
+		return structKeyExists(headers, "X-Requested-With") 
+			   && (headers["X-Requested-With"] eq "XMLHttpRequest");
+	  }
    
 
 }
