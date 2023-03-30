@@ -1,31 +1,13 @@
-<!--- x-data="{showBreadCrumb : true}"  --->
-<!--- <div id="bc-container" class="bc-container" > --->
-<!--- <div id="togglebc" class="togglebc" :class="{ 'togglebc-closed-pos': !showBreadCrumb }">
-      <button class="ais-Panel-collapseButton" @click.prevent="showBreadCrumb = !showBreadCrumb;">
-        <span>
-          <svg class="ais-Panel-collapseIcon" width="1em" height="1em" viewBox="0 0 500 500" x-show="showBreadCrumb" >
-            <path d="M250 400l150-300H100z" fill="currentColor"></path>
-          </svg>
-        </span>
-        <span>
-          <svg class="ais-Panel-collapseIcon" width="1em" height="1em" viewBox="0 0 500 500" x-show="!showBreadCrumb">
-            <path d="M100 250l300-150v300z" fill="currentColor"></path>
-          </svg>
-        </span>
-      </button> --->
-<!--- </div>  --->
-
-<!--- :class="{ 'hidden': !showBreadCrumb }" --->
-
-<!--- </div> --->
-
+<!--- show default home content when no search criteria --->
 <div id="home">
   <h1>Hello There!</h1>
   <p>Welcome to the CBI online</p>
 </div>
 
+<!--- show search results when we have a search query --->
 <div id="algolia">
-<!--- breadcrumb --->
+
+  <!--- breadcrumb --->
 <div class="breadcrumb">
   <div id="breadcrumb"></div>
 </div>
@@ -76,5 +58,5 @@
 
 <cfoutput>
   #view( 'common/fragment/item/QuickView')#
-  #view( 'common/fragment/toasts')#
+  
 </cfoutput>
