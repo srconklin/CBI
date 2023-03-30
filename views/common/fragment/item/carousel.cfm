@@ -24,7 +24,7 @@
 							<!--- @mouseenter="if (window.largeSOnly()) $dispatch('img-modal', {  imgModalSrc: slide})" 
 							@mouseleave="if (window.largeSOnly()) $dispatch('img-modal', {  imgModalSrc: ''})"> --->
 							>
-						<span >this is a description</span>
+						
 					</li>
 				</template>
 			</ul>
