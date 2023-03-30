@@ -1,13 +1,11 @@
 component extends="framework.one" output="false" accessors=true {
-	this.name = "63160"
+	// this.name = ""
 	this.applicationTimeout = createTimeSpan(2, 0, 0, 0);
 	this.setClientCookies = true;
 	this.sessionManagement = true;
 	this.sessionTimeout = createTimeSpan(0, 2, 0, 0);
 	this.datasource = 'dp_cat';
-	this.COTID = "107";
 	
-
 	property userService;
 		
 
@@ -19,10 +17,14 @@ component extends="framework.one" output="false" accessors=true {
 		generateSES = true,
 		SESOmitIndex = true,
 		decodeRequestBody = true,
+		maxNumContextsPreserved = 1,
 		// diEngine = "di1",
 		// diComponent = "framework.ioc",
 		// diLocations = "model, controllers",
-		// diConfig = { },
+		 diConfig = {
+			loadListener : function( di1 ) { di1.load(); },
+		  	exclude: ['/model/base/', ',model/beans/common.cfc']
+		},
 		// reloadApplicationOnEveryRequest = false,
         routes = [
 
@@ -37,8 +39,16 @@ component extends="framework.one" output="false" accessors=true {
 			{ "$POST/register/" = "/register/register" },
 
 			{ "$GET/myprofile/$" = "/myprofile/default" },
+			{ "$POST/updatecontactinfo/$" = "/myprofile/updatecontactinfo" },
 
-			{ "$GET/forgotpassword/$" = "/myprofile/forgotpassword", "$POST/forgotpassword/$" = "/myprofile/forgotpassword" },
+			
+			{ 
+				"$GET/forgotpassword/$" = "/myprofile/forgotpassword", 
+				"$POST/forgotpassword/$" = "/myprofile/submitforgotpassword", 
+				"$GET/resetpassword/:token/" = "/myprofile/resetpassword/token/:token/",
+				"$POST/resetpassword/$" = "/myprofile/submitresetpassword", 
+				"$GET/passwordReset/$" = "/myprofile/passwordReset",
+			},
 
 			{ "$GET/search/" = "/main/default" },
 
@@ -46,11 +56,12 @@ component extends="framework.one" output="false" accessors=true {
 			
 			{ "$GET/faq/$" = "/main/faq" },
 			{ "$GET/about/$" = "/main/about" },
+			{ "$GET/terms/$" = "/main/terms" },
 
-			{ "$GET/items/{id:[0-9]+}/" = "/items/show/id/:id" },
+			{ "$GET/items/{id:[0-9]+}/" = "/main/showitem/id/:id" },
 
-			{ "$POST/offer/$" = "/offer/create/" },
-			{ "$POST/inquiry/$" = "/inquiry/create/" },
+			{ "$POST/offer/$" = "/dealmaking/makedeal/type/offer" },
+			{ "$POST/inquiry/$" = "/dealmaking/makedeal/type/inquiry" },
 
 			{ "$GET/test/" = "/test/default" }
 		 ]
@@ -65,28 +76,32 @@ component extends="framework.one" output="false" accessors=true {
 		}
 	};
 
-	public void function setupApplication() {
-		application.AESKey = "XyekJNxLAIv2LlmULBkxNw==";
-		application.captchaKey = '6LcpOp0UAAAAAKhGFvYiNw5i85DHgAdem3nGoLwc'
-		application.VTID = this.name;
-		application.COTID = this.cotid;
-	 }
-
+	
 	public void function setupSession() {
-		controller( 'security.session' );
-	 }
-
-	 function before( struct rc ) {
-		rc.userSession = userService.getUserSession();
+		// set up a default session
+		controller( 'main.setUserSession' );
 	}
 
-	public void function setupRequest() { 
+	function before( struct rc = {} ) {
+		
+		// reset the application scope
+		if(structKeyExists(rc, 'resetApp')) {
+			userService.logout();
+		}
+			
+		// user session data
+		rc["userSession"] = userService.getUserSession();
+				
+	}
+
+	 public void function setupRequest() { 
 		request.DSNCat =this.datasource;
+		// prior to request, make sure if log in is required and/or user is authenticated
 		controller( 'security.authorize' );
 	 }
 
 	public void function setupView(rc) {
-		rc.userSession = userService.getUserSession();
+		rc["userSession"] = userService.getUserSession();
     }
 
 	public void function setupResponse() {  }
@@ -95,12 +110,6 @@ component extends="framework.one" output="false" accessors=true {
 		//return "Error 404 - Page not found.";
 		return view( 'main/notFound' );
 	}
-
-	function isAjaxRequest() {
-		var headers = getHttpRequestData().headers;
-		return structKeyExists(headers, "X-Requested-With") 
-			   && (headers["X-Requested-With"] eq "XMLHttpRequest");
-	  }
 
 	public function getEnvironment() {
 		if ( findNoCase( "sandbox", CGI.SERVER_NAME ) ) 
