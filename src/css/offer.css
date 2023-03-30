@@ -75,3 +75,13 @@
 	color: rgb(134 139 146);
 	
   }
+
+  
+.currency-ele {
+	max-width: 7.2rem;
+    min-width: 4.8rem;
+  }
+  
+  .qty-ele {
+	max-width: 4.5rem;
+  }

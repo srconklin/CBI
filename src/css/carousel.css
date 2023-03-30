@@ -1,6 +1,6 @@
 .carousel-sizer {
 	max-width: 28rem;
-	min-width: 21rem;
+	min-width: 14rem;
 }
 .carousel {
     display: flex;

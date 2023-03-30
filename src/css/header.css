@@ -1,0 +1,223 @@
+/**************** 
+  header contents 
+ ***************/
+
+ #nav {
+    background-color: rgb(55 91 187 / 1);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    flex: none;
+ }
+ .header {
+    /* padding: .75rem; */
+    padding: 0 .75rem 0 .75rem;
+    width: 100%;
+    background-color: rgb(55 91 187 / .9);
+    flex: none;
+}
+
+
+.header-container {
+    margin-top: .4rem;
+    margin-bottom: 1.0rem;
+
+}
+
+.header-column {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-logo {
+    display: flex;
+    justify-content: center;
+    flex-direction: row; 
+    align-items: flex-end; 
+
+    /* keep text next to logo */
+    /* flex-direction: row; */
+	/* align-items: center;  */
+
+    /* when search box is on same row as links and logo */
+    /* margin-right: 1.5rem; */
+}
+
+.header-logo span {
+    font-size: 22px;
+}
+
+.header-logo h3 {
+    font-size: 1.1rem;
+    opacity: .7;
+    
+}
+
+.header-logo img {
+    max-width: 4rem;
+}
+
+.header-nav {
+    display: block;
+}
+
+.header-nav button {
+    color: white;
+    display: block;
+}
+
+.header-nav button:hover {
+    opacity: .5;
+    color: #fa0114;
+}
+
+.filterbar {
+    margin-bottom: .5rem;
+    /* padding-bottom:  1rem; */
+    display: flex;
+    justify-content: center;
+}
+
+.filterbar.remove-margin {
+    margin-bottom: 0;
+}
+
+
+.filterbar .btn {
+    width: 100%;
+}
+
+.filterbar .btn.opened {
+    border-radius: .5rem .5rem 0 0;
+}
+
+/*  header links */
+.header-links {
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: column;
+}
+
+.header-links a {
+    text-decoration: none;
+    white-space: nowrap;
+    color: white;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 500;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    /* opacity: .80; */
+}
+
+.header-links a:hover {
+    /* text-decoration: underline; */
+    color: #ffeb00
+}
+
+
+.header-user {
+    position: relative;
+    display: inline-block;
+}
+
+.header-user .usericon {
+    color: white;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-weight: 500;
+    display: inline-block;
+    border-radius: 9999px;
+}
+
+.header-user .usericon svg {
+    width: 2.0rem;
+    /* margin-top: 0.2rem; */
+    height: 2.0rem;
+    border-radius: 9999px;
+}
+
+.header-user .userdd {
+    transform: translateX(0) translateY(0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1);
+    /* width: 10rem; */
+    right: 0px;
+    position: absolute;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-width: 1px;
+    border-radius: 0.5rem;
+    border-color: rgba(229, 231, 235, 1.0);
+    background-color: rgba(255, 255, 255, 1.0);
+    z-index: 1;
+}
+
+.header-user .userdd a {
+    color: rgb(55 91 187 / 1.0);
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    display: flex;
+}
+
+.header-user .userdd a:hover {
+    color: rgb(55 91 187 / 1.0);
+    background-color: rgba(229, 231, 235, 1.0);
+}
+
+.header-user .entry svg {
+    width: 1.0rem;
+    margin-top: 0.2rem;
+    margin-right: 0.32rem;
+    height: 1.0rem;
+}
+
+.header-user p {
+    line-height: 1;
+}
+
+.header-user .emphasize {
+    color: #fa0114;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.header-user .divide {
+    border-top: 1px solid rgba(243, 244, 246, 1)
+}
+
+.header-title {
+    color: White;
+    opacity: .80;
+    /* margin-right: 1rem; */
+    /* margin-bottom: 1rem; */
+    font-weight: 400;
+    text-align: center;
+
+}
+
+.header-searchbar {
+    margin-top: 1rem;
+    margin-bottom: 1.1rem;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header.header-hidden {
+    display: none;
+}

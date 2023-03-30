@@ -1,0 +1,48 @@
+
+.footer-container {
+    display: block;
+    text-align: center;
+  }
+  
+.footer-container img {
+    max-width: 4rem;
+}
+
+.footer {
+    background-color: #383941;
+    color: white;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    flex: none;
+  }
+  
+  .footer-links {
+    margin-top: 1.5rem;
+    letter-spacing: 0.1em;
+    line-height: 1.75;
+  }
+  
+  .footer-links li,
+  .footer-admin li {
+    line-height: 1.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .footer-links li a,
+  .footer-admin li a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .footer-links li a:hover,
+  .footer-admin li a:hover {
+    color: #fa0114;
+  }
+  
+  .footer-address {
+    margin-top: 1.5rem;
+    line-height: 1.50;
+  }
+  

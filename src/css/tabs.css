@@ -1,7 +1,33 @@
 
+/* vertical tabs */
+.verttabs {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.verttabs > ul {
+    min-width: fit-content;
+    display: block;
+    padding-right: 2.5rem;
+  
+}
+
+.verttabs > ul li {
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+ 
+.verttabs .activeBtn {
+    color: #fa0114;
+}
+  
+
+/* tabs */
 .tabs  {
    min-width: 1px;
 }
+
 .tabs > ul {
     margin-top: 1.5rem;
     flex-wrap: wrap;
@@ -17,8 +43,8 @@
  }
 
 
-.tabs > ul li a {
-    text-transform: uppercase;
+ .tabs > ul li a, .verttabs > ul li a {
+
     background-color: white;
     display: block;
     padding-left: .5rem;
@@ -29,6 +55,15 @@
     text-decoration: none;
     outline-offset: 0;
    
+}
+
+.verttabs > ul li a {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 1.0rem;
+}  
+
+.tabs > ul li a {
+    text-transform: uppercase; 
 }
 
 .tabs .activeBtn {
@@ -42,28 +77,36 @@
     background-color:#f7f7f7
 }
 
-.tabs .inActiveBtn { 
+.tabs .inActiveBtn, .verttabs .inActiveBtn  { 
     color: #4b5563;
 }
 
-.tabs .inActiveBtn:hover { 
+.tabs .inActiveBtn:hover, .verttabs .inActiveBtn:hover { 
   color: rgba(156, 163, 175, 1.0);
 }
 
 .tabcontent {
-    /* margin-left: 0.75rem;
-    margin-top: 0.5rem;
-     */
-
-   
-    border-bottom-right-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem; 
-    background-color: #f7f7f7;
     padding: 1rem;
     height: 100%;
     min-height: 20rem;
+    text-align: left;
+    width: 100%;
+}
+
+.tabs .tabcontent {
+    border-bottom-right-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem; 
+    background-color: #f7f7f7;
     border-left: 1px solid #c2c3c5;
     border-right: 1px solid #c2c3c5;
     border-bottom: 1px solid #c2c3c5;
-    text-align: left;
 }
+
+.tabelement {
+    animation: fadeEffect .7s;
+}
+
+@keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }

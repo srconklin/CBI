@@ -1,0 +1,106 @@
+/* links */
+
+.redlink {
+  color: #fa0114;
+  text-decoration: none;
+}
+ 
+.redlink:hover {
+  opacity: .7;
+} 
+
+/* primary button  */
+.btn {
+    /* margin-top: .3rem; */
+    border: 2px solid transparent;
+    color: white;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0.45rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  
+  /*  to make a more prominent button (usually on a form) */
+  .btn-heavy {
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+    font-weight: 600;
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+  /* small button */
+  .btn-small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.45rem;
+    border: 2px solid transparent;
+    color: #fff;
+    padding: .3rem .5rem;
+    transition: background-color .2s ease-out;
+    font-size: .8rem;
+    font-weight: 400;
+    opacity: 1;
+  }
+  
+  .btn-wy {
+    border-color: white
+  }
+  
+  .btn-wy:hover {
+    background-color: #ffeb00;
+    border-color: #ffeb00;
+    color: #375bbb;
+  }
+  
+  .btn-red {
+    color: white;
+    background-color: #fa0114;
+    border-color: #fa0114;
+  
+  }
+  
+  .btn-red-hollow {
+    color: #fa0114;
+  }
+  
+  .btn-red-hollow:hover {
+    color: white;
+    background-color: #fa0114;
+  }
+  
+  .btn-red:hover {
+    opacity: .85;
+  }
+  
+  .btn-gray {
+    color: rgba(33, 36, 61, .7);
+    background-color: transparent;
+    border-color: rgba(33, 36, 61, .6);
+    font-weight: 500;
+  
+  }
+  
+  .btn-gray:hover {
+    opacity: .85;
+    color: #fa0114;
+    border-color: #fa0114;
+  }
+  
+  
+  .btn svg,
+  .btn-small svg {
+    height: 14px;
+    margin-right: 4px;
+    width: 16px;
+    margin-top: .2rem;
+  }
+  
+  .btn-rounded {
+    border-radius: 9999px !important
+  }

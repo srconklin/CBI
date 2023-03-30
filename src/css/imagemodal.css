@@ -95,6 +95,11 @@
     font-weight: 700;
     cursor: pointer;
 }
+
+.image-modal .zoom {
+    right: 12px;
+    top: 44px;
+}
 /* .image-modal-main p {
 	color: rgba(255, 255, 255, 1.0);
 	text-align: center;
