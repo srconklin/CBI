@@ -1,36 +1,41 @@
 component accessors=true {
 
-	property framework;
+	property fw;
     property userService;
 
-    // function init( fw ) {
-    //     variables.framework = fw;
-    //     return this;
-    // }
-
-	
-	public void function default(struct rc = {}) {
-        // default login in view is full screen login page with no layout
-		//request.layout =false;
-        // set to the register page version with register modal suppressed
-        rc.loginonly= true;
-        
-        variables.framework.setview('register.default');
-        
-	}
-
-
     function before( rc ) {
-            if (variables.userService.isloggedIn() &&  variables.framework.getItem() != "logout" ) {
-                variables.framework.redirectCustomURL( "/main" );
+        if (variables.userService.isloggedIn() &&  variables.fw.getItem() != "logout" ) {
+            variables.fw.redirectCustomURL( "/main" );
         }
     }
 
+	/******************************
+	 login (GET)
+	******************************/
+    public void function default(struct rc = {}) {
+        // default login in view is full screen login page with no layout
+		// request.layout =false;
+
+        // using the register page version:
+        // set to the register page version with register modal suppressed
+        rc.showlogin= true;
+        // register page contains login form
+        variables.fw.setview('register.default');
+        
+	}
+
+    /*********************************
+	 login (POST)
+	 no view; redirects to home or to 
+     destination if one specified
+     ajax:no
+	*********************************/
     function login( rc ) {
 
+        //  no bean used; data validation here inline
         // if the form variables do not exist, redirect to the login form
-        if ( !structKeyExists( rc, "username" ) || !structKeyExists( rc, "password" ) ) {
-            variables.framework.redirectCustomURL( "/login" );
+        if ( !structKeyExists( rc, "username" ) and !structKeyExists( rc, "password" ) ) {
+            variables.fw.redirectCustomURL( "/login" );
 		}
 		
         // validate user  
@@ -39,7 +44,7 @@ component accessors=true {
 		// on invalid credentials, redisplay the login form
         if ( !isStruct(user) ) {
             rc.message = ["Invalid Username or Password"];
-            variables.framework.redirectCustomURL( "/login", "message" );
+            variables.fw.redirectCustomURL( "/login", "message" );
         }
 
         //user authenticated
@@ -47,35 +52,21 @@ component accessors=true {
 
         // set up user session
         variables.userService.setUserSession(user)
-                
-        // // set session variables from valid user
-        // session.auth.isLoggedIn = true;
-        // session.auth.fullname = user.firstname & " " & user.lastname;
-        // session.auth.user = user;
-        // // user logged in; show validated as 2
-        // session.validated = 2;
-        // // interface to legacy system for use in dynabuilt include files
-        // session.pno = user.pno;
-        // session.vwrCorelatno = Max(Session.vwrCoRelatNo,max(user.pvcorelatno, user.corelatno));
-
-
+         
 		if(structKeyExists(rc, 'destination'))
-			variables.framework.redirectCustomURL( "/#rc.destination#" );
+			variables.fw.redirectCustomURL( "/#rc.destination#" );
 		else
-        	variables.framework.redirectCustomURL( "/" );
+        	variables.fw.redirectCustomURL( "/" );
     }
-
    
+	 
+	/******************************
+	 Logout (GET)
+	******************************/
     function logout( rc ) {
         // tear down user session
         variables.userService.logout();
-       // variables.userService.defaultUserSession();
-
-        // reset session variables
-        // session.auth.isLoggedIn = false;
-        // session.auth.fullname = "";
-        // // structdelete( session.auth, "user" );
-        variables.framework.redirectCustomURL( "/");
+        variables.fw.redirectCustomURL( "/");
     }
 
 }
