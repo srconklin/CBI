@@ -5,12 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no,  maximum-scale=5">
   <link rel="shortcut icon" href="/images/favicon.ico">
- <!--- dev --->
- <link rel="stylesheet" href="/dist/styles.css">
- <script src="/dist/app.js" type="module"></script>
- <!--- prod --->
- <!--- <link rel="stylesheet" href="/dist/index.0f205b7a.css">  --->
-  
+  <link rel="stylesheet" href="/dist/app-GPLB4T47.css">
+  <script src="/dist/app-VSNYZAZM.js" type="module"></script>
 
 <body x-cloak x-data="{hidden: false}" @blur-bg.window="$event.detail?hidden = true:hidden=false; window.scroll({top: 0, left: 0, behavior: 'smooth'});" :class="{ 'no-scroll': hidden }"> 
   <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -20,9 +16,7 @@
 		#view( 'common/fragment/header', { "route" =  getItem() } )#
 	</cfoutput>
 
-  <cfoutput>
-    #view( 'common/fragment/megamenu')#
-   </cfoutput>
+   
    
   <main class="main" x-data="{ blurred: false }"  @blur-bg.window="$event.detail?blurred = true:blurred=false;" :class="{ 'blur-bg': blurred }">
 	<cfoutput>#body#</cfoutput>
@@ -30,11 +24,9 @@
 
   <!--- footer --->
   <footer class="footer">
-    <div class="container footer-container">
+    <div class="footer-container">
 
-      <div>
-        <img alt="Capovani Brothers" class="block" src="/images/logo_short.png">
-      </div>
+       <img alt="Capovani Brothers" style="display:inline-block;" src="/images/logo_short.png">
 
       <ul class="vertical footer-links">
         <li><a href="/disclaimer">Disclaimer</a></li>
@@ -71,5 +63,11 @@
   </footer>
  <script src="https://www.google.com/recaptcha/api.js?render=6LevHMkfAAAAAInPcjzzNLUUgvmKoeDzcIg4G6qS"></script>
  
+ 
+ <cfoutput>
+  #view( 'common/fragment/toasts')#
+ </cfoutput>
+
 </body>
 </html>
+
