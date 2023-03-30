@@ -1,6 +1,7 @@
 <div class="offer">
-	<form id="offerfrm" method="post" x-data  @submit.prevent="$store.forms.form='offer';$store.forms.submit()">
+	<form id="offerfrm" method="post" x-data @submit.prevent="$store.forms.form='offer';$store.forms.submit()">
 		<input type="hidden" name="itemno" :value="$store.forms.itemno">
+		<input type="hidden" name="frmpos" value="0">
 		<input type="hidden" name="ttypeno" value="11">
 		<input type="hidden" name="qtyShown" :value="$store.forms.qtyShown">
 		<input type="hidden" name="priceShown" :value="$store.forms.priceShown">
@@ -14,7 +15,26 @@
 			<div class="offer-total-row">
 					<!--- https://stackoverflow.com/questions/19233415/how-to-make-type-number-to-positive-numbers-only --->
 					<div>
-						<input name="qtyStated" id="qtyStated" oninput="validity.valid||(value='');" class="form-control qty-ele" :class="{'invalid':$store.forms.qtyStated.errorMessage && $store.forms.qtyStated.blurred}" type="number" placeholder="qty" step="1" min="1" :max="$store.forms.maxqty" maxlength="3" :readonly="$store.forms.maxqty==1"  @blur="$store.forms.validate($event)" x-model="$store.forms.qtyStated.value" required data-msg='["valueMissing:Please enter a valid quantity"]'/>
+						<input 
+						id="qtyStated"
+						name="qtyStated" 
+						type="number"
+						class="form-control qty-ele" 
+						placeholder="qty"
+						maxlength="3"
+						title="enter a quantity for your offer"						
+						<!--- optional --->
+						required
+						step="1" min="1" 
+						data-msg='["valueMissing:Please enter a valid quantity"]'
+						oninput="validity.valid||(value='');" 
+						<!--- alpine --->
+						:class="{'invalid':$store.forms.toggleError('qtyStated')}" 
+						:max="$store.forms.maxqty" 
+						:readonly="$store.forms.maxqty==1"  
+						x-model="$store.forms.qtyStated.value"
+						@blur="$store.forms.validate($event)" 
+						  />
 					</div>
 
 					<div style="padding: .2rem 0">@</div>
@@ -24,33 +44,95 @@
 							<span class="input-group-icon">
 								$
 							</span>
+							
+							<input 
+							id="priceStated"
+							name="priceStated" 
+							type="text"
+							class="form-control input-group-ele currency-ele" 
+							placeholder="999,999.00"
+							maxlength="10"
+							title="enter a price for your offer"						
+							<!--- optional --->
+							required
 							<!--- pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"  --->
-							<input  name="priceStated" id="priceStated" type="text" class="form-control input-group-ele currency-ele" :class="{'invalid':$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred}"  placeholder="999,999.00" oninput="this.value=formatCurrency(this.value);"  @blur="$store.forms.validate($event)" maxlength="10"  x-model="$store.forms.priceStated.value" data-msg='["valueMissing:Please enter a valid price"]' required/>
+							data-msg='["valueMissing:Please enter a valid price"]'
+							oninput="this.value=formatCurrency(this.value);"
+							<!--- alpine --->
+							:class="{'invalid':$store.forms.toggleError('priceStated')}"  
+							x-model="$store.forms.priceStated.value"
+							@blur="$store.forms.validate($event)"  />
 						</div>
-						<!--- <p class="helper error-message" x-cloak x-show="$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred" x-text="$store.forms.priceStated.errorMessage" class="error-message"></p> --->
 					</div>
 					<div>=</div>
-					<div class="total" x-text="$store.forms.total"></div>
+					<div 
+						class="total" 
+						x-text="$store.forms.total">
+					</div>
 				</div>
-			<p class="helper error-message qty-msg" x-cloak x-show="$store.forms.qtyStated.errorMessage && $store.forms.qtyStated.blurred" x-text="$store.forms.qtyStated.errorMessage" ></p>
-			<p class="helper error-message price-msg" x-cloak x-show="$store.forms.priceStated.errorMessage && $store.forms.priceStated.blurred" x-text="$store.forms.priceStated.errorMessage" class="error-message"></p>
+			<p 
+				class="helper error-message qty-msg" 
+				<!--- alpine --->
+				x-cloak 
+				x-show="$store.forms.toggleError('qtyStated')" 
+				x-text="$store.forms.qtyStated.errorMessage" >
+			</p>
+			<p 
+				class="helper error-message price-msg" 
+				<!--- alpine --->
+				x-cloak 
+				x-show="$store.forms.toggleError('priceStated')" 
+				x-text="$store.forms.priceStated.errorMessage">
+			</p>
 		</div>
 		<div class="form-row">
 			<label for="terms" class="form-label">
 				Qualifications or Contingencies
 			</label>
-			<!--- @blur="$store.forms.terms = stripHTML($store.forms.terms);"  --->
-			<textarea cols="50" rows="3" name="terms" id="terms" wrap="soft" class="form-control"  @blur="$store.forms.validateTerms()"  x-model="$store.forms.terms" maxlength="250" ></textarea>
+			
+			<textarea 
+				id="terms"
+				name="terms"
+				class="form-control" 
+				maxlength="250" 
+				placeholder="enter any optional qualifications or conditions surrounding your offer"
+				title="enter any optional qualifications or conditions surrounding your offer"
+				<!--- optional --->
+				cols="50" 
+				rows="3"
+				wrap="soft"
+				<!--- alpine --->
+				x-model="$store.forms.terms"
+				@blur="$store.forms.validateTerms()"
+				>
+			</textarea>
+
 			<p class="count" x-cloak>
-				 <span x-text="$store.forms.termsRemain"></span> characters remaining.
+				<span x-text="$store.forms.termsRemain"></span> characters remaining.
 			</p>
+
 		</div>
 		<div class="form-row">
 			<label for="message" class="form-label">
 				Additional Notes
 			</label>
 			<!---  @blur="$store.forms.message = stripHTML($store.forms.message);"  --->
-			<textarea cols="50" rows="3" name="message" wrap="soft" class="form-control" @blur="$store.forms.validateMessage()" x-model="$store.forms.message" maxlength="250"></textarea>
+			<textarea 
+				id="message"
+				name="message"
+				class="form-control"
+				maxlength="250"
+				placeholder="enter any additional notes or comments regarding the offer"
+				title="enter any additional notes or comments regarding the offer"
+				<!--- optional --->
+				cols="50" 
+				rows="3" 
+			 	wrap="soft" 
+				<!--- alpine --->
+				x-model="$store.forms.message"
+				@blur="$store.forms.validateMessage()"
+				>
+			</textarea>
 			<p class="count" x-cloak>
 				<span x-text="$store.forms.messageRemain"></span> characters remaining.
 		   </p>
@@ -59,28 +141,30 @@
 			#view( 'common/fragment/item/personal', { phone = 'phone1'})#
 		</cfoutput>
 		
-		<!--- <div class="helper success-message" x-cloak x-show="$store.forms.submitted">
-			<div class="flex">
-				<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle w-5 h-5 mx-2">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
-				<div>
-				  <p class="font-bold">Success! Your offer was recieved</p>
-				  <p class="text-sm">Someone will contact you soon</p>
-				</div>
-			</div>
-		</div>  --->
-		<div class="form-row" x-cloak x-show="$store.forms.captcha.errorMessage && $store.forms.captcha.blurred">
-			<p class="helper error-message"  x-text="$store.forms.captcha.errorMessage" class="error-message"></p>
+		<div
+			class="form-row" 
+			x-cloak 
+			x-show="$store.forms.generalError">
+				<p 
+					class="helper error-message" 
+					x-html="$store.forms.generalError">
+				</p>
 		</div>
 
 		<div class="form-row">
-			<button type="submit" class="btn btn-red " :class="{'submitting' :$store.forms.submitting}" :disabled="$store.forms.submitting">
-				<svg x-show="$store.forms.submitting" class="animate-spin processing"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-						<circle style="opacity: .25"  cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-						<path style="opacity: .75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-				</svg>MAKE OFFER
+			<button 
+				id="makeoffer"
+				name="makeoffer"
+				type="submit" 
+				class="btn btn-red" 
+				title="make your offer"
+				<!--- alpine --->
+				:class="{'submitting' :$store.forms.submitting}" 
+				:disabled="$store.forms.submitting">
+					<svg x-show="$store.forms.submitting" class="animate-spin processing"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+							<circle style="opacity: .25"  cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+							<path style="opacity: .75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+					</svg>MAKE OFFER
 			</button>
 		</div>
 

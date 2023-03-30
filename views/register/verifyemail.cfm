@@ -12,9 +12,6 @@
                         <button class="btn btn-red" >Resend Email</button>
                     </cfif>
                 </form> 
-            
         </div>
     </div>
 </cfoutput>
-<!--- <cfdump var="#rc#" abort="false"/>
-<cfdump var="#session#" abort="false"/> --->

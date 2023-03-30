@@ -46,10 +46,27 @@
 				
 					<form action="/login" method="post">
 						<div class="form-row">
-							<input class="form-control" type="text" placeholder="username" name="username" required/>
+							<input 
+								id="username"
+								name="username"
+								class="form-control" 
+								type="text" 
+								maxlength="50"
+								placeholder="username or email" 
+								title="enter your email or username to login" 
+								required
+							/>
 						</div>
 						<div class="form-row">
-							<input class="form-control" type="password" placeholder="password" name="password" required/>
+							<input
+								id="password" 
+								name="password" 
+								class="form-control" 
+								type="password"
+								maxlength="25"
+								placeholder="password" 
+								title="enter your password" 
+								required/>
 						</div>	
 				
 					 <div>
@@ -58,7 +75,15 @@
 					  </p>
 					</div>
 				
-					<button type="submit" class="btn btn-red login-submit">Log In</button>
+					<button 
+						id="login"
+						name="login"
+						type="submit" 
+						class="btn btn-red login-submit"
+						title="login"
+						>
+						Log In
+					</button>
 					<cfif structKeyExists(rc, 'destination')>
 					 	<input type="hidden" value="#rc.destination#" name="destination" />
 					</cfif>
