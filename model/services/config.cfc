@@ -89,7 +89,7 @@ component accessors=true {
             },
             'linkCreated' :  {
                 'title' :  'Password Reset Link Created',
-                'instruction' :  'If your email was associated with a user account in our system, then you should recieve a reset link shortly. That link is valid for 2 hours.'
+                'instruction' :  'If your email was associated with a user account in our system, then you should recieve a reset link shortly. That link is valid for 2 hours.<br>Check your spam folder, if you still did not recieve the email, the trying sending it again below.'
             },
             'linkNotCreated' :  {
                 'title' :  'Hmm, something went wrong',
