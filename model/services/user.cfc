@@ -220,7 +220,7 @@ component accessors=true {
 				
 			} catch (e) {
 				result["success"] = false;
-				writeDump(e);
+				// writeDump(e);
 			}
 		}
 

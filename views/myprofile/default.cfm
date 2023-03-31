@@ -44,7 +44,7 @@
 							value="#rc.user.pno#">
 						<input 
 							type="hidden"		
-							name="password"
+							name="pwd1"
 							value="">
 
 						

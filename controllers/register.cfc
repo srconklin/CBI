@@ -35,7 +35,7 @@ component accessors=true extends="controllers.base.common" {
 	
 		param name="rc.resendLink" default="false";
 		param name="rc.status" default="default";
-		var status = '';
+		var status = 'default';
 		rc.result.success = true;
 		// only allow resend if we have an email in session.
 		rc.allowResend=false;
@@ -123,7 +123,7 @@ component accessors=true extends="controllers.base.common" {
 		} 
 
 		// get content 
-		rc.svg = getValidSVGICon('forgotpassword', rc.fpstatus)
+		rc.svg = getValidSVGICon('forgotpassword', status)
 		status = config.getContent('register', status);
 		rc.title = status.title;
 		rc.instruction = status.instruction;
