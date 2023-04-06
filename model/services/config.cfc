@@ -140,6 +140,18 @@ component accessors=true {
             }
             
         },
+        user: {
+            'missingfields' : {
+                'instruction': 'You must enter a username and password'
+            },
+            'no_result' :  {
+                'instruction': 'Username and/or password is invalid'
+            },
+            'duplicate' :  {
+                'instruction': 'Something went wrong authenticating your account. Please email customer support'
+            },
+
+        },
         basicforms : {
             'missingMessage' : {
                 'instruction': 'You must enter a message'
@@ -226,5 +238,24 @@ component accessors=true {
     function getSettings() {
 		return settings;
 	}
+
+    /**********************************************************
+	 getValidSVGICon
+     Get the svg icon to show based on current status
+	*********************************************************/
+	private function getValidSVGIcon(string routine = '', string status ='default') {
+        var svg = '';
+        var icons = getIcons(arguments.routine);
+
+        // check the list of statuses for the routine we are on and show the success one
+        if (listfindnocase(icons.successStatus, arguments.status)) 
+			 svg = icons.theIcon;
+        // otherwise show the stock error one     
+		else 
+			svg =  '<svg xmlns="http://www.w3.org/2000/svg" class="icon-title" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> ';
+        
+        return svg;
+
+    }
     
 }

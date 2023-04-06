@@ -34,7 +34,7 @@ component accessors=true extends="controllers.base.common" {
 		rc.title= status.title;
 		rc.instruction= status.instruction;
 
-		rc.svg = getValidSVGICon('forgotpassword', rc.fpstatus)
+		rc.svg = config.getValidSVGICon('forgotpassword', rc.fpstatus)
 		
 	 }	
 
@@ -68,7 +68,7 @@ component accessors=true extends="controllers.base.common" {
 		rc.title = status.title; 
 		rc.instruction = status.instruction;
 	
-		rc.svg = getValidSVGICon('forgotpassword', 'default')
+		rc.svg = config.getValidSVGICon('forgotpassword', 'default')
 
 	}
 	
@@ -82,7 +82,7 @@ component accessors=true extends="controllers.base.common" {
 		var status = config.getContent('setpassword', 'passwordReset');
 		rc.title = status.title; 
 		rc.instruction = status.instruction;
-		rc.svg = getValidSVGICon('resetpassword', 'default')
+		rc.svg = config.getValidSVGICon('resetpassword', 'default')
 
 	}
 
@@ -145,7 +145,7 @@ component accessors=true extends="controllers.base.common" {
 			validateform(rc, 'passwordmgrbean');
 		
 			// extract email from token 
-			var email = variables.userService.decomposeToken(rc.token).email;
+			var email = variables.utils.decomposeAESToken(rc.token).email;
 			var result=variables.userService.updatePassword(email, rc.pwd1);
 			if 	(result.success) {
 				rc["response"]["res"] = true;
