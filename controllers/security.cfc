@@ -2,8 +2,10 @@ component accessors=true {
 	property framework;
     property userService;
     property config;
-    // property securelist;
 
+    function session( rc ) {
+        variables.userService.defaultUserSession();
+    }
    
    	/******************************
 	 authorize on every page request
@@ -15,7 +17,7 @@ component accessors=true {
 			return;
 
 		// check to make sure the user is logged on and skip exempt pages
-        if (!variables.userService.isloggedIn() &&
+        if (!rc.userService.isloggedIn &&
              !listfindnocase( 'login', variables.framework.getSection() ) && 
              !listfindnocase( 'main.error', variables.framework.getFullyQualifiedAction() ) ) {
 			rc.destination = variables.framework.getItem();	 
