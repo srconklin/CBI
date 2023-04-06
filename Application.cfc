@@ -79,18 +79,19 @@ component extends="framework.one" output="false" accessors=true {
 	
 	public void function setupSession() {
 		// set up a default session
-		controller( 'main.setUserSession' );
+		controller( 'security.session' );
+		//variables.userService.defaultUserSession();
+
 	}
 
 	function before( struct rc = {} ) {
 		
-		// reset the application scope
+		// reset the application 
 		if(structKeyExists(rc, 'resetApp')) {
 			userService.logout();
 		}
-			
 		// user session data
-		rc["userSession"] = userService.getUserSession();
+		rc["userSession"] = variables.userService.getUserSession();
 				
 	}
 
