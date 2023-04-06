@@ -35,6 +35,29 @@ component accessors=true {
         
     }
 
+    // decompose a token into eamil and secret GUID
+	function decomposeAESToken(required string token) {
+		var result = {
+			secretGuid : '',
+			email : ''
+		};
+		
+
+		try {
+			// replace the _ back with slashes
+			arguments.token = replace(arguments.token, "_", "/", "all");
+			var decryptedToken=decrypt(arguments.token, config.getSetting("AESKey"), "AES", "Base64")
+			result.secretGuid = getToken(decryptedToken, 1, '|');
+			result.email = getToken(decryptedToken, 2, '|');
+
+		} catch (e) {
+			result.secretGuid = '';
+			result.email = '';
+		}
+		
+		return result;
+	}
+
     function isAjaxRequest() {
 		var headers = getHttpRequestData().headers;
 		return structKeyExists(headers, "X-Requested-With") 
