@@ -6,5 +6,8 @@ component accessors=true  {
     return variables.errors;
   }
 
+  function clearErrors() {
+    variables.errors = {};
+  }
 
 }
