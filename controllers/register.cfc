@@ -15,7 +15,7 @@ component accessors=true extends="controllers.base.common" {
 	******************************/
 	public void function default(struct rc = {}) {
 		rc.showregister= true;
-		if (variables.userService.isloggedIn()) {
+		if (rc.userService.isloggedIn) {
 			// flexible config switch to have login and register forms side by side on same page
 			
 			renderResult(rc, '/myprofile');
@@ -123,7 +123,7 @@ component accessors=true extends="controllers.base.common" {
 		} 
 
 		// get content 
-		rc.svg = getValidSVGICon('forgotpassword', status)
+		rc.svg =config.getValidSVGICon('forgotpassword', status)
 		status = config.getContent('register', status);
 		rc.title = status.title;
 		rc.instruction = status.instruction;

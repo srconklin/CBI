@@ -58,7 +58,7 @@ component accessors=true {
         // get the bean and populate it from form fields
 		var thebean = variables.beanFactory.getBean( arguments.bean );
 		variables.fw.populate( cfc=thebean, key=rc.fieldnames, trim=true );
-
+       
         // Validate form input
         if ( !thebean.isValid() ) {
             rc["response"]["errors"] = thebean.getErrors();
@@ -68,13 +68,13 @@ component accessors=true {
                 variables.fw.abortController();
             }    
         }
-
+        return thebean;
     }
 
     /*********************************************************************
 	 makeLegacyCall 
      interface to include a file/execute a file in the legacy application 
-	*********************************************************************/
+     ********************************************************************/
     function makeLegacyCall(struct rc = {}, string serverTemplate  = '', struct legacyvars = {}) {
 
         // beans are transiet. They have their own variables scope and are thrown away aftwards
@@ -105,32 +105,7 @@ component accessors=true {
 
     }
 
-    /**********************************************************
-	 setUserSession 
-     defaults a user's session variables on session startup
-	*********************************************************/
-	function setUserSession(struct rc = {}) {
-		variables.userService.defaultUserSession();
-	}
     
-    /**********************************************************
-	 getValidSVGICon
-     Get the svg icon to show based on current status
-	*********************************************************/
-	private function getValidSVGICon(string routine = '', string status ='default') {
-        var svg = '';
-        var icons = config.getIcons(arguments.routine);
-
-        // check the list of statuses for the routine we are on and show the success one
-        if (listfindnocase(icons.successStatus, arguments.status)) 
-			 svg = icons.theIcon;
-        // otherwise show the stock error one     
-		else 
-			svg =  '<svg xmlns="http://www.w3.org/2000/svg" class="icon-title" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> ';
-        
-        return svg;
-
-    }
      /**********************************************************
 	 sendErrorEmail
      generic email handler for errors both explicity and implicity
@@ -174,26 +149,5 @@ component accessors=true {
             variables.fw.renderData().type( 'json' ).data( rc.response ).statusCode( 200 ).statusText( "Successful" );
     }
 
-    /**********************************************************
-	 validatePwdResetToken
-     make sure the token for resetting a password is valid
-	*********************************************************/
-	// private function validatePwdResetToken(struct rc = {}) {
-        
-    //     // meet the requirements of at least having a token
-	// 	if(!len(rc.token)) {
-	// 		rc.fpstatus='passwordNotReset';
-	// 		variables.fw.redirectCustomURL('/forgotpassword', 'fpstatus' );	
-	// 	} 
-
-	// 	//validate the token
-	// 	var result  = variables.userService.verifyPwdReset(rc.token);	
-	// 	// any errors report and go back to primary view
-	// 	if(len(result.errors)) {
-	// 		rc.fpstatus = result.errors;	
-	// 		variables.fw.redirectCustomURL('/forgotpassword', 'fpstatus' );	
-	// 	}
-
-	// }
-
+   
 }    
