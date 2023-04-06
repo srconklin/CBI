@@ -3,8 +3,12 @@
         "algoliacfc":"^2.0.1",
         "fw1":"^4.2.0"
     },
+    "devDependencies":{
+        "testbox":"^4.5.0+5"
+    },
     "installPaths":{
         "algoliacfc":"modules/algoliacfc/",
-        "fw1":"framework/"
+        "fw1":"framework/",
+        "testbox":"testbox/"
     }
 }
