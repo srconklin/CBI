@@ -143,7 +143,7 @@
 
 </cfoutput>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkEDHzr6YLw-24a07THqMOFF5t0UGgDqk&libraries=places"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=replac&libraries=places"></script>
 
 <script>
 	const input = document.getElementById("searchgeo");
