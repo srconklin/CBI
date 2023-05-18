@@ -17,7 +17,7 @@ component accessors=true {
 			return;
 
 		// check to make sure the user is logged on and skip exempt pages
-        if (!rc.userService.isloggedIn &&
+        if (!rc.userSession.isloggedIn &&
              !listfindnocase( 'login', variables.framework.getSection() ) && 
              !listfindnocase( 'main.error', variables.framework.getFullyQualifiedAction() ) ) {
 			rc.destination = variables.framework.getItem();	 

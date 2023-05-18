@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no,  maximum-scale=5">
   <link rel="shortcut icon" href="/images/favicon.ico">
-  <link rel="stylesheet" href="/dist/app-GPLB4T47.css">
-  <script src="/dist/app-VSNYZAZM.js" type="module"></script>
+  <link rel="stylesheet" href="/dist/app-LK4GNOKZ.css">
+  <script src="/dist/app-EHRVVUBE.js" type="module"></script>
 
 <body x-cloak x-data="{hidden: false}" @blur-bg.window="$event.detail?hidden = true:hidden=false; window.scroll({top: 0, left: 0, behavior: 'smooth'});" :class="{ 'no-scroll': hidden }"> 
   <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -67,6 +67,9 @@
  <cfoutput>
   #view( 'common/fragment/toasts')#
  </cfoutput>
+
+ <cfdump var="#rc#" abort="false"/>
+ <cfdump var="#session#" abort="false"/>
 
 </body>
 </html>

@@ -1,8 +1,8 @@
 component accessors=true {
     property config;
 
-    function hasHTML(str) {
-        return REFindNoCase("<[^>]*>",str);
+    function hasHTML(str='') {
+        return REFindNoCase("<[^>]*>",arguments.str);
     }
         
     function validateCaptcha(captcha, route) {
@@ -35,28 +35,49 @@ component accessors=true {
         
     }
 
-    // decompose a token into eamil and secret GUID
-	function decomposeAESToken(required string token) {
+    // decrypt and AES token
+	function decryptAESString(required string theString) {
 		var result = {
-			secretGuid : '',
-			email : ''
+			token : '',
+            error: ''
 		};
-		
 
 		try {
 			// replace the _ back with slashes
-			arguments.token = replace(arguments.token, "_", "/", "all");
-			var decryptedToken=decrypt(arguments.token, config.getSetting("AESKey"), "AES", "Base64")
-			result.secretGuid = getToken(decryptedToken, 1, '|');
-			result.email = getToken(decryptedToken, 2, '|');
+			arguments.theString = replace(arguments.theString, "_", "/", "all");
+			result.decString=decrypt(arguments.theString, config.getSetting("AESKey"), "AES", "Base64")
 
 		} catch (e) {
-			result.secretGuid = '';
-			result.email = '';
+            result.error = e.message;
 		}
 		
 		return result;
 	}
+
+    function decomposeResetToken(token){
+        var result = {
+			secretGuid : '',
+			email : '',
+            error: ''
+		};
+
+        // a reset token consists of a secret (GUID) and an email
+        result.secretGuid = getToken(arguments.token, 1, '|');
+		result.email = getToken(arguments.token, 2, '|');
+
+        if(!findNoCase('|', arguments.token))
+            result.error = 'badformat';	
+        else if(!len(result.secretGuid))
+            result.error = 'missingsecret';
+        else if(!len(result.email))
+            result.error = 'missingemail';
+        else if(!isValid('email', result.email))
+            result.error = 'bademail';
+        
+        
+        return result;
+
+    }
 
     function isAjaxRequest() {
 		var headers = getHttpRequestData().headers;

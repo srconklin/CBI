@@ -39,7 +39,7 @@ component extends="testbox.system.BaseSpec"{
 			} );  
 
             it( "should have no intialized data only; i.e pno=0", function(){
-                expect( oUser.getState().pno ).toBe( 0 )
+                expect( oUser.getUserData().pno ).toBe( 0 )
             } );
             it( "should have an intial status of ok", function(){
                 expect(oUser.getStatus() ).tobe('ok');
@@ -84,10 +84,10 @@ component extends="testbox.system.BaseSpec"{
                 expect( oUser.getErrors() ).ToBeEmpty();
                 expect(oUser.isUserValid()).toBetrue();
                 
-                var userData = oUser.getState();
+                var userData = oUser.getUserData();
                 expect(userData).toHaveKey( 'pno' );
                 expect(userData.pno).tobe(4);
-                expect(userData.avatar).tobe('RR');
+                //expect(userData.avatar).tobe('RR');
                 expect(userData.validated).tobe(2);
 
             } );

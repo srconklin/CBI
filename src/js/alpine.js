@@ -166,7 +166,6 @@ Alpine.store('forms', {
     message: '',
 
     // register
-    //password: { blurred: false, errorMessage: '' },
     emailinuse: { blurred: false, errorMessage: '' },
     agreetandc: { blurred: false, errorMessage: '', value: false },
 
@@ -312,7 +311,7 @@ Alpine.store('forms', {
         this.upper=this.pwd1.value.match(/[A-Z]/g);  
         //check for one number
         this.number=this.pwd1.value.match(/[0-9]/g);  
-        //check for one number
+        //check at least 8 characters
         this.minlength=this.pwd1.value.length >= 8;  
 
     },
@@ -390,6 +389,10 @@ Alpine.store('forms', {
                         // server side errors caught
                         if (!data.res) {
 
+                             // an error that we don't report to input but rather redirect to a new route  
+                             if (data.payload.redirect)
+                                location.href = data.payload.redirect;
+
                             // error is a string from backend then form must have a general error div
                             if( typeof data.errors === 'string' ) {
                                 this.generalError = data.errors;
@@ -407,8 +410,7 @@ Alpine.store('forms', {
                             // success no validation errors    
                         } else {
                             sessionStorage.setItem(this.form, true);
-                            // if we have a payload then we have identified a new person; a returning user who has yet to login with a password OR a new registree
-                            
+
                             if (Object.keys(data.payload).length > 0) {
 
                                 sessionStorage.setItem('firstName', data.payload.firstName);

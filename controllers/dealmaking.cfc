@@ -22,7 +22,7 @@ component accessors=true extends="controllers.base.common"{
 
 	************************************************/
 	
-    public void function makeDeal(struct rc= {}) {
+    public void function makeDeal2(struct rc= {}) {
 		param name="rc.type" default="offer";
 
             /*
@@ -31,6 +31,7 @@ component accessors=true extends="controllers.base.common"{
 			  then error is rendered and controller aborted	
 			*/
 			
+			// either offer or inquiry
 			validateform(rc, '#rc.type#bean');
 			
 			// interface to dynabuilt system by meeting requirements of template as an include
@@ -65,6 +66,53 @@ component accessors=true extends="controllers.base.common"{
 				}
 				
 			}
+			renderResult(rc);	
+
+    }
+
+	public void function makeDeal(struct rc= {}) {
+
+            /*
+			  validate form by loading into bean.
+			  note ajax if in use on form submit and it errors
+			  then error is rendered and controller aborted	
+			*/
+			
+			// either offer or inquiry
+			var deal = validateform(rc, 'dealbean');
+			
+			var userLoggedInBeforeOffer = userService.getUserSession().isloggedIn;
+			
+			// make offer or inquiry
+			deal.sendoffer();
+
+			// if error then show and send it
+			if(!deal.offerSentSuccesfully()) {
+				var e = deal.getErrors();
+                rc["response"]["errors"] = e.message;
+                rc["response"]["errorcode"] = e.errorcode;
+				request.exception = e;
+               	sendErrorEmail(rc);
+			
+			//success
+			} else {
+				
+				// offerer was not logged in (unknown before); then legacy system will have partially logged them in; 
+				// update the session vars that the we have that the legacy does not
+				if (!userLoggedInBeforeOffer ) {	
+					var dd = deal.getData();
+					// partial login
+					variables.userService.setUserSession( {email: dd.email, firstName : dd.firstName, lastName: dd.lastName, isNewPerson :  deal.isNewPerson()});
+				}
+				
+				rc["response"]["res"] = true;
+				// payload for setting messaging into browser sesssionstate
+				rc["response"]["payload"]["message"] = deal.isNewPerson() ? 'isNewPerson' : 'existingPerson';
+				rc["response"]["payload"]["firstName"] =  userService.getUserSession().firstName;
+
+
+			}
+			
 			renderResult(rc);	
 
     }

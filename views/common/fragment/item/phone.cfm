@@ -19,7 +19,8 @@
         <!--- alpine --->
         :class="{'invalid':$store.forms.toggleError('#local.phone#')}" 
         x-model="$store.forms.#local.phone#.value" 
-        @blur="$store.forms.validate($event)" />
+        @blur="$store.forms.validate($event)" 
+        @focus="$store.forms.generalError=''"/>
     <p 
         class="helper error-message"
         x-cloak 

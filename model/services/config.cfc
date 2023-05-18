@@ -13,10 +13,9 @@ component accessors=true {
         },
         securelist : "myprofile.default",
         captchaProtect : "offer.create,inquiry.create,myprofile.submitforgotpassword,register.register",
-         env : CGI.SERVER_NAME eq '127.0.0.1' ? 'dev'  : 'prod'
+        env : CGI.SERVER_NAME eq '127.0.0.1' ? 'dev'  : 'prod'
         
     }
-
     
     variables.Icons = {
         resetpassword = {
@@ -66,7 +65,27 @@ component accessors=true {
             },
             'EmailNotFound' : {
                 'title' :  'Hmm, something not quite right',
-                'instruction' :  "We could not update the password from the email address provided."
+                'instruction' :  "We could not update the password with the email address provided."
+            },
+            'nolowercase' : {
+                'title' :  'Hmm, password incorrect',
+                'instruction' :  "The Password must contain at least one lowercase character"
+            },
+            'nouppercase' : {
+                'title' :  'Hmm, password incorrect',
+                'instruction' :  "The Password must contain at least one uppercase character"
+            },
+            'nodigit' : {
+                'title' :  'Hmm, password incorrect',
+                'instruction' :  "The Password must contain at least one number"
+            },
+            'nodigit' : {
+                'title' :  'Hmm, password incorrect',
+                'instruction' :  "The Password must contain at least one number"
+            },
+            'tooshort' : {
+                'title' :  'Hmm, password incorrect',
+                'instruction' :  "The Password must be at least 8 characters"
             }
             
         },                
@@ -89,7 +108,7 @@ component accessors=true {
             },
             'linkCreated' :  {
                 'title' :  'Password Reset Link Created',
-                'instruction' :  'If your email was associated with a user account in our system, then you should recieve a reset link shortly. That link is valid for 2 hours.<br>Check your spam folder, if you still did not recieve the email, the trying sending it again below.'
+                'instruction' :  'If the email was associated with a user account in our system, you should recieve a reset link shortly. The link is valid for 2 hours. Check your spam folder, if you still did not recieve the email, then trying re-sending the email again below.'
             },
             'linkNotCreated' :  {
                 'title' :  'Hmm, something went wrong',
@@ -124,20 +143,28 @@ component accessors=true {
              },
              'successfullySent' : {
                 'title': 'Verify Email',
-                'instruction' : "An email has been sent to <strong>[EMAIL]</strong> with a link to verify your account.<br>If you don't receive the email, please check your spam folder or request a new link below."
+                'instruction' : "An email has been [TRIES] to <strong>[EMAIL]</strong> with a link to verify your account.<br>If you don't receive the email, please check your spam folder or request a new link below."
              },
              'successfullyVerified' : {
                 'title': 'Yah! Email Verified',
                 'instruction' : "You are now logged in! Please feel free to browse our inventory."
              },
-             'expired' : {
+             'verifyLinkExpired' : {
                 'title' : 'Verify Link Expired',
                 'instruction' : 'Sorry, that link is not valid anymore. Please click the button below to send a new one.'
              },
              'invalidCaptcha' :  {
                 'title' :  'Hmm, something went wrong',
                 'instruction' :  'We are having trouble verifying that you are real. Please try entering your email address again.'
-            }
+            },
+            'emaildidnotverify' :  {
+                'title' :  'Hmm, something went wrong with verifying your email.',
+                'instruction' :  'Maybe the verify link has expired or there is a problem with the link we sent you. If you cannot find a more recent email with a valid link, then try sending a new one below.'
+            },
+            'verifylinknotcreated' :  {
+                'title' :  'Hmm, something went wrong',
+                'instruction' :  'We are having trouble generating the verify link. Try sending the link again.'
+            },
             
         },
         user: {
@@ -149,8 +176,13 @@ component accessors=true {
             },
             'duplicate' :  {
                 'instruction': 'Something went wrong authenticating your account. Please email customer support'
-            },
+            }
 
+        },
+        contactinfo : {
+            'pno' : {
+                'instruction': 'Something went wrong. The PNO is missing or is invalid'
+            }
         },
         basicforms : {
             'missingMessage' : {
@@ -162,6 +194,9 @@ component accessors=true {
             'tooLong' : {
                 'instruction': 'Too long . Please limit your input'
             },    
+            'baditemno' : {
+                'instruction': 'incorrect badly formatted Item nr'
+            },
             'qtyMissing' : {
                 'instruction': 'A quantity is required'
             },
@@ -192,6 +227,9 @@ component accessors=true {
             'missingEmail' : {
                 'instruction': 'Email is required'
             },    
+            'missingPhone' : {
+                'instruction': 'Phone is required'
+            },  
             'firstNameTooLong' : {
                 'instruction': 'First name is too long.'
             },    
@@ -212,7 +250,10 @@ component accessors=true {
             },    
             'invalidPhone' : {
                 'instruction': 'Not a valid phone number'
-            }    
+            } ,
+            'agreeTandC' : {
+                'instruction': 'You must agree to the terms'
+            }     
 
         },
         captchaProtect : {
@@ -243,7 +284,7 @@ component accessors=true {
 	 getValidSVGICon
      Get the svg icon to show based on current status
 	*********************************************************/
-	private function getValidSVGIcon(string routine = '', string status ='default') {
+	function getValidSVGIcon(string routine = '', string status ='default') {
         var svg = '';
         var icons = getIcons(arguments.routine);
 

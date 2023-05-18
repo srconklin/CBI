@@ -1,13 +1,17 @@
-component accessors=true {
+component accessors=true extends="model.beans.common" {
 
-    variables.errors = {};
+     //accessors
     property firstName;
     property lastName;
     property email;
     property coname;
     property phone1 default='ns';
     property phone2 default='ns';
+     
+
+    //dependencies
     property utils;
+    property config;
 
     function isValid(){
      
@@ -49,7 +53,7 @@ component accessors=true {
         }
 
         //tel 
-        // if phone1 is not equal to ns then we must be being supplied the phone1 form field otherwise we have to be getting a phone2
+        // if phone1 is not equal to ns then we are being supplied the phone1 form field otherwise we have to be getting a phone2
         if ( getPhone1() neq 'ns' ) {
             if ( !len(getPhone1()) ) {
                 variables.errors["phone1"] = config.getContent('basicforms', 'missingPhone').instruction; 

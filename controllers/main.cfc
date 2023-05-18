@@ -1,7 +1,5 @@
 component accessors=true extends="controllers.base.common" {
 
-	// property config;
-	 
 	/******************************
 	 default controller (GET)
 	 home page
@@ -13,11 +11,15 @@ component accessors=true extends="controllers.base.common" {
 	
 	/******************************
 	 show item detail page (GET)
+	 migrate
 	******************************/
 	public void function showItem(struct rc = {}) {
 		param name="rc.id" default=0  type="integer";
 		
 		try {
+			// var result = itemService.getItem(rc.id);
+			// structappend(rc, result,true);
+			
 			rc.content =deserializeJSON(fileRead(ExpandPath( "./" ) & '/data/#rc.id#.json'));
 			rc.bc =fileRead(ExpandPath( "./" ) & '/data/bc/#rc.id#.cfm');
 		} 

@@ -20,10 +20,12 @@
             required
             data-msg='["valueMissing:Please enter your first name"]'
             oninput="this.value=validInput(this.value);"
+            
             <!--- alpine --->
             :class="{'invalid':$store.forms.toggleError('firstName')}"  
             x-model="$store.forms.firstName.value" 
             @blur="$store.forms.validate($event)" 
+            @focus="$store.forms.generalError=''"
             />
         <p 
             class="helper error-message" 
@@ -51,6 +53,7 @@
             :class="{'invalid':$store.forms.toggleError('lastName')}" 
             x-model="$store.forms.lastName.value"
             @blur="$store.forms.validate($event)" 
+            @focus="$store.forms.generalError=''"
             />
         <p 
             class="helper error-message" 
@@ -82,7 +85,9 @@
                 <!--- alpine --->
                 :class="{'invalid':$store.forms.toggleError('email')}" 
                 x-model="$store.forms.email.value"
-                @blur="$store.forms.validate($event)"/>
+                @blur="$store.forms.validate($event)"
+                @focus="$store.forms.generalError=''"
+                />
         </div>
         <p 
             class="helper error-message" 
@@ -104,7 +109,8 @@
             title="enter your optional company name"
             <!--- alpine --->
             x-model="$store.forms.coname" 
-            @blur="$store.forms.validateConame()" />
+            @blur="$store.forms.validateConame()" 
+            @focus="$store.forms.generalError=''"/>
     </div>
     <div class="form-row ">
         <cfoutput>

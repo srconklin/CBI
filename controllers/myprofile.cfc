@@ -1,6 +1,6 @@
 component accessors=true extends="controllers.base.common" {
     
-	property userService;
+	property usergateway;
 	property config;
 
 	/************************************
@@ -14,27 +14,25 @@ component accessors=true extends="controllers.base.common" {
 	*************************************/
 	public void function default(struct rc = {}) {
 		// populate the update contact info form
-		 rc.user = userService.getContactInfo(rc.userSession.pno);
+		rc.user = usergateway.getContactInfo(rc.userSession.pno);
 
 	}
 
  	/******************************
 	 forgotpassword (GET)
 	 clicked forgot password link
-	*****************************/
+	*******************************/
 	public void function forgotpassword(struct rc = {}) {
-		 param name="rc.fpstatus" default="default";
-		 //var validIconStatuses = 'default,linkCreated';
+		param name="rc.fpstatus" default="default";
+		//var validIconStatuses = 'default,linkCreated';
 		 
-		 // on successfully sending the email, don't show the send form; an extra step to prevent misuse.
-		 rc.allowSend = rc.fpstatus eq 'success' ? false: true;
-
-		var status = config.getContent('forgotpassword', rc.fpstatus);
+		// on successfully sending the email, don't show the send form; an extra step to prevent misuse.
+		rc.allowSend = rc.fpstatus eq 'success' ? false: true;
+		
 		// set the title and instruction as a function of the current status
-		rc.title= status.title;
-		rc.instruction= status.instruction;
-
-		rc.svg = config.getValidSVGICon('forgotpassword', rc.fpstatus)
+		structAppend(rc,config.getContent('forgotpassword', rc.fpstatus));
+	
+		rc.svg = config.getValidSVGIcon('forgotpassword', rc.fpstatus)
 		
 	 }	
 
@@ -43,40 +41,46 @@ component accessors=true extends="controllers.base.common" {
 	 resetPassword (GET)
 	 shown after user clinks reset link	 
 	 must have token present
-	 has a password and a confirm email box
+	 has a view -> password manager widget
 	****************************************/
 	public void function resetpassword(struct rc = {}) {
-		param name="rc.fpstatus" default="default";
+		param name="rc.fpstatus" default="passwordNotReset";
 		param name="rc.token" default="";
 
-		// meet the requirements of at least having a token
-		if(!len(rc.token)) {
-			rc.fpstatus='passwordNotReset';
-			renderResult(rc, '/forgotpassword', 'fpstatus' ) ;
-		} 
-
 		//validate the token
-		var result  = variables.userService.verifyPwdReset(rc.token);	
-		// any errors report and go back to primary view
-		if(len(result.errors)) {
-			rc.fpstatus = result.errors;	
+		if(len(rc.token)) {
+		
+			var fp = variables.beanFactory.getBean( 'forgotpasswordbean' );
+			fp.setResetToken(rc.token);
+
+			// check that token is valid
+			if (!fp.verifyToken()) {
+				//suppress detailed reason for error and just set status to generalize reason
+				rc.fpstatus = fp.getErrors() eq 'passwordLinkExpired' ? fp.getErrors() : 'passwordNotReset';
+				
+				renderResult(rc, '/forgotpassword', 'fpstatus' ) ;
+
+			// no errors	
+			} else {
+				// allow showing of pwd boxes which uses ajax to process form,
+				structAppend(rc,config.getContent('setpassword', 'default'));
+				rc.svg = config.getValidSVGICon('forgotpassword', 'default');
+				rc.fpstatus = 'default';
+			}
+			//var result  = variables.userService.verifyPwdReset(rc.token);	
+
+		} else {
 			renderResult(rc, '/forgotpassword', 'fpstatus' ) ;
 		}
 		
-		// made it this far, allow screen to proceed to show pwd boxes
-		var status = config.getContent('setpassword', 'default');
-		rc.title = status.title; 
-		rc.instruction = status.instruction;
-	
-		rc.svg = config.getValidSVGICon('forgotpassword', 'default')
 
 	}
 	
-	/******************************
+	/*************************************************
 	 submitresetpassword (get)
-	 final success screen after 
-	 changing password
-	******************************/
+	 final success screen after changing password
+	 has a view -> 
+	**************************************************/
 	public void function passwordReset(struct rc = {}) {
 		
 		var status = config.getContent('setpassword', 'passwordReset');
@@ -86,10 +90,9 @@ component accessors=true extends="controllers.base.common" {
 
 	}
 
-
-	/**********************************
+	/*******************************
 	 POST METHODS
-	***********************************/
+	*******************************/
 
 	/******************************
 	 submitforgotpassword (POST)
@@ -107,23 +110,15 @@ component accessors=true extends="controllers.base.common" {
 		} else {
 			
 			//validate form by loading into bean
-			validateform(rc, 'forgotpasswordbean');
+			var forgotpassword = validateform(rc, 'forgotpasswordbean');
 			
-			//if error on validating then, set return status for redirect
-			if(len(rc.response.errors)) {
+			// bean validation error
+			if(len(rc.response.errors)) 
 				rc.fpstatus = rc.response.errors;	
-			} else {
-				
-				// expected variables
-				form.email = rc.email;
-				// make legacy call to reset forgotten password
-
-				makeLegacyCall(rc, "resetForgottenPwd", variables.baseVars);
-				
-				// set appropriate message for user to see on screen
-				rc.fpstatus = !len(rc.response.errors) ? 'linkCreated' : 'linkNotCreated';
-			}	
-		}
+		    else 
+			// set appropriate message for lookup based on result of creating the fp link
+			rc.fpstatus = forgotpassword.generateLink() ? 'linkCreated' : 'linkNotCreated';
+		}	
 	
 		renderResult(rc, '/forgotpassword', 'fpstatus' ) ;
 		
@@ -141,22 +136,40 @@ component accessors=true extends="controllers.base.common" {
 		param name="rc.pwd2" default="";
 		param name="rc.token" default="";
 		
-			//validate form by loading into bean
-			validateform(rc, 'passwordmgrbean');
+			//validate form submit portion by loading into bean
+			var pm = validateform(rc, 'passwordmgrbean');
 		
-			// extract email from token 
-			var email = variables.utils.decomposeAESToken(rc.token).email;
-			var result=variables.userService.updatePassword(email, rc.pwd1);
-			if 	(result.success) {
-				rc["response"]["res"] = true;
-				rc["response"]["payload"]["redirect"] = '/passwordReset';
-			} else {
-				rc["response"]["errors"] = result.errors;
-				sendErrorEmail(rc);
-			}
-		
-		 renderResult(rc);
+			// revalidate the token to make sure nothing has changed 
+			// this includes decomposing it
+			var fp = variables.beanFactory.getBean( 'forgotpasswordbean' );
+			fp.setResetToken(rc.token);
 
+			// check that token is valid
+			if (!fp.verifyToken()) {
+				rc["response"]["errors"] = config.getContent('forgotpassword', fp.getErrors())
+				sendErrorEmail(rc);
+
+			// no errors, move on to updating the password	
+			} else {
+
+				pm.setEmail(fp.getemail());
+				pm.updatePassword();
+				// update the security hashes to say we are done.
+				fp.markPasswordVerified();
+				if (pm.hasErrors()) 
+					rc["response"]["errors"] = pm.getErrors();
+				else if(fp.hasErrors())
+					rc["response"]["errors"] = fp.getErrors();
+				// no errors	
+				else {
+					rc["response"]["res"] = true;
+					// we are in an ajax handler; js payload response contains a redirect; JS uses that to relocate
+					rc["response"]["payload"]["redirect"] = '/passwordReset';
+				}
+
+			}
+
+			renderResult(rc);
 	 }	
 
 	 
@@ -167,8 +180,20 @@ component accessors=true extends="controllers.base.common" {
 	**********************************************/
 	public void function updateContactInfo(struct rc = {}) {
 
-		validateform(rc, 'contactInfobean');
-		makeLegacyCall(rc, "procreg2", variables.baseVars);
+		var cb = validateform(rc, 'contactInfobean');
+		// makeLegacyCall(rc, "procreg2", variables.baseVars);
+		cb.update();
+
+		if(cb.hasErrors()) {
+			var e = cb.getErrors();
+			rc["response"]["errors"] = e.message;
+			rc["response"]["errorcode"] = e.errorcode;
+			request.exception = e;
+			sendErrorEmail(rc);
+		} else {
+			rc["response"]["res"] = true;
+		}
+
 		renderResult(rc);
 	
    }

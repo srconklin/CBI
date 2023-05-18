@@ -60,8 +60,8 @@ component extends="framework.one" output="false" accessors=true {
 
 			{ "$GET/items/{id:[0-9]+}/" = "/main/showitem/id/:id" },
 
-			{ "$POST/offer/$" = "/dealmaking/makedeal/type/offer" },
-			{ "$POST/inquiry/$" = "/dealmaking/makedeal/type/inquiry" },
+			{ "$POST/offer/$" = "/dealmaking/makedeal/" },
+			{ "$POST/inquiry/$" = "/dealmaking/makedeal" },
 
 			{ "$GET/test/" = "/test/default" }
 		 ]
@@ -102,7 +102,7 @@ component extends="framework.one" output="false" accessors=true {
 	 }
 
 	public void function setupView(rc) {
-		rc["userSession"] = userService.getUserSession();
+		rc["userSession"] = variables.userService.getUserSession();
     }
 
 	public void function setupResponse() {  }

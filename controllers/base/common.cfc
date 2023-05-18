@@ -4,14 +4,15 @@ component accessors=true {
 	property beanFactory;
     property userService;
 	property utils;
+	property config;
     
-    function init(config)  {
-        variables.config = arguments.config;
-        variables.baseVars = {
-            domain = cgi.https eq 'on'? 'https://' : "http://" & cgi.http_host,
-            aeskey = variables.config.getSetting("AESKey")
-        }
-	}
+    // function init(config)  {
+    //     variables.config = arguments.config;
+    //     variables.baseVars = {
+    //         domain = cgi.https eq 'on'? 'https://' : "http://" & cgi.http_host,
+    //         aeskey = variables.config.getSetting("AESKey")
+    //     }
+	// }
 
     /*********************************************************************
 	 before
@@ -75,35 +76,35 @@ component accessors=true {
 	 makeLegacyCall 
      interface to include a file/execute a file in the legacy application 
      ********************************************************************/
-    function makeLegacyCall(struct rc = {}, string serverTemplate  = '', struct legacyvars = {}) {
+    // function makeLegacyCall(struct rc = {}, string serverTemplate  = '', struct legacyvars = {}) {
 
-        // beans are transiet. They have their own variables scope and are thrown away aftwards
-        var legacyBean = variables.beanFactory.getBean( "legacybean" );
-        try{
-            var vars = legacyBean.makeLegacyCall( serverTemplate = arguments.serverTemplate,legacyvars=arguments.legacyvars);
-            // stuff any return vars from the legacy system into the rc for harvesting in the calling program.
-            structAppend(rc.vars, vars, true);
-        } catch (e) {
-                // we have an error. we report back to calling function rather than
-                // render and abort controller as sometimes we have managed errors where
-                // the message is looked up in content config
-                // writeDump(e);
-                // abort;
-                // cfrethrow;
-                // stick the exception object into the request to match how it works with FW1 onError.
-                // the sendError routine expects this for error reporting via email
-                request.exception = e;
-                rc["response"]["errors"] = e.message;
-                rc["response"]["errorcode"] = e.errorcode;
-               	sendErrorEmail(rc);
+    //     // beans are transiet. They have their own variables scope and are thrown away aftwards
+    //     var legacyBean = variables.beanFactory.getBean( "legacybean" );
+    //     try{
+    //         var vars = legacyBean.makeLegacyCall( serverTemplate = arguments.serverTemplate,legacyvars=arguments.legacyvars);
+    //         // stuff any return vars from the legacy system into the rc for harvesting in the calling program.
+    //         structAppend(rc.vars, vars, true);
+    //     } catch (e) {
+    //             // we have an error. we report back to calling function rather than
+    //             // render and abort controller as sometimes we have managed errors where
+    //             // the message is looked up in content config
+    //             // writeDump(e);
+    //             // abort;
+    //             // cfrethrow;
+    //             // stick the exception object into the request to match how it works with FW1 onError.
+    //             // the sendError routine expects this for error reporting via email
+    //             request.exception = e;
+    //             rc["response"]["errors"] = e.message;
+    //             rc["response"]["errorcode"] = e.errorcode;
+    //            	sendErrorEmail(rc);
 			
-        }
+    //     }
 
-        //no errors turn response to true
-		 if(!len(rc.response.errors)) 
-             rc["response"]["res"] = true;
+    //     //no errors turn response to true
+	// 	 if(!len(rc.response.errors)) 
+    //          rc["response"]["res"] = true;
 
-    }
+    // }
 
     
      /**********************************************************
