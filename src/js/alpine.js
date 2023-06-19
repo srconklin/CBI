@@ -172,6 +172,7 @@ Alpine.store('forms', {
     // password (reset, register, myaccount change password)
     pwd1: { blurred: false, errorMessage: '', value: '' },
     pwd2: { blurred: false, errorMessage: '', value: '' },
+    pwdcurrent: { blurred: false, errorMessage: '', value: '' },
     upper: false,
     lower: false,
     number: false,
@@ -389,7 +390,7 @@ Alpine.store('forms', {
                         // server side errors caught
                         if (!data.res) {
 
-                             // an error that we don't report to input but rather redirect to a new route  
+                             // an error that we don't report to same data input screen but rather redirect to a new route  
                              if (data.payload.redirect)
                                 location.href = data.payload.redirect;
 

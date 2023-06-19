@@ -101,7 +101,7 @@
     border-right: 1px solid #c2c3c5;
     border-bottom: 1px solid #c2c3c5;
 }
-
+/* 
 .tabelement {
     animation: fadeEffect .7s;
 }
@@ -109,4 +109,4 @@
 @keyframes fadeEffect {
     from {opacity: 0;}
     to {opacity: 1;}
-  }
+  } */

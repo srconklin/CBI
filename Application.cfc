@@ -40,6 +40,7 @@ component extends="framework.one" output="false" accessors=true {
 
 			{ "$GET/myprofile/$" = "/myprofile/default" },
 			{ "$POST/updatecontactinfo/$" = "/myprofile/updatecontactinfo" },
+			{ "$POST/changepassword/$" = "/myprofile/changepassword" },
 
 			
 			{ 

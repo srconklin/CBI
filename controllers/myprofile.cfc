@@ -153,7 +153,7 @@ component accessors=true extends="controllers.base.common" {
 			} else {
 
 				pm.setEmail(fp.getemail());
-				pm.updatePassword();
+				pm.resetPassword();
 				// update the security hashes to say we are done.
 				fp.markPasswordVerified();
 				if (pm.hasErrors()) 
@@ -181,7 +181,6 @@ component accessors=true extends="controllers.base.common" {
 	public void function updateContactInfo(struct rc = {}) {
 
 		var cb = validateform(rc, 'contactInfobean');
-		// makeLegacyCall(rc, "procreg2", variables.baseVars);
 		cb.update();
 
 		if(cb.hasErrors()) {
@@ -197,7 +196,25 @@ component accessors=true extends="controllers.base.common" {
 		renderResult(rc);
 	
    }
+	/***********************************************
+		changepassword (POST)
+		my account change password
+		ajax :yes
+	**********************************************/
+	public void function changepassword(struct rc = {}) {
 
+		var pm = validateform(rc, 'passwordmgrbean');
+		pm.changePassword();
+
+		if(pm.hasErrors()) {
+			rc["response"]["errors"] = pm.getErrors();
+		} else {
+			rc["response"]["res"] = true;
+		}
+
+		renderResult(rc);
+	
+   }
 		
 
 }

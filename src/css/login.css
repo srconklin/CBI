@@ -29,41 +29,6 @@
   font-size: 1.5rem;
 }
 
-/* .login-fp {
-  text-decoration: none;
-  color: #fa0114;
-}
-
-.login-fp:hover {
-  opacity: .7;
-} */
-/* 
-.login-submit {
-  width: 100%;
-  margin-top: 1.5rem !important;
-  border-radius: 9999px !important; 
-} */
-
-/* .login-footnote {
-  display: flex;
-  justify-content: center;
-  margin-top: 1.25rem;
-  margin-left: .75rem;
-  margin-right: .75rem;
-  font-size: .875rem;
-  line-height: 1.25rem;
-}
-
-.login-footnote a {
-  text-decoration: none;
-  color: #fa0114;
-}
-
-.login-footnote a:hover {
-  opacity: .7;
-} */
-
-
 .pwdrequirements p {
   margin-bottom: .5rem;
   display: flex;

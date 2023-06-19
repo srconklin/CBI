@@ -33,7 +33,9 @@ component accessors=true {
     }
 
     variables.content = {
-
+        changepassword = {
+           
+        },
         setpassword = {
             'default' :  {
                 'title' :  'Password Reset',
@@ -66,6 +68,14 @@ component accessors=true {
             'EmailNotFound' : {
                 'title' :  'Hmm, something not quite right',
                 'instruction' :  "We could not update the password with the email address provided."
+            },
+            'pnoNotFound' : {
+                'title' :  'Hmm, something not quite right',
+                'instruction' :  "We could not find your user account. Please try logging out and back in again."
+            },
+            'passwordnotcorrrect' : {
+                'title' :  'Hmm, something not quite right',
+                'instruction' :  "Password is incorrect. Please try again."
             },
             'nolowercase' : {
                 'title' :  'Hmm, password incorrect',

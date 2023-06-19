@@ -51,6 +51,9 @@ component extends="testbox.system.BaseSpec"{
         ";
         
         var qry = queryExecute( sql, params);
+
+        var hashedpw = hash('kk;')
+        var qry = queryExecute( "update peopleOrig set password = '#hashedpw#' where pno = :pno", {pno: 4});
     }
 
     /*********************************** BDD SUITES ***********************************/
@@ -132,11 +135,11 @@ component extends="testbox.system.BaseSpec"{
 
             });
            
-            describe( "when the password is being updated", function (){
+            describe( "when the password is being reset from an email request", function (){
                 
                 it( " and the email can't be found in the system, it should throw an error", function(){
                     oPM.setEmail('thisuserdoesnotexist@nocompany.com');
-                    oPM.updatePassword();
+                    oPM.resetPassword();
                     expect(oPM.getErrors()).NotToBeEmpty();
                     debug( oPM.getErrors() );
                     expect (oPM.getErrors()).toInclude('email address provided.');
@@ -148,9 +151,8 @@ component extends="testbox.system.BaseSpec"{
                     oPM.setpwd1('goodPassword_99');
                     oPM.setpwd2('goodPassword_99');
                     var hashedpw = hash(oPM.getpwd2())
-                    oPM.updatePassword();
+                    oPM.resetPassword();
                     expect(oPM.getErrors()).toBeEmpty();
-                    debug( oPM.getErrors());
                     // we would expect the user's password to match the newly set one
                     var qry = queryExecute( 'select password from peopleOrig where email = :email', {email: 'ed@capovani.com'});
                     expect( qry.password).toBe(hashedpw);
@@ -159,6 +161,42 @@ component extends="testbox.system.BaseSpec"{
                 });
 
             });
+
+            describe( "when the password is being updated by the user", function (){
+                
+                it( " and the pno can't be found in the system, it should throw an error", function(){
+                    oPM.setpNo('0');
+                    oPM.changePassword();
+                    expect(oPM.getErrors()).NotToBeEmpty();
+                    debug( oPM.getErrors() );
+                    expect (oPM.getErrors()['pwdcurrent']).toInclude('user account');
+                } );
+
+                it( " and the pno is valid but the password is wrong, it should throw an error", function(){
+                    oPM.setpNo('4');
+                    oPM.setPwdCurrent('garbage!!');
+                    oPM.changePassword();
+                    expect(oPM.getErrors()).NotToBeEmpty();
+                    debug( oPM.getErrors() );
+                    expect (oPM.getErrors()['pwdcurrent']).toInclude('password is incorrect');
+                } );
+
+                it( " and the pno and password are valid, the password should have been updated", function(){
+                    oPM.setpNo('4');
+                    oPM.setPwdCurrent('kk;');
+                    oPM.setpwd1('goodPassword_99');
+                    oPM.setpwd2('goodPassword_99');
+                    var hashedpw = hash(oPM.getpwd2())
+                    oPM.changePassword();
+                    expect(oPM.getErrors()).toBeEmpty();
+                    debug( oPM.getErrors() );
+                    // we would expect the user's password to match the newly set one
+                    var qry = queryExecute( 'select password from peopleOrig where pno = :pno', {pno: 4});
+                    expect( qry.password).toBe(hashedpw);
+                
+                } );
+
+            });    
         });
     }
 }

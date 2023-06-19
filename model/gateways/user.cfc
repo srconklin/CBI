@@ -46,6 +46,20 @@ component accessors=true {
       
     }
 
+	function getUserbyPno( required numeric pno) {
+            
+        var params = {
+            pno: arguments.pno
+        };
+            
+        var sql = getBaseUserQuery() & ' AND p.pno = :pno;'
+
+        var arUser = queryExecute( sql, params,  { returntype="array" });
+        
+        return arUser;
+      
+    }
+
     function getContactInfo(required numeric pno) {
 		var user ='';
 		

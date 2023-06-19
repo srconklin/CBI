@@ -41,6 +41,12 @@ const config = {
             message: 'Contact information was updated',
             type: 'success'
 
+        },
+        'changepassword': {
+            title: 'Success!',
+            message: 'Password sucessfully changed',
+            type: 'success'
+
         }
     }
 

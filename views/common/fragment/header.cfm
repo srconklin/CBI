@@ -52,52 +52,72 @@
 			</a>
 			<cfif rc.userSession.isLoggedIn >
 
-				<div x-data="{showUM : false}" class="header-user" @mouseenter="showUM = true" @mouseleave="showUM = false">
+				<div x-data="{
+						showUM : false,
+						close() {
+							this.showUM = false
+						},
+						open() {
+							this.showUM = true
+						}	
+					}" 
+					x-ref="uMenu"
+					class="header-user" 
+					@mouseenter="open()" 
+					@mouseleave="close()"
+					@keydown.escape.prevent.stop="close()"
+					@focusin.window="! $refs.uMenu.contains($event.target) && close()"
+					x-id="['userMenu']">
 
 						<!-- button or link -->
-						<a class="usericon" href="#">
-							
-							<!--- <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
-								stroke-linecap="round" stroke-linejoin="round">
-								<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
-								<circle cx="12" cy="7" r="4" />
-							</svg> --->
-							
+						<button 
+						class="usericon" 
+						type="button"
+						@focus= "open()"
+						:aria-expanded="showUM"
+						:aria-controls="$id('userMenu')">
 							<cfoutput>
 								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 64 64" version="1.1">
 									<circle fill="##FFFFFF" cx="32" width="64" height="64" cy="32" r="32"/>
 									<text x="50%" y="50%" fill="##fa0114" style="color: ##fa0114; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="30" font-weight="600" dy=".1em" dominant-baseline="middle" >#rc.userSession.avatar#</text></svg>
 							</cfoutput>
-							<!--- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="notify-badge" style="width: 1.4rem;height: 1.4rem;">
-								<path fill-rule="evenodd" d="M10.339 2.237a.532.532 0 00-.678 0 11.947 11.947 0 01-7.078 2.75.5.5 0 00-.479.425A12.11 12.11 0 002 7c0 5.163 3.26 9.564 7.834 11.257a.48.48 0 00.332 0C14.74 16.564 18 12.163 18 7.001c0-.54-.035-1.07-.104-1.59a.5.5 0 00-.48-.425 11.947 11.947 0 01-7.077-2.75zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-							  </svg>
-							   --->
-							
-						</a>
+						</button>
 						<cfif !rc.userSession.isEmailVerified><a href="/myprofile" title="Verify your eamil" style="opacity:1;"><div class="notify-badge" >!</div></a></cfif>
 
 					<!-- drop down menu -->
-					<div x-show="showUM"
-						class="userdd box-shadow"
-						x-transition:enter="transition ease-out duration-200"
+					<div
+						x-ref="dropdownmenu"
+						x-show="showUM"
+						@click.outside="close()"
+						class="userdd box-shadow fadein"
+						<!--- x-transition.origin.top.left --->
+						:id="$id('userMenu')"
+						style="display: none;"
+						<!--- x-transition:enter="transition ease-out duration-200"
 						x-transition:enter-start="opacity-0 translate-y-1 "
 						x-transition:enter-end="opacity-100 translate-y-0"
 						x-transition:leave="transition ease-in duration-150"
 						x-transition:leave-start="opacity-100 translate-y-0"
-						x-transition:leave-end="opacity-0 translate-y-1">
+						x-transition:leave-end="opacity-0 translate-y-1" --->
+						>
 						<!-- <div class="shadow-xs rounded-lg overflow-hidden"> -->
 						<!-- items -->
-						<a href="" class="entry"><cfoutput>
+						<div class="name">
+							<cfoutput>
 							<p class="emphasize">#rc.userSession.name#</p>
 						</cfoutput>
-						</a>
+						</div>
 						<div class="divide"></div>
 						<a href="/myprofile" class="entry">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+							<!--- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
 								<path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
 								<path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+							  </svg> --->
+							  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke-width="1.5" stroke="currentColor" >
+								<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
 							  </svg>
-							<p>My Account</p>
+							  
+							<p>My Profile</p>
 						</a>
 					
 						<a href="/logout" class="entry">

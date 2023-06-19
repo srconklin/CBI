@@ -112,7 +112,7 @@ media queries
 	}
 	.header-links {
 		display: flex;
-		align-items: flex-start;
+		align-items: flex-end;
 		flex-direction: row;
 	}
 

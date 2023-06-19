@@ -22,6 +22,7 @@
             :class="{'invalid':$store.forms.toggleError('pwd1')}"  
             @blur="$store.forms.validate($event)" 
             @keyup="$store.forms.pwdtests($event)" 
+            @focus="$store.forms.generalError=''"
             x-model="$store.forms.pwd1.value"
             />
             <p class="helper error-message" 
@@ -100,6 +101,7 @@
             :class="{'invalid':$store.forms.toggleError('pwd2')}"  
             @blur="$store.forms.validate($event)" 
             @keyup="$store.forms.validate($event)"
+            @focus="$store.forms.generalError=''"
             x-model="$store.forms.pwd2.value"
             />
             <p class="helper error-message" 
