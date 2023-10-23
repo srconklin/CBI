@@ -1,20 +1,17 @@
 <div class="offer">
-	<form id="inquiryfrm" method="post" x-data  @submit.prevent="$store.forms.form='inquiry';$store.forms.submit()">
-		<input type="hidden" name="itemno" :value="$store.forms.itemno">
-		<input type="hidden" name="frmpos" value="1">
-		<input type="hidden" name="ttypeno" value="10">
-		<input type="hidden" name="qtyShown" :value="$store.forms.qtyShown">
-		<input type="hidden" name="priceShown" :value="$store.forms.priceShown">
+	<form 
+		id="inquiryfrm" 
+		method="post" 
+		x-data  
+		@submit.prevent="$store.forms.submit('inquiry')">
 
-		<div class="form-row">
+		<div class="form-row" x-id="['message']">
 			<cfoutput>
-				<label for="message" class="form-label">
+				<label :for="$id('message')" class="form-label">
 					Message <cfif rc.userSession.isLoggedIn><a href="/myprofile" class="user">as #rc.userSession.name# <svg xmlns="http://www.w3.org/2000/svg" class="hit-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg></a></cfif> 
 				</label>
 			</cfoutput>
-			<!---  @blur="$store.forms.message = stripHTML($store.forms.message);"  --->
 			<textarea 
-				id="message"
 				name="message"
 				maxlength="250" 
 				class="form-control" 
@@ -22,22 +19,39 @@
 				title="ask a question or send a message to the asset manager"
 				<!--- optional --->
 				required
+				data-msg='["valueMissing:Please enter a message"]'
 				cols="50" 
 				rows="3"
 				wrap="soft" 
 				<!--- alpine --->
-				@blur="$store.forms.validateMessage()" 
-				x-model="$store.forms.message" 
-				>
-			</textarea>
+				:id="$id('message')"
+				@blur="$store.inquiry.validate($event)"
+				x-model="$store.inquiry.message.value" 
+				></textarea>
 			<p class="count" x-cloak>
-				<span x-text="$store.forms.messageRemain"></span> characters remaining.
+				<span x-text="$store.inquiry.messageRemain"></span> characters remaining.
 		   </p>
+		   <p 
+		   class="helper error-message" 
+		   x-cloak 
+		   x-show="$store.inquiry.toggleError('message')" 
+		   x-text="$store.inquiry.message.errorMessage" >
+	   </p>
 		</div>
 		
 		<cfoutput>
-			#view( 'common/fragment/item/personal', { phone = 'phone2'})#
+			#view( 'common/fragment/item/personal', {store='inquiry'})#
 		</cfoutput>
+
+		<div
+			class="form-row" 
+			x-cloak 
+			x-show="$store.inquiry.generalError">
+				<p 
+					class="helper error-message" 
+					x-html="$store.inquiry.generalError">
+				</p>
+		</div>
 
 		<div class="form-row">
 			<button 

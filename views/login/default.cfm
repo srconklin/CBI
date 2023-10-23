@@ -54,6 +54,7 @@
 								maxlength="50"
 								placeholder="username or email" 
 								title="enter your email or username to login" 
+								autocomplete="username"
 								required
 							/>
 						</div>
@@ -66,6 +67,7 @@
 								maxlength="25"
 								placeholder="password" 
 								title="enter your password" 
+								autocomplete="current-password"
 								required/>
 						</div>	
 				

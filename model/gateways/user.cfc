@@ -59,6 +59,20 @@ component accessors=true {
         return arUser;
       
     }
+	function getUserPrimaryAddress( required numeric pno) {
+            
+        var params = {
+            pno: arguments.pno
+        };
+            
+        var sql = ' select [pno], [Street1] ,[Street2],  [PostalCode], [CityTxt], [StateTxt], [CountryTxt], [LocGID], [StPGID], [CyGID]  
+					FROM addresses where bprimary = 1 and pno = :pno; '
+
+        var arUser = queryExecute( sql, params,  { returntype="array" });
+        
+        return arUser;
+      
+    }
 
     function getContactInfo(required numeric pno) {
 		var user ='';
@@ -98,7 +112,7 @@ component accessors=true {
 				
 			}  catch (e) {
 				result['success']=false;
-				result['errors']=e.message;
+				result['errors']=e;
 			}
 
 			return result;
@@ -116,14 +130,15 @@ component accessors=true {
 		};
 
 		var sql = 'SET nocount on;
-					UPDATE securityHashes set verifyVerified=1, verifyHash=null, verifyGUID=null, verifyDateTime=null  WHERE email = :email;'
+					UPDATE securityHashes set verifyVerified=1, verifyHash=null, 
+					verifyGUID=null, verifyDateTime=null  WHERE email = :email;'
 			
 			try {
 				var qry = queryExecute( sql, params);
 				
 			}  catch (e) {
 				result['success']=false;
-				result['errors']=e.message;
+				result['errors']=e;
 			}
 
 			return result;
@@ -137,22 +152,75 @@ component accessors=true {
 		result['errors']='';
 
 		
-		var params = {
-			password:  hash(arguments.password),
-			email: arguments.email
-		};
-
-		var sql = 'SET nocount on;
-				   UPDATE people SET password= :password WHERE email = :email;'
-			
 			try {
+
+				var params = {
+					password:  hash(arguments.password),
+					email: arguments.email
+				};
+		
+				var sql = 'SET nocount on;
+						   UPDATE people SET password= :password WHERE email = :email;'
+			
+						   
 				var qry = queryExecute( sql, params);
 				
 			}  catch (e) {
 				result['success']=false;
-				result['errors']=e.message;
+				result['errors']=e;
 			}
 
 			return result;
+	}
+
+	function saveAddress(required number pno, required string street1, required string street2, required string postalcode, required number LocGID) {
+		var result = {};
+    	result['success']=true;
+		result['errors']='';
+		
+		try {
+
+			variables.cityGID = arguments.LocGID;
+				
+			include "/cbilegacy/legacySiteSettings.cfm"
+			include "/serversnips/getgeoHierarchy.cfm"
+				
+		var params = {
+			Pno : {value=arguments.pno, cfsqltype="integer"},
+				street1:  {value=arguments.street1, cfsqltype="varchar"},
+				street2:  {value=arguments.street2, cfsqltype="varchar"},
+				postalcode:  {value=arguments.postalcode, cfsqltype="varchar"},
+				locGID:  {value=geoDataPacket.City_GID, cfsqltype="integer"},
+				StPGID:  {value=geoDataPacket.state_GID, cfsqltype="integer"},
+				CyGID:  {value=geoDataPacket.Country_GID, cfsqltype="integer"},
+				CityTxt:  {value=geoDataPacket.city, cfsqltype="varchar"},
+				StateTxt:  {value=geoDataPacket.state, cfsqltype="varchar"},
+				CountryTxt:  {value=geoDataPacket.country, cfsqltype="varchar"}
+		};
+		
+		
+
+		var sql = 'SET nocount on;
+				   UPDATE addresses
+				   SET 
+				   street1= :street1,
+				   street2= :street2,
+				   postalcode= :postalcode,
+				   locGID= :locGID,
+				   StPGID= :StPGID,
+				   CyGID= :CyGID,
+				   CityTxt= :CityTxt,
+				   StateTxt= :StateTxt,
+				   CountryTxt= :CountryTxt
+    			   WHERE pno = :pno;'
+		
+		var qry = queryExecute( sql, params);
+			
+		}  catch (e) {
+			result['success']=false;
+			result['errors']=e;
+		}
+
+		return result;
 	}
 }

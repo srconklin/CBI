@@ -12,10 +12,10 @@ component accessors=true extends="model.beans.personal" {
     super.isValid();  
     
     if ( !len(getPno()) or getPno() lt 1) {
-      variables.errors["pno"] =  config.getContent('ContactInfo', 'pno').instruction; 
+      setErrorState('pnoNotFound');
     } 
      
-      return structCount(variables.errors) ? false: true;
+      return !hasErrors();
   }
 
   private function setForm() {
@@ -25,7 +25,7 @@ component accessors=true extends="model.beans.personal" {
     form.lastName = getLastName();
     form.email = getEmail();
     form.coname = getConame();
-    form.phone1 = getPhone1();
+    form.phone1 = getPhone();
 
   }
 
@@ -39,7 +39,7 @@ component accessors=true extends="model.beans.personal" {
       include "/cbilegacy/procreg2.cfm";
       
     } catch (e) {
-      variables.errors =e;
+      setErrorState(e)
     }    
 
 

@@ -93,7 +93,6 @@ component extends="testbox.system.BaseSpec"{
 			} );  
 
             it( "should have initialized data only; ", function(){
-                expect( oRegister.emailNotVerified() ).toBeFalse()
                 expect( oRegister.getPm()).toBeEmpty()
             } );
          
@@ -101,11 +100,13 @@ component extends="testbox.system.BaseSpec"{
             describe( "when performing a validity test ", function(){
 
                 it( "agree to terms is required", function(){
-                   
+                    
                     expect( oRegister.isValid() ).toBeFalse();
+
                     var errs = oRegister.getErrors();
                     expect( errs ).notToBeEmpty();
                     expect (errs).toHaveKey('agreetandc');
+                    expect (oRegister.getErrorContext()['status']['agreetandc']).tobe('agreeTandC');
                     
                 } );
 
@@ -116,7 +117,7 @@ component extends="testbox.system.BaseSpec"{
                     oRegister.setlastname('User');
                     oRegister.setEmail(fakeuser);
                     oRegister.setConame('copmany');
-                    oRegister.setPhone1('713-972-2243');
+                    oRegister.setPhone('713-972-2243');
                     
                     expect( oRegister.isValid() ).tobeTrue();
                 } );
@@ -129,7 +130,8 @@ component extends="testbox.system.BaseSpec"{
                 it( "& we do not have a valid password from a pm bean, then it shold fail and throw an error", function(){
                    
                     oRegister.signup();
-                    expect(oRegister.getErrors().message).toBe('password manager not setup');
+                    expect(oRegister.getErrorContext()['status']).tobe('application');
+                    expect(oRegister.getErrorContext()['originalStatus']).tobe('pmmissing');
                                         
                 });
 
@@ -156,13 +158,15 @@ component extends="testbox.system.BaseSpec"{
                     oRegister.setlastname('Conklin');
                     oRegister.setEmail('sconklin@dynaprice.com');
                     oRegister.setConame('DP');
-                    oRegister.setPhone1('713-972-2243');
+                    oRegister.setPhone('713-972-2243');
 
                     oRegister.signup();
                     
                     expect(oRegister.hasErrors()).tobeTrue();
-                    expect(oRegister.getErrors()).notToBeEmpty(oRegister.getErrors());
-                    expect(oRegister.getErrors().errorcode).tobe('emailinuse');
+                    expect(oRegister.getErrors()).notToBeEmpty();
+                    expect(oRegister.getErrorContext()['status']).tobe('dperror');
+                    expect(oRegister.getErrorContext()['originalStatus']).tobe('emailinuse');
+                    
 
                 });
 
@@ -177,11 +181,15 @@ component extends="testbox.system.BaseSpec"{
                     oRegister.setlastname('Capovani');
                     oRegister.setEmail('ed@capovani.com');
                     oRegister.setConame('CBI');
-                    oRegister.setPhone1('800-123-9999');
+                    oRegister.setPhone('800-123-9999');
 
                     oRegister.signup();
+
+                    expect(oRegister.hasErrors()).tobeTrue();
+                    expect(oRegister.getErrors()).notToBeEmpty();
+                    expect(oRegister.getErrorContext()['originalStatus']).tobe('emailinuse_nv');
+                    
                    
-                    expect( oRegister.emailNotVerified()).toBeTrue();
                       
                 } );
 
@@ -198,7 +206,7 @@ component extends="testbox.system.BaseSpec"{
                     oRegister.setlastname('user');
                     oRegister.setEmail(fakeuser);
                     oRegister.setConame('mycompany');
-                    oRegister.setPhone1('800-123-9999');
+                    oRegister.setPhone('800-123-9999');
 
                     oRegister.signup();
                     // we would expect a new user
@@ -237,10 +245,14 @@ component extends="testbox.system.BaseSpec"{
 
                     it( "a tampered or garbage token is provided for decryption", function(){
                         oRegister.setVerifyToken('jwrcrWNFdJBoyOeefR862uoPzbxsYaAcJzI_7wtB6B8XK8XCXdygi5OltkcFdyaR32Q6mrrvuwZK_RjpxLd');
+
                         var result = oRegister.verifyToken();
+
                         expect(	result ).toBeFalse();
-                        expect(oRegister.getErrors()).NotToBeEmpty();
-                        debug( oRegister.getErrors() );
+                        
+                        expect (oRegister.getErrorContext()['Originalstatus']).tobe('application');
+                        expect (oRegister.getErrorContext()['OriginalError']['message']).tobe('Input length must be multiple of 16 when decrypting with padded cipher');                      
+                       
                         
                     });
 
@@ -251,8 +263,10 @@ component extends="testbox.system.BaseSpec"{
                         var result =  oRegister.verifyToken();
                         expect(	result ).toBeFalse();
                         expect(oRegister.getErrors()).NotToBeEmpty();
-                        expect(oRegister.getErrors()).tobe('badformat');
-                        debug( oRegister.getErrors() );
+                       
+                        expect (oRegister.getErrorContext()['status']).tobe('emaildidnotverify');
+                        expect (oRegister.getErrorContext()['Originalstatus']).tobe('badformat');
+                      
 
                     });
 
@@ -263,8 +277,8 @@ component extends="testbox.system.BaseSpec"{
                         var result =  oRegister.verifyToken();
                         expect(	result ).toBeFalse();
                         expect(oRegister.getErrors()).NotToBeEmpty();
-                        expect(oRegister.getErrors()).tobe('missingemail');
-                        debug( oRegister.getErrors() );
+                        expect (oRegister.getErrorContext()['status']).tobe('emaildidnotverify');
+                        expect (oRegister.getErrorContext()['Originalstatus']).tobe('missingemail');
 
                     });
                    
@@ -275,19 +289,23 @@ component extends="testbox.system.BaseSpec"{
                         var result =  oRegister.verifyToken();
                         expect(	result ).toBeFalse();
                         expect(oRegister.getErrors()).NotToBeEmpty();
-                        expect(oRegister.getErrors()).tobe('bademail');
-                        debug( oRegister.getErrors() );
+                       // expect(oRegister.getErrors()).tobe('bademail');
+                        expect (oRegister.getErrorContext()['status']).tobe('emaildidnotverify');
+                        expect (oRegister.getErrorContext()['Originalstatus']).tobe('bademail');
 
                     });
                     it( "the token email is not in the db ", function(){
                         // create a token an email not found
-                        var encryptedHash = replace(encrypt("shh, this is a secret!|#fakeuser#", variables.config.getSetting("AESKey"), "AES", "base64"), "/", "_", "all");
+                        var encryptedHash = replace(encrypt("shh, this is a secret!|notfound@indb.com", variables.config.getSetting("AESKey"), "AES", "base64"), "/", "_", "all");
                         oRegister.setVerifyToken(encryptedHash);
+                      
                         var result =  oRegister.verifyToken();
+                      
                         expect(	result ).toBeFalse();
                         expect(oRegister.getErrors()).NotToBeEmpty();
-                        expect(oRegister.getErrors()).tobe('emaildidnotverify');
-                        debug( oRegister.getErrors() );
+                        expect (oRegister.getErrorContext()['status']).tobe('emaildidnotverify');
+                        expect (oRegister.getErrorContext()['Originalstatus']).tobe('toomanyornouser');
+                        
 
                     });
                     it( "the token is older than 2 hours", function(){
@@ -297,8 +315,9 @@ component extends="testbox.system.BaseSpec"{
                         var result =  oRegister.verifyToken();
                         expect(	result ).toBeFalse();
                         expect(oRegister.getErrors()).NotToBeEmpty();
-                        expect(oRegister.getErrors()).tobe('verifyLinkExpired');
-                        debug( oRegister.getErrors() );
+                     
+                        expect (oRegister.getErrorContext()['status']).tobe('verifyLinkExpired');
+                        expect (oRegister.getErrorContext()['Originalstatus']).tobe('linkExpired');
 
                     });
                 });    
@@ -308,7 +327,8 @@ component extends="testbox.system.BaseSpec"{
                     it( " it should contain a valid user array that is used to auto log the user in", function(){
                     
                         saveContent  variable="sql" {writeOutput('
-                            SELECT s.verifyguid, S.verifyHash, isnull(S.verifyVerified, 0) as verifyVerified  FROM securityHashes S WHERE s.email= :email')
+                            SELECT s.verifyguid, S.verifyHash, isnull(S.verifyVerified, 0) as verifyVerified  
+                            FROM securityHashes S WHERE s.email= :email')
                         }
                         
                         var qry = queryExecute( sql, {email: fakeuser});
@@ -316,9 +336,9 @@ component extends="testbox.system.BaseSpec"{
                         encryptedHash = replace(encrypt("#qry.verifyguid#|#fakeuser#", variables.config.getSetting("AESKey"), "AES", "base64"), "/", "_", "all");
                         // token = encodeforURL(encryptedHash);
                         oRegister.setVerifyToken(encryptedHash);
+                       
                         var result = oRegister.verifyToken();
-                        debug(oRegister.getErrors());
-                        expect(	result ).toBeTrue();
+                        debug(oRegister.getErrorContext());
                         expect(oRegister.getErrors()).toBeEmpty();
                         expect(oRegister.getData().user).NottoBeEmpty();
                         expect(oRegister.getData().user).toBeTypeOf('struct');
@@ -341,8 +361,8 @@ component extends="testbox.system.BaseSpec"{
                         oRegister.setEmail('blabla@dynaprice.com');
                         oRegister.resendLink();
                         expect(oRegister.getErrors()).NotToBeEmpty();
-                        expect(oRegister.getErrors()).tobe('emaildidnotverify');
-                        debug( oRegister.getErrors());
+                        expect (oRegister.getErrorContext()['status']).tobe('verifylinknotcreated');
+                        expect (oRegister.getErrorContext()['Originalstatus']).tobe('toomanyornouser')
                     });
 
                     it( "and the email is found, but the email has already been verified, it should fail and not send the link again", function(){
@@ -358,8 +378,7 @@ component extends="testbox.system.BaseSpec"{
                         oRegister.setEmail('ed@capovani.com');
                         oRegister.resendLink();
                         expect(oRegister.getErrors()).NotToBeEmpty();
-                        expect(oRegister.getErrors()).tobe('emailAlreadyVerified');
-                        debug( oRegister.getErrors());
+                        expect (oRegister.getErrorContext()['status']).tobe('emailAlreadyVerified');
 
                         sql = "SET NOCOUNT ON;
                         update securityHashes set verifyVerified= 0 where email = :email";

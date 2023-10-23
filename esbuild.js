@@ -10,38 +10,43 @@ const postCssPlugin = require("@deanc/esbuild-plugin-postcss");
 const glob = require('glob');
 const isProduction = process.env.NODE_ENV == 'production';
 const pathPattern = path.join(__dirname, "/dist/[!m]*").replace(/\\/g, '/');
-const file = './layouts/default.cfm';
+const files = {
+    'app' :  './layouts/default.cfm',
+    'aac' :  './views/myprofile/default.cfm'
+  };
 
 console.log('build mode',  process.env.NODE_ENV);
 
 // rewrite the index page with the style and javascript references updated with the new hashed assets
-const rewriteIndex = (assets) => {
-  fs.readFile(file, 'utf8', function (err,data) {
+const rewriteHTMLFile = (assets) => {
+  fs.readFile(assets.htmlFile, 'utf8', function (err,data) {
     if (err) return console.log(err);
     console.log('replacing new hashes', assets)
-    var result = data.replace(/dist\/app[-A-Z0-9]*\.css/g, assets.css);
-    result = result.replace(/dist\/app[-A-Z0-9]*\.js/g, assets.js);
+    var result = data.replace(/dist\/[a-z-A-Z0-9]*\.css/g, assets.css);
+    result = result.replace(/dist\/[a-z-A-Z0-9]*\.js/g, assets.js);
 
-    fs.writeFile(file, result, 'utf8', function (err) {
+    fs.writeFile(assets.htmlFile, result, 'utf8', function (err) {
+      console.log('rewriting file', assets.htmlFile);
       if (err) return console.log(err);
     });
 
   });
 }
 
-// read metafile get generated hash name for the assets and update the refernces in html file
+// read metafile get generated hash name for the assets and update the references in html file
 const updateAssets = {
 name: 'updateAssets',
 setup(build) {
   build.onEnd(result => {
-    const files = result?.metafile?.outputs || {};
-    if (files) {
-      Object.keys(files).forEach(file => {
+    const theFiles = result?.metafile?.outputs || {};
+    if (theFiles) {
+      Object.keys(theFiles).forEach(file => {
         if ( result.metafile.outputs[file].entryPoint) {
-          console.log('Parsing entrypoint', file)  
-          rewriteIndex({
+          console.log('Parsing entrypoint', file) ;
+          rewriteHTMLFile({
             css: result.metafile.outputs[file].cssBundle,
-            js: file
+            js: file,
+            htmlFile: files[result.metafile.outputs[file].entryPoint.substring(4, 7)]
           })
         } 
       })
@@ -84,7 +89,7 @@ const applugin = isProduction ? [postCssPlugin({plugins: [autoprefixer]})] : [];
 const plugins = [buildStarted, ...applugin, updateAssets]
 
 const config = {
-    entryPoints: ['./src/app.js'],
+    entryPoints: ['./src/app.js', './src/aac.js'],
     bundle: true,
     sourcemap: !isProduction,
     logLevel: 'info',

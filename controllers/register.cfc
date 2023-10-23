@@ -22,6 +22,8 @@ component accessors=true extends="controllers.base.common" {
 	show instructions page to verify email; 
 	1) redirected here from a first time registration.
 	2) or redirected here from this.resendlink
+	3) or from a reregistration attempt where the email exists but 
+	was	never verified
 
 	NOTE: session.verifyemail contains the email to be verified
 	shares the view from verifyemail - route for when email link 
@@ -32,17 +34,20 @@ component accessors=true extends="controllers.base.common" {
 		param name="rc.resendLink" default="false";
 		// redirected here with a status to report
 		param name="rc.status" default="default";
+		rc.svg = '<svg xmlns="http://www.w3.org/2000/svg" class="icon-title" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"</svg>';
 
 		var status = rc.status;
-		// rc.result.success = true;
-		
-		// only allow resend if we have an email in session.
-		rc.allowResend=false;
-		rc.svg = '<svg xmlns="http://www.w3.org/2000/svg" class="icon-title" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"</svg>';
+
+		//assume we are not to generate a resend form
+		rc.allowResend= false;
 		
 		// rc.status could be something other than default, if so, then let it flow through to
 		// show error content
 		if (status eq 'default') {
+
+			// only allow resend if we have an email in session and we are coming in as 'default'
+			if (structKeyExists(session, 'verifyemail') and len(session.verifyemail)) 
+				rc.allowResend= true;
 		
 			// someone, somehow clicks a verify email link, but the user is already verified 
 			// and logged in-- can ignore with an already verified message.
@@ -50,32 +55,21 @@ component accessors=true extends="controllers.base.common" {
 				status = 'emailAlreadyVerified';
 				
 			// session is still active from a recent registration.	
-			else if (structKeyExists(session, 'verifyemail') and len(session.verifyemail)) {
-				rc.allowResend= true;
+			else if (rc.allowResend) {
 				
 				// user clicked on resend link while session still active from a registration
 				if (rc.resendLink) {
+
 					// generate a new hash and send it; make sure old one is removed or replaced
 					var register = variables.beanFactory.getBean( 'registerbean' );
 					register.setEmail(session.verifyemail);
 					register.resendlink();
+					
 					if (register.hasErrors()) {
-						var e = register.getErrors();
-						request.exception = e;
-						sendErrorEmail(rc);
-						status = ' verifylinknotcreated';
+						status = handleServerError(register.getErrorContext());
 					} else {
 						status ='successfullySent';
 					}
-
-					// // trying to register again with an email that has been put into verify mode, but was never done
-					// if (structKeyExists(rc, 'nv')) 
-					// 	status ='notVerified';
-
-					// // show that the email was sent
-					// else if (rc.result.success) {
-					// 	status ='successfullySent';
-					// }
 				}
 				else
 					status ='successfullySent';
@@ -85,9 +79,15 @@ component accessors=true extends="controllers.base.common" {
 		// get content 
 		status = config.getContent('register', status);
 		rc.title = status.title;
-		rc.instruction = replacenocase(status.instruction, '[EMAIL]', encodeforHTML(session.verifyemail));
-		rc.instruction = replacenocase(rc.instruction, '[TRIES]', rc.resendLink ? 'resent' : 'sent');
 
+		// allowresened = email in session = customize to user name and email
+		if (rc.allowResend) {
+			rc.instruction = replacenocase(status.instruction, '[EMAIL]', encodeforHTML(session.verifyemail));
+			rc.instruction = replacenocase(rc.instruction, '[TRIES]', rc.resendLink ? 'resent' : 'sent');
+		} else {
+			rc.instruction = status.instruction;
+		}
+		
 		// special view
 		variables.fw.setview('register.verifyemail');
 
@@ -95,7 +95,9 @@ component accessors=true extends="controllers.base.common" {
 
 	/************************************************************
 	 verifyEmail (get)
+	 user recieves a verify email to confirm their email address
 	 verify email from link in email. must have token present
+	 ajax : no
 	************************************************************/
 	public void function verifyEmail(struct rc = {}) {
 		
@@ -115,13 +117,17 @@ component accessors=true extends="controllers.base.common" {
 
 			// check that token is valid
 			if (!register.verifyToken()) {
+
 				rc.allowResend=true;
-				status = register.getErrors();
+				// handle server error
+				status = handleServerError(register.getErrorContext());
+
 				// in the case of expired links give them chance to resend
 				if (status eq 'verifyLinkExpired') {
-					
 					session.verifyemail = register.getEmail();
-				}	
+				}
+				
+
 			}  else {
 				// bean to load up a proper user config
 				var user = variables.beanFactory.getBean( 'userbean' );
@@ -137,10 +143,11 @@ component accessors=true extends="controllers.base.common" {
 		} 
 
 		// get content 
-		rc.svg =config.getValidSVGICon('forgotpassword', status)
-		status = config.getContent('register', status);
-		rc.title = status.title;
-		rc.instruction = status.instruction;
+		rc.svg =config.getValidSVGICon('verifyemail', status)
+		//status = config.getContent('register', status);
+		structAppend(rc, config.getContent('register', status))
+		//rc.title = status.title;
+		//rc.instruction = status.instruction;
 
 	}
 	/******************************
@@ -164,21 +171,24 @@ component accessors=true extends="controllers.base.common" {
 
 			//register requires a passwordmgr bean
 			register.setPM(pm);
+			
 			// register the user
 			register.signup();
 
 			//if errors from legacy system
 			if(register.hasErrors()) {
-				var e = register.getErrors();
-				rc["response"]["errors"] = e.message;
-				rc["response"]["errorcode"] = e.errorcode;
-				request.exception = e;
-				sendErrorEmail(rc);
-					
-			// email exists but not verified from previous send; go to different screen.
-			} else if(register.emailNotVerified()) {
-					// rc["response"]["res"] = true;
-					rc["response"]["payload"]["redirect"] = '/verify_email/nv/1';
+				// get an error context to pass to handleServerError
+				var err = register.getErrorContext();
+				// parse error
+				handleServerError(err);
+				// email exists but not verified from previous send; go to different screen.
+				if(err.originalStatus eq 'emailinuse_nv') {
+					session.verifyemail = rc.email;
+					rc["response"]["payload"]["firstname"] = rc.firstname;
+					// redirect to verify page
+					rc["response"]["payload"]["redirect"] = '/verify_email/status/notVerified';
+				}
+
 			} else {		
 				// out of security concerns use a session variable to persist the email while relocating
 				// NOTE: this is a JS ajax form submit; so redirect using fw not possible

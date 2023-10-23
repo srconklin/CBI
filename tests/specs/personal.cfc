@@ -41,9 +41,6 @@ component extends="testbox.system.BaseSpec"{
 			} );  
 
             describe( "when performing a validity test ", function(){
-
-              
-
               
                 it( "fields should NOT violate character count limitations", function(){
                                       
@@ -51,8 +48,7 @@ component extends="testbox.system.BaseSpec"{
                     oPersonal.setlastname('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pharetra, nibh quis varius imperdiet, odio lorem interdum purus, eget placerat magna lorem in velit. Curabitur sodales dui eu euismod cursus. Ut mollis tellus ac sem luctus, vel malesuada nunc tempor. ');
                     oPersonal.setEmail('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pharetra, nibh quis varius imperdiet, odio lorem interdum purus, eget placerat magna lorem in velit. Curabitur sodales dui eu euismod cursus. Ut mollis tellus ac sem luctus, vel malesuada nunc tempor. ');
                     oPersonal.setConame('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pharetra, nibh quis varius imperdiet, odio lorem interdum purus, eget placerat magna lorem in velit. Curabitur sodales dui eu euismod cursus. Ut mollis tellus ac sem luctus, vel malesuada nunc tempor. ');
-                    oPersonal.setPhone1('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pharetra, nibh quis varius imperdiet, odio lorem interdum purus, eget placerat magna lorem in velit. Curabitur sodales dui eu euismod cursus. Ut mollis tellus ac sem luctus, vel malesuada nunc tempor. ');
-                    oPersonal.setPhone2('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pharetra, nibh quis varius imperdiet, odio lorem interdum purus, eget placerat magna lorem in velit. Curabitur sodales dui eu euismod cursus. Ut mollis tellus ac sem luctus, vel malesuada nunc tempor. ');
+                    oPersonal.setPhone('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pharetra, nibh quis varius imperdiet, odio lorem interdum purus, eget placerat magna lorem in velit. Curabitur sodales dui eu euismod cursus. Ut mollis tellus ac sem luctus, vel malesuada nunc tempor. ');
                     expect( oPersonal.isValid() ).toBeFalse();
                     var errs = oPersonal.getErrors();
                     expect( errs ).notToBeEmpty();
@@ -60,7 +56,8 @@ component extends="testbox.system.BaseSpec"{
                     expect (errs).toHaveKey('lastname');
                     expect (errs).toHaveKey('email');
                     expect (errs).toHaveKey('coname');
-                    expect (errs).toHaveKey('phone1');
+                    expect (errs).toHaveKey('phone');
+                    expect (oPersonal.getErrorContext()['status']['firstname']).tobe('FirstNametooLong');
                 } );
                 it( "fields should NOT contain any HTML ", function(){
 
@@ -76,6 +73,7 @@ component extends="testbox.system.BaseSpec"{
                     expect (errs).toHaveKey('firstname');
                     expect (errs).toHaveKey('lastname');
                     expect (errs).toHaveKey('email');
+                    expect (oPersonal.getErrorContext()['status']['firstname']).tobe('noHTML');
                 } );
 
                 it( "an invalid email should be rejected  ", function(){
@@ -85,23 +83,23 @@ component extends="testbox.system.BaseSpec"{
                     var errs = oPersonal.getErrors();
                     expect( errs ).notToBeEmpty();
                     expect (errs).toHaveKey('email');
+                    expect (oPersonal.getErrorContext()['status']['email']).tobe('invalidEmail');
                 } );
                 it( "invalid phone numbers should be rejected  ", function(){
                    
-                    oPersonal.setPhone1('garbage');
+                    oPersonal.setPhone('garbage');
                    
                     expect( oPersonal.isValid() ).toBeFalse();
                     var errs = oPersonal.getErrors();
                     expect( errs ).notToBeEmpty();
-                    expect (errs).toHaveKey('phone1');
+                    expect (errs).toHaveKey('phone');
 
-                    oPersonal.setPhone1('ns');
-                    oPersonal.setPhone2('garbage');
+                    oPersonal.setPhone('ns');
 
                     expect( oPersonal.isValid() ).toBeFalse();
                     var errs = oPersonal.getErrors();
                     expect( errs ).notToBeEmpty();
-                    expect (errs).toHaveKey('phone2');
+                    expect (oPersonal.getErrorContext()['status']['phone']).tobe('invalidPhone');
                 } );
 
 
@@ -111,7 +109,7 @@ component extends="testbox.system.BaseSpec"{
                     oPersonal.setlastname('User');
                     oPersonal.setEmail('fakeuser@company.com ');
                     oPersonal.setConame('copmany');
-                    oPersonal.setPhone1('713-972-2243');
+                    oPersonal.setPhone('713-972-2243');
                     
                     expect( oPersonal.isValid() ).tobeTrue();
                 } );

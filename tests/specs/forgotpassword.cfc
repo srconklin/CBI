@@ -82,16 +82,14 @@ component extends="testbox.system.BaseSpec"{
                 it( "it should fail with a missing email", function(){
                    
                     expect( oFP.isValid() ).toBeFalse();
-                    var errs = oFP.getErrors();
-                    expect (errs).tobe('missingEmail');
+                    expect (oFP.getErrorContext()['status']).tobe('missingEmail');
                 } );
                 it( "email should be a valid email;", function(){
                     // offer and not logged in
                     oFP.setEmail('asdfsfsdf');
 
                     expect( oFP.isValid() ).toBeFalse();
-                    var errs = oFP.getErrors();
-                    expect (errs).tobe('InvalidEmail');
+                    expect (oFP.getErrorContext()['status']).tobe('InvalidEmail');
                 } );
                
 
@@ -106,49 +104,80 @@ component extends="testbox.system.BaseSpec"{
                 
     
                 it( " and the form email is not defined, it should throw an error", function(){
+                    
                     oFP.generateLink();
+                    
                     expect(oFP.getErrors()).NotToBeEmpty();
-                    expect( oFP.getErrors().errorcode).tobe('missingfields');
+                    expect (oFP.getErrorContext()['Originalstatus']).tobe('missingfields');
+                    expect (oFP.getErrorContext()['status']).tobe('application');
     
                 } );
                 it( " and the email can't be found in the system, it should throw an error", function(){
                     oFP.setEmail('thisuserdoesnotexist@nocompany.com');
+                    
                     oFP.generateLink();
+                    
                     expect(oFP.getErrors()).NotToBeEmpty();
-                    expect( oFP.getErrors().errorcode).tobe('bademail');
+                    expect (oFP.getErrorContext()['Originalstatus']).tobe('accountnotfound');
+                    expect (oFP.getErrorContext()['status']).tobe('dperror');
     
                 } );
                    
                 it( "and the user is real, then it should have created a valid argon hash ", function(){
+                    
                     oFP.setEmail('sconklin@dynaprice.com');
+                    
                     oFP.generateLink();
+                    
                     expect(oFP.getErrors()).toBeEmpty();
                     var ahash = oFP.getData().hashes.theArgonHash;
                     expect(ahash).NotToBeEmpty();
                     expect(Argon2CheckHash( oFP.getData().hashes.secret, ahash)).tobeTrue();
                 });
-                it( "it should have updated the securityhashes table with the hash ", function(){
+
+                it( "and it should have updated the securityhashes table with the hash ", function(){
+                   
                     oFP.setEmail('sconklin@dynaprice.com');
+                   
                     oFP.generateLink();
+                   
                     expect(oFP.getErrors()).toBeEmpty();
                     var ahash = oFP.getData().hashes.theArgonHash;
-                       var qry = queryExecute( 'select pwdHash from securityHashes where email = :email', {email: 'sconklin@dynaprice.com'});
-                       expect( qry.recordCount ).toBe(1);
-                       expect( qry.pwdHash).toBe(ahash);
+                    var qry = queryExecute( 'select pwdHash from securityHashes where email = :email', {email: 'sconklin@dynaprice.com'});
+                    expect( qry.recordCount ).toBe(1);
+                    expect( qry.pwdHash).toBe(ahash);
+                    
+                });
+                it( "and it should have created a resetlink to place in an email ", function(){
+                   
+                    oFP.setEmail('sconklin@dynaprice.com');
+                   
+                    oFP.generateLink();
+                   
+                    expect(oFP.getErrors()).toBeEmpty();
+                    expect( oFP.getData().resetlink).nottoBeEmpty();
+                    expect( oFP.getData().resetlink).toInclude('resetpassword');
+                    
                 });
 
             });
 
-            describe( "when a email verify token is being validated", function (){
+            describe( "when an email verify token is being validated", function (){
 
                 describe( "the routine should fail when", function (){
 
                     it( "a tampered or garbage token is provided for decryption", function(){
+                       
                         oFP.setResetToken('jwrcrWNFdJBoyOeefR862uoPzbxsYaAcJzI_7wtB6B8XK8XCXdygi5OltkcFdyaR32Q6mrrvuwZK_RjpxLd');
+                       
                         var result = oFP.verifyToken();
+                       
                         expect(	result ).toBeFalse();
                         expect(oFP.getErrors()).NotToBeEmpty();
-                        debug( oFP.getErrors() );
+                        
+                        expect (oFP.getErrorContext()['Originalstatus']).tobe('application');
+                        expect (oFP.getErrorContext()['OriginalError']['message']).tobe('Input length must be multiple of 16 when decrypting with padded cipher');                      
+                       
                         
                     });
 
@@ -159,9 +188,9 @@ component extends="testbox.system.BaseSpec"{
                         var result =  oFP.verifyToken();
                         expect(	result ).toBeFalse();
                         expect(oFP.getErrors()).NotToBeEmpty();
-                        expect(oFP.getErrors()).tobe('badformat');
-                        debug( oFP.getErrors() );
-
+                        expect (oFP.getErrorContext()['status']).tobe('passwordNotReset');
+                        expect (oFP.getErrorContext()['Originalstatus']).tobe('badformat');
+                      
                     });
 
                     it( "a decrypted token does not have an email ", function(){
@@ -171,8 +200,8 @@ component extends="testbox.system.BaseSpec"{
                         var result =  oFP.verifyToken();
                         expect(	result ).toBeFalse();
                         expect(oFP.getErrors()).NotToBeEmpty();
-                        expect(oFP.getErrors()).tobe('missingemail');
-                        debug( oFP.getErrors() );
+                        expect (oFP.getErrorContext()['status']).tobe('passwordNotReset');
+                        expect (oFP.getErrorContext()['Originalstatus']).tobe('missingemail');
 
                     });
                    
@@ -183,8 +212,8 @@ component extends="testbox.system.BaseSpec"{
                         var result =  oFP.verifyToken();
                         expect(	result ).toBeFalse();
                         expect(oFP.getErrors()).NotToBeEmpty();
-                        expect(oFP.getErrors()).tobe('bademail');
-                        debug( oFP.getErrors() );
+                        expect (oFP.getErrorContext()['status']).tobe('passwordNotReset');
+                        expect (oFP.getErrorContext()['Originalstatus']).tobe('bademail');
 
                     });
                     it( "the token email is not in the db ", function(){
@@ -194,8 +223,9 @@ component extends="testbox.system.BaseSpec"{
                         var result =  oFP.verifyToken();
                         expect(	result ).toBeFalse();
                         expect(oFP.getErrors()).NotToBeEmpty();
-                        expect(oFP.getErrors()).tobe('toomanyornouser');
-                        debug( oFP.getErrors() );
+                        expect (oFP.getErrorContext()['status']).tobe('passwordNotReset');
+                        expect (oFP.getErrorContext()['Originalstatus']).tobe('toomanyornouser');
+                      
 
                     });
                     it( "the token is older than 2 hours", function(){
@@ -205,8 +235,9 @@ component extends="testbox.system.BaseSpec"{
                         var result =  oFP.verifyToken();
                         expect(	result ).toBeFalse();
                         expect(oFP.getErrors()).NotToBeEmpty();
-                        expect(oFP.getErrors()).tobe('passwordLinkExpired');
-                        debug( oFP.getErrors() );
+                        expect (oFP.getErrorContext()['status']).tobe('passwordLinkExpired');
+                        expect (oFP.getErrorContext()['Originalstatus']).tobe('linkExpired');
+                      
 
                     });
                 });    

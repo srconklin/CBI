@@ -1,15 +1,21 @@
-<cfparam name="local.phone" default="phone1">
+<!--- <cfparam name="local.phone" default="phone1"> --->
 <cfparam name="local.mode" default="new">
+<cfparam name="local.store" default="">
 
+<cfif !len(local.store)>
+    <p>STORE NOT SET</p>
+    <cfabort>
+</cfif>
+
+<cfoutput>
 <!--- don't show form fields on inquiry and offer screens when logged in --->
 <cfif  local.mode eq 'edit' or not rc.userSession.isLoggedIn >
-    <div class="form-row">
-        <label for="firstName" class="form-label">
+    <div class="form-row"  x-id="['firstname']">
+        <label :for="$id('firstname')" class="form-label">
             First Name <span>*</span>
         </label>
       
         <input 
-            id="firstName" 
             name="firstName" 
             type="text" 
             class="form-control" 
@@ -19,23 +25,24 @@
             <!--- optional --->
             required
             data-msg='["valueMissing:Please enter your first name"]'
-            oninput="this.value=validInput(this.value);"
+            oninput="this.value=stripInvalidChars(this.value);"
             
             <!--- alpine --->
-            :class="{'invalid':$store.forms.toggleError('firstName')}"  
-            x-model="$store.forms.firstName.value" 
-            @blur="$store.forms.validate($event)" 
-            @focus="$store.forms.generalError=''"
+            :id="$id('firstname')"
+            :class="{'invalid':$store.#local.store#.toggleError('firstName')}"  
+            x-model="$store.#local.store#.firstName.value" 
+            @blur="$store.#local.store#.validate($event)" 
+            @focus="$store.#local.store#.generalError=''"
             />
         <p 
             class="helper error-message" 
             x-cloak 
-            x-show="$store.forms.toggleError('firstName')" 
-            x-text="$store.forms.firstName.errorMessage" >
+            x-show="$store.#local.store#.toggleError('firstName')" 
+            x-text="$store.#local.store#.firstName.errorMessage" >
         </p>
     </div>
-    <div class="form-row">
-        <label for="lastName" class="form-label">
+    <div class="form-row" x-id="['lastname']">
+        <label :for="$id('lastname')"  class="form-label">
             Last Name <span>*</span>
         </label>
         <input 
@@ -48,22 +55,23 @@
             <!--- optional --->
             required
             data-msg='["valueMissing:Please enter your last name"]'
-            oninput="this.value=validInput(this.value);"
+            oninput="this.value=stripInvalidChars(this.value);"
             <!--- alpine --->
-            :class="{'invalid':$store.forms.toggleError('lastName')}" 
-            x-model="$store.forms.lastName.value"
-            @blur="$store.forms.validate($event)" 
-            @focus="$store.forms.generalError=''"
+            :id="$id('lastname')"
+            :class="{'invalid':$store.#local.store#.toggleError('lastName')}" 
+            x-model="$store.#local.store#.lastName.value"
+            @blur="$store.#local.store#.validate($event)" 
+            @focus="$store.#local.store#.generalError=''"
             />
         <p 
             class="helper error-message" 
             x-cloak 
-            x-show="$store.forms.toggleError('lastName')" 
-            x-text="$store.forms.lastName.errorMessage">
+            x-show="$store.#local.store#.toggleError('lastName')" 
+            x-text="$store.#local.store#.lastName.errorMessage">
         </p>
     </div>
-    <div class="form-row">
-        <label for="email" class="form-label">
+    <div class="form-row" x-id="['email']">
+        <label :for="$id('email')" class="form-label">
             Email <span>*</span>
         </label>
         <div class="input-group">
@@ -83,21 +91,22 @@
                 required
                 data-msg='["valueMissing:Please enter your email"]'
                 <!--- alpine --->
-                :class="{'invalid':$store.forms.toggleError('email')}" 
-                x-model="$store.forms.email.value"
-                @blur="$store.forms.validate($event)"
-                @focus="$store.forms.generalError=''"
+                :id="$id('email')"
+                :class="{'invalid':$store.#local.store#.toggleError('email')}" 
+                x-model="$store.#local.store#.email.value"
+                @blur="$store.#local.store#.validate($event)"
+                @focus="$store.#local.store#.generalError=''"
                 />
         </div>
         <p 
             class="helper error-message" 
             x-cloak 
-            x-show="$store.forms.toggleError('email')" 
-            x-text="$store.forms.email.errorMessage">
+            x-show="$store.#local.store#.toggleError('email')" 
+            x-text="$store.#local.store#.email.errorMessage">
         </p>
     </div>
-    <div class="form-row">
-        <label for="coname" class="form-label">
+    <div class="form-row" x-id="['coname']">
+        <label :for="$id('coname')" class="form-label">
             Company
         </label>
         <input 
@@ -108,20 +117,47 @@
             maxlength="50"
             title="enter your optional company name"
             <!--- alpine --->
-            x-model="$store.forms.coname" 
-            @blur="$store.forms.validateConame()" 
-            @focus="$store.forms.generalError=''"/>
+            :id="$id('coname')"
+            x-model="$store.#local.store#.coname.value" 
+            @blur="$store.#local.store#.validate($event)" 
+            @focus="$store.#local.store#.generalError=''"/>
     </div>
-    <div class="form-row ">
-        <cfoutput>
-			#view( 'common/fragment/item/phone',  {phone = local.phone })#
-		</cfoutput>
+    <div class="form-row"  x-id="['phone']">
+        <label :for="$id('phone')" class="form-label">
+            Phone <span>*</span>
+        </label>
+        <input      
+            name="phone" 
+            type="tel" 
+            class="form-control input-group-ele-svg" 
+            maxlength="28"
+            placeholder="(555) 555-5555"
+            title="enter a valid phone number"
+            <!--- optional --->
+            required 
+            data-msg='["valueMissing:Please enter a valid phone number"]'
+            data-id=''
+            oninput="this.value=validTelNumber(this.value)"
+            autocomplete="tel"
+            <!--- alpine --->
+            x-init="$store.#local.store#.phoneHandler = window.iti($id('phone'))"
+            :id="$id('phone')"
+            :class="{'invalid':$store.#local.store#.toggleError('phone')}" 
+            x-model="$store.#local.store#.phone.value" 
+            @blur="$store.#local.store#.validate($event)" 
+            @focus="$store.#local.store#.generalError=''"/>
+        <p 
+            class="helper error-message"
+            x-cloak 
+            x-show="$store.#local.store#.toggleError('phone')" 
+            x-text="$store.#local.store#.phone.errorMessage">
+        </p>
     </div>
-<cfelse>
-    <cfoutput>
-        <input type="hidden" name="email" value="#rc.userSession.email#">
-    </cfoutput>
-</cfif>    
 
+<cfelse>
+        <input type="hidden" name="email" value="#rc.userSession.email#">
+    </cfif>    
+    
+</cfoutput>
 
 

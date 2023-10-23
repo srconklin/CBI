@@ -4,7 +4,7 @@ component accessors=true extends="model.beans.common" {
 	property resetToken;
     
     // private data
-    variables.threshold =120;
+   
     variables.hashes = {
         secret : '',
         theArgonHash : ''
@@ -24,77 +24,59 @@ component accessors=true extends="model.beans.common" {
 
     function isValid( ){
             
-            if(!len(getEmail())){
-                variables.errors ='missingEmail';
-            } else if (!isValid('email', getEmail())){
-                variables.errors ='InvalidEmail';
-            }    
-            
-            return len(variables.errors) ? false: true;
+        if(!len(getEmail())){
+            setErrorState('missingEmail');
+        } else if (!isValid('email', getEmail())){
+            setErrorState('InvalidEmail');
+        }    
+        
+        return !hasErrors();
     }
 
     function markPasswordVerified () {
        var  result = variables.userGateway.markPasswordVerified(getEmail());   
-        if (!result.success) 
-            variables.errors=result['errors']; 
+       if (!result.success) 
+            setErrorState(result['errors']);
     }
 
     function generateLink(){
-        var result = false;
-    
         form.email = getEmail();
 
         try{
             include "/cbilegacy/legacySiteSettings.cfm";
             include "/cbilegacy/resetForgottenPwd.cfm";
-            result = true;
         
         } catch (e) {
-            variables.errors =e;
+            setErrorState(e);
+
         }   
         
-        return result;
     }
-  
     
     function verifyToken(){
 
         clearErrors();
 
-        // decrypt an AES encrypted string
-        var decrypt = variables.utils.decryptAESString(getResetToken());
-        // error decrypting 
-        if(len(decrypt.error)) {
-            variables.errors=decrypt.error;
-        } else {
+       var result = variables.utils.verifyToken(getResetToken(), 'password');
+        if (!result.success) {
 
-            // decompose token into email and secret
-            var decomposedToken = variables.utils.decomposeResetToken(decrypt.decString);
-
-            //problem with token
-            if(len(decomposedToken.error)) {
-                variables.errors=decomposedToken.error;
-            } else {
+            setErrorState(result['error']);
             
-                // setemail into bean
-                setEmail(decomposedToken.email);
-
-                //validate email against a user
-                var arUser = variables.userGateway.getUserbyEmail(getEmail());
-               
-                // email found in encrypted string comes back as not being excatly one row in the db. fishy or broken link
-                if (arUser.len() neq 1) {
-                    variables.errors='toomanyornouser';
-                // link expired more than 2hours 
-                } else if (datediff('n', arUser[1].pwdDateTime, now()) gt variables.threshold) {	
-                    variables.errors='passwordLinkExpired';
-                // hash is invalid; something fishy
-                } else if (! Argon2CheckHash( decomposedToken.secretGuid, arUser[1].pwdHash)) {
-                    variables.errors='invalidHash';
-                }
+             // rules to reset errorstate to something else than techie results
+            if (getOriginalStatus() eq 'linkExpired') {
+                setErrorState(key='passwordLinkExpired', origStatus=getOriginalStatus());
+            // everything but alreadyverified is getting turned into a simple message 
+            // if we have a cfexception is it stored in originalerror 
+            } else if (getOriginalStatus() neq 'emailAlreadyVerified') {
+                setErrorState(key='passwordNotReset' , origStatus=getOriginalStatus());
             }
+            
+            
         }
-        return len(variables.errors) ? false: true;
+         else 
+           setEmail(result.email);  
+
+        return !hasErrors();
 
     }
 }

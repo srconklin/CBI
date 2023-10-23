@@ -5,6 +5,7 @@ component extends="framework.one" output="false" accessors=true {
 	this.sessionManagement = true;
 	this.sessionTimeout = createTimeSpan(0, 2, 0, 0);
 	this.datasource = 'dp_cat';
+
 	
 	property userService;
 		
@@ -32,32 +33,37 @@ component extends="framework.one" output="false" accessors=true {
 			{ "$POST/login/" = "/login/login" },
 			{ "$GET/logout/" = "/login/logout" },
 
-			{ "$GET/register/$" = "/register/default" },
-			{ "$GET/verify_email/" = "/register/verify_email" },
-			{ "$GET/verify/:token/" = "/register/verifyemail/token/:token/" },
-			{ "$POST/resendlink/" = "/register/resendlink" },
-			{ "$POST/register/" = "/register/register" },
+			
+			{ "$GET/register/$" = "/register/default" ,
+			 "$GET/verify_email/" = "/register/verify_email" ,
+			 "$GET/verify/:token/" = "/register/verifyemail/token/:token/" ,
+			 "$POST/resendlink/" = "/register/resendlink" ,
+			 "$POST/register/" = "/register/register" 
+			} 
 
-			{ "$GET/myprofile/$" = "/myprofile/default" },
-			{ "$POST/updatecontactinfo/$" = "/myprofile/updatecontactinfo" },
-			{ "$POST/changepassword/$" = "/myprofile/changepassword" },
+			{
 
+				"$GET/forgotpassword/$" = "/forgotpassword/default", 
+				"$GET/passwordReset/$" = "/forgotpassword/passwordReset",
+				"$GET/resetpassword/:token/" = "/forgotpassword/resetpassword/token/:token/",
+				"$POST/resetpassword/$" = "/forgotpassword/submitresetpassword", 
+				"$POST/forgotpassword/$" = "/forgotpassword/submitforgotpassword"
+
+			}
 			
 			{ 
-				"$GET/forgotpassword/$" = "/myprofile/forgotpassword", 
-				"$POST/forgotpassword/$" = "/myprofile/submitforgotpassword", 
-				"$GET/resetpassword/:token/" = "/myprofile/resetpassword/token/:token/",
-				"$POST/resetpassword/$" = "/myprofile/submitresetpassword", 
-				"$GET/passwordReset/$" = "/myprofile/passwordReset",
+				"$GET/myprofile/$" = "/myprofile/default" ,
+				"$POST/changepassword/$" = "/myprofile/changepassword",
+				"$POST/updatecontactinfo/$" = "/myprofile/updatecontactinfo",
+				"$POST/myaddress/$" = "/myprofile/updateAddress"
 			},
 
 			{ "$GET/search/" = "/main/default" },
-
 			{ "$GET/contact/$" = "/main/contact" },
-			
 			{ "$GET/faq/$" = "/main/faq" },
 			{ "$GET/about/$" = "/main/about" },
 			{ "$GET/terms/$" = "/main/terms" },
+			{ "$POST/locationlookup/$" = "/main/locationlookup" },
 
 			{ "$GET/items/{id:[0-9]+}/" = "/main/showitem/id/:id" },
 
@@ -73,7 +79,7 @@ component extends="framework.one" output="false" accessors=true {
 				reloadApplicationOnEveryRequest = true
 			},
 		prod = {
-			 password = "supersecret"
+			 password = "Pri234Sc"
 		}
 	};
 
@@ -106,11 +112,18 @@ component extends="framework.one" output="false" accessors=true {
 		rc["userSession"] = variables.userService.getUserSession();
     }
 
-	public void function setupResponse() {  }
+	public void function setupResponse() { }
 
 	public string function onMissingView(struct rc = {}) {
 		//return "Error 404 - Page not found.";
 		return view( 'main/notFound' );
+	}
+
+	public function setupEnvironment(string env) {
+		if(arguments.env eq 'prod') 
+			this.mappings[ "/websnips" ] = "C:\inetpub\Dynaprice\shared\CodeSnips\Web";
+		else	
+			this.mappings[ "/websnips" ] = "C:\Users\scott\Projects\dynaprice\shared\CodeSnips\Web" 
 	}
 
 	public function getEnvironment() {

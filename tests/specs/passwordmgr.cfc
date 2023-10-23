@@ -83,14 +83,18 @@ component extends="testbox.system.BaseSpec"{
                    
                     oPM.setPwd2('foo');
                     expect( oPM.isValid() ).toBeFalse();
-                    var errs = oPM.getErrors();
-                    expect (errs.pwd1).toInclude('valid password');
+                    // var errs = oPM.getErrors();
+                    // expect (errs.pwd1).toInclude('valid password');
+                    expect (oPM.getErrorContext()['status']['pwd1']).tobe('missingpassword');
+
 
                     oPM.setPwd1('foo');
                     oPM.setPwd2('');
                     expect( oPM.isValid() ).toBeFalse();
-                    var errs = oPM.getErrors();
-                    expect (errs.pwd2).toInclude('confirm your password');
+                    //var errs = oPM.getErrors();
+                    //expect (errs.pwd2).toInclude('confirm your password');
+                    //expect(oPM.getErrors()).tobe('missingConfirmationPassword');
+                    expect (oPM.getErrorContext()['status']['pwd2']).tobe('missingConfirmationPassword');
 
                 } );
                 it( "it should fail when the passwords do not meet requirement standards", function(){
@@ -99,36 +103,32 @@ component extends="testbox.system.BaseSpec"{
                     oPM.setPwd1('FOO');
                     oPM.setPwd2('FOO');
                     expect( oPM.isValid() ).toBeFalse();
-                    var errs = oPM.getErrors();
-                    expect (errs.pwd1).toInclude('lowercase character');
+                    expect (oPM.getErrorContext()['status']['pwd1']).tobe('nolowercase');
 
                      // no uppercase
                      oPM.setPwd1('foo');
                      oPM.setPwd2('foo');
                      expect( oPM.isValid() ).toBeFalse();
-                     var errs = oPM.getErrors();
-                     expect (errs.pwd1).toInclude('uppercase character');
+                     expect (oPM.getErrorContext()['status']['pwd1']).tobe('nouppercase');
 
                     // no number
                     oPM.setPwd1('Foo');
                     oPM.setPwd2('Foo');
                     expect( oPM.isValid() ).toBeFalse();
-                    var errs = oPM.getErrors();
-                    expect (errs.pwd1).toInclude('least one number');
+                    expect (oPM.getErrorContext()['status']['pwd1']).tobe('nodigit');
 
                      // too short
                      oPM.setPwd1('Foo123');
                      oPM.setPwd2('Foo123');
                      expect( oPM.isValid() ).toBeFalse();
-                     var errs = oPM.getErrors();
-                     expect (errs.pwd1).toInclude('least 8 characters');
+                     expect (oPM.getErrorContext()['status']['pwd1']).tobe('tooshort');
 
                      // passwords do not match
                      oPM.setPwd1('Foo_123$');
                      oPM.setPwd2('Foo_123*');
                      expect( oPM.isValid() ).toBeFalse();
-                     var errs = oPM.getErrors();
-                     expect (errs.pwd2).toInclude('Passwords must match');
+                     expect (oPM.getErrorContext()['status']['pwd2']).tobe('passwordsDoNotMatch');
+                     
 
                     
                 } );
@@ -141,8 +141,10 @@ component extends="testbox.system.BaseSpec"{
                     oPM.setEmail('thisuserdoesnotexist@nocompany.com');
                     oPM.resetPassword();
                     expect(oPM.getErrors()).NotToBeEmpty();
-                    debug( oPM.getErrors() );
-                    expect (oPM.getErrors()).toInclude('email address provided.');
+                    expect (oPM.getErrorContext()['status']).tobe('emailNotFound');
+                    // debug( oPM.getErrors() );
+                    // expect (oPM.getErrors()).toInclude('email address provided.');
+
     
                 } );
                    
@@ -151,7 +153,9 @@ component extends="testbox.system.BaseSpec"{
                     oPM.setpwd1('goodPassword_99');
                     oPM.setpwd2('goodPassword_99');
                     var hashedpw = hash(oPM.getpwd2())
+                 
                     oPM.resetPassword();
+                    
                     expect(oPM.getErrors()).toBeEmpty();
                     // we would expect the user's password to match the newly set one
                     var qry = queryExecute( 'select password from peopleOrig where email = :email', {email: 'ed@capovani.com'});
@@ -164,22 +168,44 @@ component extends="testbox.system.BaseSpec"{
 
             describe( "when the password is being updated by the user", function (){
                 
-                it( " and the pno can't be found in the system, it should throw an error", function(){
-                    oPM.setpNo('0');
+                it( " and the pno is missing, it should throw an error", function(){
+                    // oPM.setpNo('');
+                    oPM.setEmail('ed@capovani.com');
+                    oPM.setpwd1('goodPassword_99');
+                    oPM.setpwd2('goodPassword_99');
+
                     oPM.changePassword();
+                    
+                     expect(oPM.getErrors()).NotToBeEmpty();
+                     expect (oPM.getErrors()['pwdcurrent']).toInclude('user account');
+                     expect (oPM.getErrorContext()['status']['pwdcurrent']).tobe('pnoNotFound');
+                } );
+
+                it( " and the pno is is not found in the db, it should throw an error", function(){
+                    oPM.setpNo('99999');
+                    oPM.setEmail('ed@capovani.com');
+                    oPM.setpwd1('goodPassword_99');
+                    oPM.setpwd2('goodPassword_99');
+
+                    oPM.changePassword();
+
                     expect(oPM.getErrors()).NotToBeEmpty();
-                    debug( oPM.getErrors() );
-                    expect (oPM.getErrors()['pwdcurrent']).toInclude('user account');
+                    expect (oPM.getErrorContext()['status']['pwdcurrent']).tobe('pnoNotFound');
+
                 } );
 
                 it( " and the pno is valid but the password is wrong, it should throw an error", function(){
                     oPM.setpNo('4');
                     oPM.setPwdCurrent('garbage!!');
+                    
                     oPM.changePassword();
+                    
                     expect(oPM.getErrors()).NotToBeEmpty();
-                    debug( oPM.getErrors() );
-                    expect (oPM.getErrors()['pwdcurrent']).toInclude('password is incorrect');
+                    expect (oPM.getErrorContext()['status']['pwdcurrent']).tobe('passwordnotcorrrect');
+                    //expect (oPM.getErrors()['pwdcurrent']).toInclude('password is incorrect');
                 } );
+
+              
 
                 it( " and the pno and password are valid, the password should have been updated", function(){
                     oPM.setpNo('4');

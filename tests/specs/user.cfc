@@ -27,7 +27,7 @@ component extends="testbox.system.BaseSpec"{
         describe( "User Domain Object", function(){
 
             beforeEach(function( currentSpec ) {
-                    oUser = request.beanFactory.getBean("userbean"); 
+                oUser = request.beanFactory.getBean("userbean"); 
             });
         
             afterEach(function( currentSpec ) {
@@ -42,7 +42,7 @@ component extends="testbox.system.BaseSpec"{
                 expect( oUser.getUserData().pno ).toBe( 0 )
             } );
             it( "should have an intial status of ok", function(){
-                expect(oUser.getStatus() ).tobe('ok');
+                expect(oUser.getStatus() ).ToBeEmpty('');
             } );
 
             describe( "when performing a validity test ", function(){
@@ -50,6 +50,7 @@ component extends="testbox.system.BaseSpec"{
                 it( " it should fail when password or username are missing", function(){
                     oUser.setUserName('user1');
                     expect( oUser.isValid() ).toBeFalse();
+                    expect(oUser.getStatus() ).tobe('missing_login_fields');
                 } );
     
                 it( "and if it does fail, then an error message should be generated", function(){
@@ -67,27 +68,24 @@ component extends="testbox.system.BaseSpec"{
             });
            
 
-            it( "When a user is NOT  found, then IsUserValid() should return FALSE and set an error message ", function(){
+            it( "When checking if a user is valid and the user is not found then should return FALSE and set an error message ", function(){
                 oUser.setUserName('garbage');
                 oUser.setPassword('garbage');
                 expect(oUser.isUserValid()).toBeFalse();
-                expect(oUser.getStatus() ).tobe('no_result');
-                //expect( oUser.getErrors() ).ToBeEmpty;
-                expect( oUser.getErrors() ).tobe('Username and/or password is invalid');
+                expect(oUser.getStatus() ).tobe('user_not_found');
 
             } );
 
-            it( "when a user is found, then IsUserValid() should return true and set a valid user state", function(){
+            it( "when a user is found, then should return true and set a valid user state", function(){
                 oUser.setUserName('rkr');
                 oUser.setPassword('kk;');
-                expect(oUser.getStatus() ).tobe('ok');
+                expect(oUser.getStatus() ).ToBeEmpty('ok');
                 expect( oUser.getErrors() ).ToBeEmpty();
                 expect(oUser.isUserValid()).toBetrue();
                 
                 var userData = oUser.getUserData();
                 expect(userData).toHaveKey( 'pno' );
                 expect(userData.pno).tobe(4);
-                //expect(userData.avatar).tobe('RR');
                 expect(userData.validated).tobe(2);
 
             } );

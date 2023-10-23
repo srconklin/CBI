@@ -35,6 +35,7 @@ component extends="testbox.system.BaseSpec"{
         var qry = queryExecute( sql, params);
     }
 
+  
     /*********************************** BDD SUITES ***********************************/
 
     function run( testResults, testBox ){
@@ -46,6 +47,12 @@ component extends="testbox.system.BaseSpec"{
                 //create a default empty sesssion; guest
                 userService.defaultUserSession();
                 oDeal = request.beanFactory.getBean("dealbean"); 
+                // Spoof hidden for other tests; variables.error is a string
+                odeal.setItemno('234');
+                oDeal.setTtypeNo(11);
+                odeal.setQtyShown(1);
+                oDeal.setPriceShown(0);
+      
             });
         
             afterEach(function( currentSpec ) {
@@ -68,15 +75,23 @@ component extends="testbox.system.BaseSpec"{
 
             describe( "when performing a validity test ", function(){
 
+                it( "the hidden fields should fail when they are not set", function(){
+                    odeal.setItemno(0);
+                    oDeal.setTtypeNo('');
+                    expect( oDeal.isValid() ).toBeFalse();
+                    var errs = oDeal.getErrors();
+                    expect( errs ).notToBeEmpty();
+                } );
+                
                 it( "and when a user is NOT logged in, then personal data fields are required", function(){
-                    odeal.setPhone1('');
+          
                     expect( oDeal.isValid() ).toBeFalse();
                     var errs = oDeal.getErrors();
                     expect( errs ).notToBeEmpty();
                     expect (errs).toHaveKey('firstname');
                     expect (errs).toHaveKey('lastname');
                     expect (errs).toHaveKey('email');
-                    expect (errs).toHaveKey('phone1');
+                    expect (errs).toHaveKey('phone');
                     
                 } );
                 
@@ -87,10 +102,10 @@ component extends="testbox.system.BaseSpec"{
                     expect (errs).nottoHaveKey('firstname');
                     expect (errs).nottoHaveKey('lastname');
                     expect (errs).nottoHaveKey('email');
-                    expect (errs).nottoHaveKey('phone1');
+                    expect (errs).nottoHaveKey('phone');
                     
                 } );
-                it( "and an offer in in progress, it should fail with a missing qty and price", function(){
+                it( "and an offer in in progress, it should fail with important missing properties like qty and price", function(){
                     // offer and not logged in
                     oDeal.setTtypeNo(11);
 
@@ -99,6 +114,9 @@ component extends="testbox.system.BaseSpec"{
                     expect( errs ).notToBeEmpty();
                     expect (errs).toHaveKey('qtystated');
                     expect (errs).toHaveKey('pricestated');
+                    expect (oDeal.getErrorContext()['status']['qtystated']).tobe('qtyMissing');
+
+
                 } );
                 it( "qty and price should be valid numbers", function(){
                     // offer and not logged in
@@ -111,6 +129,9 @@ component extends="testbox.system.BaseSpec"{
                     expect( errs ).notToBeEmpty();
                     expect (errs).toHaveKey('qtystated');
                     expect (errs).toHaveKey('pricestated');
+                    expect (oDeal.getErrorContext()['status']['qtystated']).tobe('invalidNumber');
+
+                    
                 } );
     
                 it( "Message and Terms should NOT violate character count limitations", function(){
@@ -124,6 +145,7 @@ component extends="testbox.system.BaseSpec"{
                     expect( errs ).notToBeEmpty();
                     expect (errs).toHaveKey('message');
                     expect (errs).toHaveKey('terms');
+                    expect (oDeal.getErrorContext()['status']['terms']).tobe('tooLong');
                     
                 } );
                 it( "Message and Terms should NOT contain any HTML ", function(){
@@ -137,6 +159,7 @@ component extends="testbox.system.BaseSpec"{
                     expect( errs ).notToBeEmpty();
                     expect (errs).toHaveKey('message');
                     expect (errs).toHaveKey('terms');
+                    expect (oDeal.getErrorContext()['status']['terms']).tobe('noHTML');
                    
                 } );
 
@@ -152,9 +175,10 @@ component extends="testbox.system.BaseSpec"{
                     oDeal.setlastname('User');
                     oDeal.setEmail('fakeuser@company.com ');
                     oDeal.setConame('copmany');
-                    oDeal.setPhone1('713-972-2243');
+                    oDeal.setPhone('713-972-2243');
                     
                     expect( oDeal.isValid() ).tobeTrue();
+                    expect (oDeal.getErrorContext()['status']).tobeEmpty();
                 } );
 
             });
@@ -172,10 +196,10 @@ component extends="testbox.system.BaseSpec"{
                     oDeal.setlastname('User');
                     oDeal.setEmail('fakeuser@company.com');
                     oDeal.setConame('mycompany');
-                    oDeal.setPhone1('713-972-2243');
+                    oDeal.setPhone('713-972-2243');
 
                     oDeal.sendOffer();
-                    expect(oDeal.getErrors()).toBeEmpty(oDeal.getErrors());
+                    expect(oDeal.getErrors()).toBeEmpty();
                     expect( oDeal.getData().offerSent ).tobeTrue;
                   
                     expect(oDeal.isNewPerson()).toBe(1);
@@ -203,7 +227,7 @@ component extends="testbox.system.BaseSpec"{
                     oDeal.setlastname('User');
                     oDeal.setEmail('fakeuser@company.com');
                     oDeal.setConame('mycompany');
-                    oDeal.setPhone1('713-972-2243');
+                    oDeal.setPhone('713-972-2243');
 
                     oDeal.sendOffer();
                     expect(oDeal.getErrors()).toBeEmpty(oDeal.getErrors());
@@ -242,7 +266,7 @@ component extends="testbox.system.BaseSpec"{
                     oDeal.setlastname('Conklin');
                     oDeal.setEmail('sconklin@dynaprice.com');
                     oDeal.setConame('mycompany');
-                    oDeal.setPhone1('713-972-2243');
+                    oDeal.setPhone('713-972-2243');
 
                     oDeal.sendOffer();
 

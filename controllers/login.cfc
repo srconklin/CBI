@@ -53,6 +53,7 @@ component accessors=true extends="controllers.base.common" {
             // check if user is real - > makes an odbc call authenticate user
             else if(!user.isUserValid()) 
                 rc.message = [user.getErrors()];
+
             else {
                 // set up user session
                 variables.userService.setUserSession(user.getUserData());
@@ -61,43 +62,7 @@ component accessors=true extends="controllers.base.common" {
         }
         renderResult(rc, route, 'message' ) ;
     }
-    /*********************************
-	 login (POST)
-	 no view; redirects to home or to 
-     destination if one specified
-     ajax:no
-     migrate
-	*********************************/
-    // function login( rc ) {
-
-    //     //  no bean used; data validation here inline
-    //     // if the form variables do not exist, redirect to the login form
-    //     if ( !structKeyExists( rc, "username" ) and !structKeyExists( rc, "password" ) ) {
-    //         variables.fw.redirectCustomURL( "/login" );
-	// 	}
-		
-    //     // validate user  
-	// 	var user = variables.userService.validateUser( rc.username, rc.password);
-		
-	// 	// not a struct means invalid credentials or duplicate rows, redisplay the login form
-    //     if ( !isStruct(user) ) {
-    //         rc.message = ["Invalid Username or Password"];
-    //         variables.fw.redirectCustomURL( "/login", "message" );
-    //     }
-
-    //     //user authenticated
-    //     user.validated = 2;
-
-    //     // set up user session
-    //     variables.userService.setUserSession(user)
-         
-	// 	if(structKeyExists(rc, 'destination'))
-	// 		variables.fw.redirectCustomURL( "/#rc.destination#" );
-	// 	else
-    //     	variables.fw.redirectCustomURL( "/" );
-    // }
-   
-	 
+    	 
 	/******************************
 	 Logout (GET)
 	******************************/

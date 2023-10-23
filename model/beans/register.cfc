@@ -7,10 +7,9 @@ component accessors=true extends="model.beans.personal" {
   property pno default="0" ;
   property pm;
   
-
   // private data
 
-  variables.emailexistsNV = false;
+  //variables.emailexistsNV = false;
   // password manager bean
   variables.pm = '';
   // authenticated user array 
@@ -30,10 +29,12 @@ component accessors=true extends="model.beans.personal" {
 
     super.isValid();  
 
+    // must agree to T&C
     if ( !len(getAgreeTandC()) ) {
-      variables.errors["agreetandc"] =  config.getContent('basicforms', 'agreeTandC').instruction; 
+      setErrorState('agreeTandC', 'agreeTandC');
+      
     } 
-    return structCount(variables.errors) ? false: true;
+    return !hasErrors();
 
   }
 
@@ -44,15 +45,15 @@ component accessors=true extends="model.beans.personal" {
       form.lastName = getLastName();
       form.email = getEmail();
       form.coname = getConame();
-      form.phone1 = getPhone1();
+      form.phone1 = getPhone();
       form.password = variables.pm.getPwd1();
       form.bcast = getBcast();
   
     }
   
-  function emailNotVerified() {
-    return variables.emailexistsNV
-  }
+  // function emailNotVerified() {
+  //   return variables.emailexistsNV
+  // }
   
   function getUserData() {
     return variables.user
@@ -75,12 +76,10 @@ component accessors=true extends="model.beans.personal" {
       include "/cbilegacy/procreg2.cfm";
        
     } catch (e) {
-        if (e.errorcode eq 'emailinuse_nv')
-          variables.emailexistsNV = true
-        else  
-          variables.errors =e;
-    }    
+      // only throws here; no slugs
+       setErrorState(e);
 
+    }    
   
   }
 
@@ -89,12 +88,12 @@ component accessors=true extends="model.beans.personal" {
       //validate email against a user
       var arUser = variables.userGateway.getUserbyEmail(getEmail());
       
-      // email found in encrypted string comes back as not being exactly one row in the db. fishy or broken link
+      // user has an email in session that is needed to generate a new link. test it as still being valid
       if (arUser.len() neq 1) {
-        variables.errors='emaildidnotverify';
+        setErrorState( key='verifylinknotcreated', origStatus='toomanyornouser');
       // no reason to resend the link if the email has been verified
       } else if (arUser[1].verifyVerified) {	
-          variables.errors='emailAlreadyVerified';    
+        setErrorState('emailAlreadyVerified');    
      
       // user email successfully verified    
       } else {
@@ -109,68 +108,48 @@ component accessors=true extends="model.beans.personal" {
             include "/cbilegacy/procreg2.cfm"
             
           } catch (e) {
-            variables.errors=e;   
+            setErrorState(e)
           }
        
       }
 
 	}
-     
+
   function verifyToken(){
 
     clearErrors();
 
-    // decrypt an AES encrypted string
-    var decrypt = variables.utils.decryptAESString(getVerifyToken());
-    // error decrypting 
-    if(len(decrypt.error)) {
-        variables.errors=decrypt.error;
-    } else {
+    var result = variables.utils.verifyToken(getVerifyToken(), 'register');
+    if (!result.success) {
+       
+        setErrorState(result['error']);
 
-        // decompose token into email and secret
-        var decomposedToken = variables.utils.decomposeResetToken(decrypt.decString);
-
-        //problem with token
-        if(len(decomposedToken.error)) {
-            variables.errors=decomposedToken.error;
-        } else {
-        
-            // setemail into bean
-            setEmail(decomposedToken.email);
-
-            //validate email against a user
-            var arUser = variables.userGateway.getUserbyEmail(getEmail());
-           
-            // email found in encrypted string comes back as not being exactly one row in the db. fishy or broken link
-            if (arUser.len() neq 1) {
-                variables.errors='emaildidnotverify';
-            } else if (arUser[1].verifyVerified) {	
-                variables.errors='emailAlreadyVerified';    
-            // link expired more than 2hours 
-            } else if (datediff('n', arUser[1].verifyDateTime, now()) gt 120 ) {	
-                variables.errors='verifyLinkExpired';
-            // hash is invalid; something fishy
-            } else if (! Argon2CheckHash( decomposedToken.secretGuid, arUser[1].verifyHash)) {
-                variables.errors='emaildidnotverify';
-            // user email successfully verified    
-            } else {
-
-               // mark email as verified
-               result = variables.userGateway.markEmailVerified(getEmail());
-               if (!result['success'])
-                variables.errors =result['errors']
-              else {
-                //re-retrieve user with updated security settings
-                arUser = variables.userGateway.getUserbyEmail(getEmail());
-                variables.user = arUser[1];
-              }
-
-            }
+        // custom rules to reset errorstate to something else other than techie errors
+        if (getOriginalStatus() eq 'linkExpired') {
+          setErrorState(key='verifyLinkExpired', origStatus=getOriginalStatus());
+        // everything but alreadyverified is getting turned into a simple message 
+        // if we have a cfexception is it stored in originalerror 
+        } else if (getOriginalStatus() neq 'emailAlreadyVerified') {
+          setErrorState(key='emaildidnotverify' , origStatus=getOriginalStatus());
         }
+      
     }
-    return len(variables.errors) ? false: true;
+    else {
+           setEmail(result.email);  
+          // mark email as verified
+          result = variables.userGateway.markEmailVerified(getemail());
+          if (!result['success'])
+            setErrorState(result['errors']);
+         else {
+           //re-retrieve user with updated security settings
+           arUser = variables.userGateway.getUserbyEmail(getEmail());
+           variables.user = arUser[1];
+         }
+      
+    }
+
+    return !hasErrors();
 
 }
-
 
 }

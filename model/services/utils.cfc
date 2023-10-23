@@ -1,5 +1,6 @@
 component accessors=true {
     property config;
+    property userGateway;
 
     function hasHTML(str='') {
         return REFindNoCase("<[^>]*>",arguments.str);
@@ -38,17 +39,17 @@ component accessors=true {
     // decrypt and AES token
 	function decryptAESString(required string theString) {
 		var result = {
-			token : '',
+			decString : '',
             error: ''
 		};
 
 		try {
 			// replace the _ back with slashes
 			arguments.theString = replace(arguments.theString, "_", "/", "all");
-			result.decString=decrypt(arguments.theString, config.getSetting("AESKey"), "AES", "Base64")
+			result.decString=decrypt(arguments.theString, config.getSetting("AESKey"), "AES", "Base64");
 
 		} catch (e) {
-            result.error = e.message;
+            result.error = e;
 		}
 		
 		return result;
@@ -79,6 +80,80 @@ component accessors=true {
 
     }
 
+    function verifyToken(token, type='register'){
+        var result = {
+            success : false,
+			email : '',
+            error: ''
+		};
+
+        // decrypt an AES encrypted string
+        var decrypt = decryptAESString(arguments.token);
+        // error decrypting; a cf exception
+        if(len(decrypt.error)) {
+             result.error = decrypt.error;
+        } else {
+
+            // decompose token into email and secret
+            var decomposedToken = decomposeResetToken(decrypt.decString);
+
+            //problem with token
+            if(len(decomposedToken.error)) {
+                // decomposeResetToken returns very specific errors on issues that could have
+                result.error = decomposedToken.error;
+            } else {
+            
+               // return email
+               // setEmail(decomposedToken.email);
+                result.email = decomposedToken.email;
+
+                //validate email against a user
+                var arUser = variables.userGateway.getUserbyEmail(result.email);
+               
+                // email found in encrypted string comes back as not being excatly one row in the db. fishy or broken link
+                if (arUser.len() neq 1) {
+                    result.error = 'toomanyornouser';
+                } else if (arUser[1].verifyVerified) {	
+                    result.error = 'emailAlreadyVerified';
+                
+                } else {
+
+                    // register checks    
+                    if (arguments.type eq 'register') {
+                    
+                        // register token date link expired more than the threshold allows
+                        if ( datediff('n', arUser[1].verifyDateTime, now()) gt config.getSetting('threshold')) {	
+                            result.error = 'linkExpired';
+                        // hash is invalid; something fishy    
+                        } else if (! Argon2CheckHash( decomposedToken.secretGuid, arUser[1].verifyHash)) {
+                            result.error = 'invalidHash';
+                        }
+
+
+                    // password checks        
+                    } else if (arguments.type eq 'password') {
+                        
+                        // pwd token date link expired more than the threshold allows
+                        if ( datediff('n', arUser[1].pwdDateTime, now()) gt config.getSetting('threshold')) {	
+                            result.error = 'linkExpired';
+                        // hash is invalid; something fishy    
+                        } else if (! Argon2CheckHash( decomposedToken.secretGuid, arUser[1].pwdHash)) {
+                           result.error = 'invalidHash';
+                        }
+
+                    // coding issuing where type is not defined    
+                    } else {
+                        result.error = 'typemismatch';
+                    }
+
+                }
+
+            }
+        }
+        
+        result['success'] = len(result.error) ? false : true;
+        return result;
+    }
     function isAjaxRequest() {
 		var headers = getHttpRequestData().headers;
 		return structKeyExists(headers, "X-Requested-With") 

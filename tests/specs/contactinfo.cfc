@@ -53,12 +53,12 @@ component extends="testbox.system.BaseSpec"{
 
                 it( "and pno is missing then it should not validate", function(){
                     
-                    oCI.setPno('0');
+                    oCI.setPno('');
                     oCI.setfirstname('Fake');
                     oCI.setlastname('User');
                     oCI.setEmail('sconklin@dynaprice.com');
                     oCI.setConame('DP');
-                    oCI.setPhone1('713-972-2243');
+                    oCI.setPhone('713-972-2243');
                     
                     expect( oCI.isValid() ).tobeFalse();
                     
@@ -72,14 +72,14 @@ component extends="testbox.system.BaseSpec"{
                     oCI.setlastname('User');
                     oCI.setEmail('sconklin@dynaprice.com');
                     oCI.setConame('copmany');
-                    oCI.setPhone1('713-972-2243');
+                    oCI.setPhone('713-972-2243');
                     
                     expect( oCI.isValid() ).tobeTrue();
                 } );
 
             });
            
-            describe( "when we try to update the user", function() {
+            describe( "when we try to update the contact information", function() {
               
                 it( " & the user being updated could not be found, it should not allow the update", function(){
                     
@@ -88,13 +88,20 @@ component extends="testbox.system.BaseSpec"{
                     oCI.setlastname('Conklin');
                     oCI.setEmail('blablabla@dynaprice.com');
                     oCI.setConame('DP');
-                    oCI.setPhone1('713-972-2243');
+                    oCI.setPhone('713-972-2243');
 
                     oCI.update();
-                    
+                   
+                    // we should have an error
                     expect(oCI.hasErrors()).tobeTrue();
-                    expect(oCI.getErrors()).notToBeEmpty(oCI.getErrors());
-                    expect(oCI.getErrors().errorcode).tobe('accountnotfound');
+                    // get the errorcontext
+                    var = ec = oCI.getErrorContext();
+                 
+                    expect(ec.error).notToBeEmpty();
+                    expect(ec.Originalstatus).tobe('accountnotfound');
+                    //expect(ec.errorType).tobe('exception');
+                    
+                    debug(oCI.getErrorContext());
 
                 });
                 it( " & the email exists in the system under another account, it should not allow the update", function(){
@@ -104,13 +111,14 @@ component extends="testbox.system.BaseSpec"{
                     oCI.setlastname('Conklin');
                     oCI.setEmail('ed@capovani.com');
                     oCI.setConame('DP');
-                    oCI.setPhone1('713-972-2243');
+                    oCI.setPhone('713-972-2243');
 
                     oCI.update();
                     
                     expect(oCI.hasErrors()).tobeTrue();
-                    expect(oCI.getErrors()).notToBeEmpty(oCI.getErrors());
-                    expect(oCI.getErrors().errorcode).tobe('emailinuse');
+                    expect(oCI.getErrors()).notToBeEmpty();
+                    expect (oCI.getErrorContext()['Originalstatus']).tobe('emailinuse');
+                    
 
                 });
 
@@ -122,7 +130,7 @@ component extends="testbox.system.BaseSpec"{
                     oCI.setlastname('Conklin');
                     oCI.setEmail('sconklin@dynaprice.com');
                     oCI.setConame('Facebook');
-                    oCI.setPhone1('713-972-2243');
+                    oCI.setPhone('713-972-2243');
 
                     oCI.update();
 
@@ -139,6 +147,8 @@ component extends="testbox.system.BaseSpec"{
                 } );
 
             });
+
+            
 
           
         });

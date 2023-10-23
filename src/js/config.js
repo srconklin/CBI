@@ -42,6 +42,12 @@ const config = {
             type: 'success'
 
         },
+        'myaddress': {
+            title: 'Success!',
+            message: 'Address was updated',
+            type: 'success'
+
+        },
         'changepassword': {
             title: 'Success!',
             message: 'Password sucessfully changed',

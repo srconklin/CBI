@@ -11,6 +11,7 @@ component {
 	this.datasource = 'dp_cat';
 	// any mappings go here, we create one that points to the root called test.
 	this.mappings[ "/tests" ] = getDirectoryFromPath( getCurrentTemplatePath() );
+	this.mappings[ "/websnips" ] = "C:\Users\scott\Projects\dynaprice\shared\CodeSnips\Web" 
 
 	// any orm definitions go here.
 

@@ -21,60 +21,11 @@ component accessors=true extends="controllers.base.common"{
 		then why not flip them to validated = 2
 
 	************************************************/
-	
-    public void function makeDeal2(struct rc= {}) {
-		param name="rc.type" default="offer";
-
-            /*
-			  validate form by loading into bean.
-			  note ajax if in use on form submit and it errors
-			  then error is rendered and controller aborted	
-			*/
-			
-			// either offer or inquiry
-			validateform(rc, '#rc.type#bean');
-			
-			// interface to dynabuilt system by meeting requirements of template as an include
-			form.ccSender = true;
-            if (structKeyExists(rc, 'phone2')) 
-				form.phone1 = rc.phone2;
-           
-			var vars  = {
-				validated = session.validated,
-				pno = session.pno,
-				sessionID = session.sessionID,
-				vizPagetop = session.vwrCoRelatNo
-			}
-			makeLegacyCall(rc, "proctrans", vars);
-
-			//no errors from legacy system
-			if(!len(rc.response.errors)) {
-						
-				// user is logged in in legacy system, sync some variables we need to keep the user 
-				// session complete in this version.
-				if(structKeyExists(rc, 'firstname')) 
-				{
-
-					var user= {
-						email: rc.email, 
-						firstName : rc.firstName, 
-						lastName: rc.lastName,
-						newperson: rc.vars.newperson
-					}
-
-					rc["response"]["payload"] = variables.userService.syncValidatedUser(user);
-				}
-				
-			}
-			renderResult(rc);	
-
-    }
-
 	public void function makeDeal(struct rc= {}) {
-
+			
             /*
 			  validate form by loading into bean.
-			  note ajax if in use on form submit and it errors
+			  note if ajax in use on form submit and it errors, 
 			  then error is rendered and controller aborted	
 			*/
 			
@@ -84,15 +35,9 @@ component accessors=true extends="controllers.base.common"{
 			var userLoggedInBeforeOffer = userService.getUserSession().isloggedIn;
 			
 			// make offer or inquiry
-			deal.sendoffer();
-
 			// if error then show and send it
-			if(!deal.offerSentSuccesfully()) {
-				var e = deal.getErrors();
-                rc["response"]["errors"] = e.message;
-                rc["response"]["errorcode"] = e.errorcode;
-				request.exception = e;
-               	sendErrorEmail(rc);
+			if(!deal.sendoffer()) {
+				handleServerError(deal.getErrorContext());
 			
 			//success
 			} else {

@@ -16,7 +16,7 @@ component accessors=true extends="model.beans.common"{
         lastname : ''
     };
 
-    variables.status = 'ok';
+    //variables.status = 'ok';
 
     // dependencies
     property config;
@@ -26,7 +26,7 @@ component accessors=true extends="model.beans.common"{
     function isValid() {
         var result = true;
         if ( !len(getUserName()) or !len(getPassword()) ) {
-            setErrorState('missingfields');
+             setErrorState('missing_login_fields');
         }
         return len(getErrors()) ? false: true;
 
@@ -40,10 +40,10 @@ component accessors=true extends="model.beans.common"{
         var arUser = variables.userGateway.getUserbyCredentials(getUsername(), getPassword());
       
         if(!isArray(arUser) or arUser.len() eq 0) {
-            setErrorState('no_result');
+            setErrorState('user_not_found');
         }    
         else if(arUser.len() gt 1) {
-            setErrorState('duplicate');
+            setErrorState('duplicate_user');
         }
         // user authenticated    
         else {
@@ -59,23 +59,10 @@ component accessors=true extends="model.beans.common"{
         variables.userData.vwrCorelatno = max(user.pvcorelatno, user.corelatno);
         variables.userData.validated = 2;
     }
-    function getStatus() {
-        return variables.status;
-    }
 
     function getUserData() {
         return variables.userData;
     }
-
-    private function setErrorState(string key='') {
-        variables.status = arguments.key;
-        if(len(variables.status))
-            variables.errors = config.getContent('user',  variables.status).instruction;
-        else     
-           clearErrors();
-    }
-
-   
   
 
 }

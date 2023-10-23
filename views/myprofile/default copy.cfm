@@ -8,11 +8,11 @@
 </div>
 
 <style>
-	.pac-icon {
+.pac-icon {
 	  display: none;
 	}
 
-	.pac-item {
+.pac-item {
   padding: 10px;
   font-size: 16px;
   cursor: pointer;

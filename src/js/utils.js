@@ -5,9 +5,25 @@ window.formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
   });
-  // valid input includes alpha characters and full stop,comma,apostrophe,dash and space
-  window.validInput = (s) => s.toString().replace(/[^\p{L} '.,-]/gui, '');
-  // window.validInput = (s) => s.toString().replace(/[0-9~`!@#%&=_";:><\(\)\^\$\|\?\*\+\{\}\[\]\\\/]/gi, '');
+  // matches any kind of letter from any language and full stop,comma,apostrophe,dash and space
+  // window.stripInvalidChars = (s) => s.toString().replace(/[^\p{L} '.,-]/gui, '');
+  // window.stripInvalidCharsForPostal = (s) => s.toString().replace(/[^\p{L}[^0-9] -]/gui, '');
+  // window.stripInvalidCharsForAddress = (s) => s.toString().replace(/[^\p{L}[^0-9] #'.,-;]/gui, '');
+  window.stripInvalidChars = (s, type) => {
+    let regex;
+
+    switch(type) {
+      case 'pc':
+        regex = /[^\p{L}\d -]/gui;
+        break;
+      case 'ad':
+        regex = /[^\p{L}\d #'.:,-;\/]/gui;
+        break;
+      default:
+        regex = /[^\p{L} '.,-]/gui;
+    } 
+    return s.toString().replace(regex, '');
+  }
   window.stripHTML = (s) => s.toString().replace(/(<([^>]+)>)/gi, '');
   window.integerOnly = (n) => n.toString().replace(/[^0-9]/g, '');
   window.formatNumber = (n) => addCommas(integerOnly(n));
@@ -65,38 +81,50 @@ window.formatter = new Intl.NumberFormat('en-US', {
   
   window.fetchItemAsJSON = async (itemno)  => {
     const response = await fetch(`/data/${itemno}.json`, { method: 'GET' });
-    const data = await response.json();
-    return data;
+    return await response.json();;
   }
 
-  window.validateCaptcha = (route) => {
+  window.getCaptchaToken = (route) => {
     // https://www.delftstack.com/howto/javascript/javascript-wait-for-function-to-finish/
     return new Promise((res, rej) => {
-        grecaptcha.ready(() => {
-            grecaptcha.execute('6LevHMkfAAAAAInPcjzzNLUUgvmKoeDzcIg4G6qS', { action: route }).then((token) => res(token));
-        });
+
+      try {
+          grecaptcha.ready(() => {
+              grecaptcha.execute('6LevHMkfAAAAAInPcjzzNLUUgvmKoeDzcIg4G6qS', { action: route }).then((token) => res(token));
+          });
+
+        } catch (e) {
+          console.log(e);
+          rej(e);
+        }
+
     });
   }
 
-  window.captchaError = (error) => {
-    console.log(`Error recieved in getting captcha token/processing form ${error}`);
+  window.submitForm = async (route, data) => {
+    const response = await fetch( route, {
+      headers: {
+        'X-Requested-With' : 'XMLHttpRequest'
+      },
+      method: 'POST',
+      body: data
+    });
+    return await response.json();
   }
 
   window.submitCap = (frm, route) => {
-    
-    window.validateCaptcha(route) 
-    .then(token => { 
-      console.log(token);
-      let theForm = document.forms[frm];
-      let input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'g-recaptcha-response';
-      input.value = token;
-      theForm.appendChild(input);
-      theForm.submit();
-    })
-    .catch(window.captchaError)
-
+        window.getCaptchaToken(route) 
+          .then(token => { 
+            console.log(token);
+            let theForm = document.forms[frm];
+            let input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'g-recaptcha-response';
+            input.value = token;
+            theForm.appendChild(input);
+            theForm.submit();
+          })
+          .catch(error =>  console.log(`Error recieved in getting captcha token/processing form ${error}`))
   }
 
   

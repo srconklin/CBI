@@ -31,22 +31,21 @@
 							autocomplete="off"
 							novalidate
 							x-data 
-							@submit.prevent="$store.forms.form='register';$store.forms.submit(); ">
-						
-								
+							@submit.prevent="$store.forms.submit('register'); ">
+														
 								<div class="flex flex-direction-column" style="gap: 3em;">
 									<div class="flex-child" >
-										<cfoutput>#view( 'common/fragment/item/personal', {phone = 'phone1'})#</cfoutput>
+										<cfoutput>#view( 'common/fragment/item/personal', {store='register'})#</cfoutput>
 									</div>	
 									
 									<!--- personal fields --->
 									<div class="flex-child" >
-										<cfoutput>#view( 'common/fragment/item/pwd', {label = 'Password'})# </cfoutput>
+										<cfoutput>#view( 'common/fragment/item/pwd', {label = 'Password', store='register'})# </cfoutput>
 
 										<div class="form-row checkbox-container">
 											<label for="bcast" >
 												<input 
-													<!--- id="bcast" --->
+													id="bcast"
 													name="bcast"
 													type="checkbox" 
 													class="checkbox" 
@@ -61,7 +60,7 @@
 										<div class="form-row checkbox-container">
 											<label for="agreetandc" >
 												<input 
-													<!--- id="agreetandc" --->
+													id="agreetandc"
 													name="agreetandc"
 													type="checkbox" 
 													class="checkbox" 
@@ -69,25 +68,25 @@
 													data-msg='["valueMissing:you must agree to the terms and conditions"]'			
 													title="you must agree to the terms and conditions" 
 													<!--- alpine --->
-													:class="{'invalid':$store.forms.toggleError('agreetandc')}" 
-													x-model="$store.forms.agreetandc.value" >
+													:class="{'invalid':$store.register.toggleError('agreetandc')}" 
+													x-model="$store.register.agreetandc.value" >
 												<span>I Agree to <a class="redlink" href="/terms">Terms of Service</a></span>
 											</label>
 											<p 
 												class="helper error-message" 
 												x-cloak 
-												x-show="$store.forms.toggleError('agreetandc')" 
-												x-text="$store.forms.agreetandc.errorMessage">
+												x-show="$store.register.toggleError('agreetandc')" 
+												x-text="$store.register.agreetandc.errorMessage">
 											</p>
 										</div>
 										
 										<div 
 											class="form-row" 
 											x-cloak 
-											x-show="$store.forms.generalError">
+											x-show="$store.register.generalError">
 												<p 
 													class="helper error-message-box error-message" 
-													x-html="$store.forms.generalError">
+													x-html="$store.register.generalError">
 												</p>
 										</div>
 									
@@ -153,10 +152,27 @@
 								method="post">
 
 								<div class="form-row">
-									<input class="form-control" type="text" placeholder="username" name="username" required/>
+									<input 
+										id="username" 
+										name="username" 
+										class="form-control" 
+										type="text" 
+										placeholder="username or email" 
+										title="enter your email or username to login" 
+										autocomplete="username"
+										required/>
 								</div>
 								<div class="form-row">
-									<input class="form-control" type="password" placeholder="password" name="password" required/>
+									<input
+										id="password" 
+										name="password" 
+										class="form-control" 
+										type="password"
+										maxlength="25"
+										placeholder="password" 
+										title="enter your password" 
+										autocomplete="current-password"
+										required/>
 								</div>	
 						
 								<div class="center-w-flex form-row mt-6">

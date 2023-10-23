@@ -360,6 +360,11 @@ media queries
 		flex-direction: row;
 	}
 
+       
+
+
+     
+
 }
 
 @media (min-width: 732px) {
@@ -433,6 +438,10 @@ media queries
 	}
 
 
+	#myaddressfrm > div {
+		flex-direction: row;
+		gap: 3em;
+	}
 }
 
 @media (min-width: 1280px) {

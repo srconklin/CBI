@@ -16,8 +16,7 @@ component accessors=true extends="model.beans.personal" {
     // business logic data
     //set in legacy system 0=exisiting email; 1=found
     variables.newperson; 
-   
-   
+      
     //set in legacy system;
     // 0=found in db but never logged in. inserted from a previous offer/inquiry, no passsord and should not be able to manage profile
     // 1=found in db and user has properly registered; set a password and verified email ownership
@@ -36,71 +35,85 @@ component accessors=true extends="model.beans.personal" {
     
     
     function isValid( ){
-               
+
+        if (!hiddenNotValid())
+            return false;
+            
         // base handler is personal bean
         // only called the isvalid on the base component when the user is not logged in.
         if (!userService.getUserSession().isloggedIn)
             super.isValid();
-    
-        //itemno 
-        if ( !len(getItemno()) or getItemno() eq 0 ) {
-            variables.errors["itemno"] = config.getContent('basicforms', 'baditemno').instruction;
-        } else if (!isValid('Numeric', replaceNoCase(getItemno(), ',', ''))) {
-            variables.errors["itemno"] = config.getContent('basicforms', 'invalidNumber').instruction; 
-        }
-
-        // only on offer screen
+   
+        // only on make offer screen
         if (getTtypeno() eq 11) {
 
             //qty 
             if ( !len(getQtyStated()) ) {
-                variables.errors["qtyStated"] = config.getContent('basicforms', 'qtyMissing').instruction;
+                setErrorState('qtyMissing', 'qtyStated');
             } else if (!isValid('Numeric', replaceNoCase(getQtyStated(), ',', ''))) {
-                variables.errors["qtyStated"] = config.getContent('basicforms', 'invalidNumber').instruction; 
+                setErrorState('invalidNumber', 'qtyStated');
             } else if (getQtyStated() gt 9999)  {
-                variables.errors["qtyStated"] = config.getContent('basicforms', 'maxQty').instruction;
+                setErrorState('maxQty', 'qtyStated');
             }
 
             
             // price
             if ( !len(getPriceStated()) ) {
-                variables.errors["priceStated"] = config.getContent('basicforms', 'priceMissing').instruction; 
+                setErrorState('priceMissing', 'priceStated');
             } else if (!isValid('float', replaceNoCase(getPriceStated(), ',', ''))) {
-                variables.errors["priceStated"] = config.getContent('basicforms', 'invalidPrice').instruction; 
+                setErrorState('invalidPrice', 'priceStated');
             } else if (getPriceStated() gt 9999999)  {
-                variables.errors["priceStated"] = config.getContent('basicforms', 'maxPrice').instruction; 
+                setErrorState('maxPrice', 'priceStated');
             }
 
             // terms     
             if (len(getTerms()) ) {
-                    if(utils.hasHTML(getTerms())) {
-                        variables.errors["terms"] = config.getContent('basicforms', 'noHTML').instruction; 
-                    } else if (len(getTerms()) gt 250)  {
-                        variables.errors["terms"] = config.getContent('basicforms', 'tooLong').instruction; 
-                    }
+                if(utils.hasHTML(getTerms())) {
+                    setErrorState('noHTML', 'terms');
+                } else if (len(getTerms()) gt 250)  {
+                    setErrorState('tooLong', 'terms');
+                }
             }
         }
 
          // message required on inquiry only  
         if (getttypeno() eq 10 and !len(getMessage()) ) {
-            variables.errors["message"] = config.getContent('basicforms', 'missingMessage').instruction; 
+            setErrorState('missingMessage', 'message');
         }  
+
         else if(utils.hasHTML(getMessage())) {
-            variables.errors["message"] = config.getContent('basicforms', 'noHTML').instruction; 
+            setErrorState('noHTML', 'message');
         } else if (len(getMessage()) gt 250)  {
-            variables.errors["message"] = config.getContent('basicforms', 'tooLong').instruction; 
+            setErrorState('tooLong', 'message');
         }
         
-        return structCount(variables.errors) ? false: true;
+
+        return !hasErrors();
   }
 
+  function hiddenNotValid( ){
+
+     //ttypeno 
+     if (!listfindnocase('10,11', getTTypeno())) {
+       setErrorState('badTypeno'); 
+     } 
+     //itemno 
+     if ( !len(getItemno()) or getItemno() eq 0 ) {
+        setErrorState('badItemno'); 
+    } else if (!isValid('Numeric', replaceNoCase(getItemno(), ',', ''))) {
+        setErrorState('badItemno'); 
+    }
+
+    return !hasErrors();
+
+  }
 
   function isNewPerson() {
        return variables.newPerson;
   }  
 
   function offerSentSuccesfully() {
-    return (len(variables.errors) or !variables.offerSent) ? false: true;
+    return (hasErrors() or !variables.offerSent) ? false: true;
   }
     
   function sendOffer(){
@@ -116,10 +129,10 @@ component accessors=true extends="model.beans.personal" {
         include "/cbilegacy/proctrans.cfm";
        
     } catch (e) {
-        variables.errors =e;
+        setErrorState(e)
+        
     }    
-
-  
+    return offerSentSuccesfully();
   }
 
   private function setOfferer(user={}) {
@@ -144,7 +157,7 @@ component accessors=true extends="model.beans.personal" {
     form.lastName = getLastName();
     form.email = getEmail();
     form.coname = getConame();
-    form.phone1 = len(getPhone1()) ? getPhone1() : getPhone2();
+    form.phone1 = getPhone();
 
   }
 

@@ -1,10 +1,11 @@
 <div class="offer">
-	<form id="offerfrm" method="post" x-data @submit.prevent="$store.forms.form='offer';$store.forms.submit()">
-		<input type="hidden" name="itemno" :value="$store.forms.itemno">
-		<input type="hidden" name="frmpos" value="0">
-		<input type="hidden" name="ttypeno" value="11">
-		<input type="hidden" name="qtyShown" :value="$store.forms.qtyShown">
-		<input type="hidden" name="priceShown" :value="$store.forms.priceShown">
+	<form 
+		id="offerfrm" 
+		name="offerfrm" 
+		method="post" 
+		x-data 
+		<!--- form name passed to submit form --->
+		@submit.prevent="$store.forms.submit('offer')">
 
 		<div class="form-row">
 			<cfoutput>
@@ -25,15 +26,16 @@
 						title="enter a quantity for your offer"						
 						<!--- optional --->
 						required
-						step="1" min="1" 
+						step="1" 
+						min="1" 
 						data-msg='["valueMissing:Please enter a valid quantity"]'
 						oninput="validity.valid||(value='');" 
 						<!--- alpine --->
-						:class="{'invalid':$store.forms.toggleError('qtyStated')}" 
-						:max="$store.forms.maxqty" 
-						:readonly="$store.forms.maxqty==1"  
-						x-model="$store.forms.qtyStated.value"
-						@blur="$store.forms.validate($event)" 
+						:class="{'invalid':$store.offer.toggleError('qtyStated')}" 
+						:max="$store.offer.maxqty" 
+						:readonly="$store.offer.maxqty==1"  
+						x-model="$store.offer.qtyStated.value"
+						@blur="$store.offer.validate($event)" 
 						  />
 					</div>
 
@@ -59,30 +61,30 @@
 							data-msg='["valueMissing:Please enter a valid price"]'
 							oninput="this.value=formatCurrency(this.value);"
 							<!--- alpine --->
-							:class="{'invalid':$store.forms.toggleError('priceStated')}"  
-							x-model="$store.forms.priceStated.value"
-							@blur="$store.forms.validate($event)"  />
+							:class="{'invalid':$store.offer.toggleError('priceStated')}"  
+							x-model="$store.offer.priceStated.value"
+							@blur="$store.offer.validate($event)"  />
 						</div>
 					</div>
 					<div>=</div>
 					<div 
 						class="total" 
-						x-text="$store.forms.total">
+						x-text="$store.offer.total">
 					</div>
 				</div>
 			<p 
 				class="helper error-message qty-msg" 
 				<!--- alpine --->
 				x-cloak 
-				x-show="$store.forms.toggleError('qtyStated')" 
-				x-text="$store.forms.qtyStated.errorMessage" >
+				x-show="$store.offer.toggleError('qtyStated')" 
+				x-text="$store.offer.qtyStated.errorMessage" >
 			</p>
 			<p 
 				class="helper error-message price-msg" 
 				<!--- alpine --->
 				x-cloak 
-				x-show="$store.forms.toggleError('priceStated')" 
-				x-text="$store.forms.priceStated.errorMessage">
+				x-show="$store.offer.toggleError('priceStated')" 
+				x-text="$store.offer.priceStated.errorMessage">
 			</p>
 		</div>
 		<div class="form-row">
@@ -102,23 +104,21 @@
 				rows="3"
 				wrap="soft"
 				<!--- alpine --->
-				x-model="$store.forms.terms"
-				@blur="$store.forms.validateTerms()"
+				x-model="$store.offer.terms.value"
+				@blur="$store.offer.validate($event)"
 				>
 			</textarea>
 
 			<p class="count" x-cloak>
-				<span x-text="$store.forms.termsRemain"></span> characters remaining.
+				<span x-text="$store.offer.termsRemain"></span> characters remaining.
 			</p>
 
 		</div>
-		<div class="form-row">
-			<label for="message" class="form-label">
+		<div class="form-row" x-id="['message']">
+			<label :for="$id('message')" class="form-label">
 				Additional Notes
 			</label>
-			<!---  @blur="$store.forms.message = stripHTML($store.forms.message);"  --->
 			<textarea 
-				id="message"
 				name="message"
 				class="form-control"
 				maxlength="250"
@@ -129,25 +129,25 @@
 				rows="3" 
 			 	wrap="soft" 
 				<!--- alpine --->
-				x-model="$store.forms.message"
-				@blur="$store.forms.validateMessage()"
-				>
-			</textarea>
+				:id="$id('message')"
+				x-model="$store.offer.message.value"
+				@blur="$store.offer.validate($event)"
+				></textarea>
 			<p class="count" x-cloak>
-				<span x-text="$store.forms.messageRemain"></span> characters remaining.
+				<span x-text="$store.offer.messageRemain"></span> characters remaining.
 		   </p>
 		</div>
 		<cfoutput>
-			#view( 'common/fragment/item/personal', { phone = 'phone1'})#
+			#view( 'common/fragment/item/personal', {store='offer'})#
 		</cfoutput>
 		
 		<div
 			class="form-row" 
 			x-cloak 
-			x-show="$store.forms.generalError">
+			x-show="$store.offer.generalError">
 				<p 
 					class="helper error-message" 
-					x-html="$store.forms.generalError">
+					x-html="$store.offer.generalError">
 				</p>
 		</div>
 

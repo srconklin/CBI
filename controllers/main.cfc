@@ -28,6 +28,32 @@ component accessors=true extends="controllers.base.common" {
 		}
 	}
 
+	 /***********************************************
+		locationlookup (POST)
+		given a google places object from an autocomplete
+		box return the geochain from server 
+		ajax :yes
+	**********************************************/
+	public void function locationlookup(struct rc = {}) {
+		param rc.placesResponse='';
+		rc['response']['geoChain'] = [];
+		
+		var ll = variables.beanFactory.getBean( 'locationlookupbean' );
+		ll.setPlacesResponse(rc.placesResponse);
+		ll.performLookup();
+
+		if(ll.hasErrors()) {
+			handleServerError(ll.getErrorContext());
+			
+		} else {
+			rc["response"]["res"] = true;
+			rc['response']['geoChain'] = ll.getGeoChain();
+		}
+	
+		renderResult(rc);
+	
+   }
+
 	
 	/******************************
 	 site wide error handler
