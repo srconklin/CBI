@@ -91,6 +91,7 @@ const plugins = [buildStarted, ...applugin, updateAssets]
 const config = {
     entryPoints: ['./src/app.js', './src/aac.js'],
     bundle: true,
+    external: ["*.jpg"],
     sourcemap: !isProduction,
     logLevel: 'info',
     // entryNames: isProduction ? '[dir]/[name]-[hash]' : '[dir]/[name]',

@@ -62,10 +62,8 @@ component accessors=true  {
    }
 
    function setErrorState(any key='', string field='', string origstatus = '') {
-      
     
       if(len(arguments.key)) {
-        
           
           // field present means we are creating a struct of errors for each field
           if(len(arguments.field)) {

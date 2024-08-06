@@ -5,7 +5,7 @@
 			<line x1="12" y1="8" x2="12" y2="12"></line>
 			<line x1="12" y1="16" x2="12.01" y2="16"></line>
 		</svg>
-		<cfloop index="currentIndex" item="currentItem" array="#local.messages#"> 
-			<cfoutput>#currentItem#</cfoutput><br> 
-		</cfloop>
+		<!--- <cfloop index="currentIndex" item="currentItem" array="#local.messages#">  --->
+			<cfoutput>#local.message#</cfoutput><br> 
+		<!--- </cfloop> --->
 </div>

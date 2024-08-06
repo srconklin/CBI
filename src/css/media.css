@@ -64,7 +64,7 @@ media queries
 		margin-bottom: 0;
 	}
 
-	.modal {
+	.modal-container2 .fullsize {
 		max-width: 85%;
 	}
 
@@ -82,8 +82,8 @@ media queries
 
 	
 	.icon-title {
-		width: 6rem;
-		height: 6rem;
+		width: 4rem;
+		height: 4rem;
 	}
 
 	.ais-Hits-list {
@@ -104,21 +104,21 @@ media queries
 
 		
 
-	.header-container {
+	/* .header-container {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 
-	}
-	.header-links {
+	} */
+	/* .header-links {
 		display: flex;
 		align-items: flex-end;
 		flex-direction: row;
-	}
+	} */
 
-	.header-nav {
+	/* .header-nav {
 		display: none;
-	}
+	} */
 	
 	.main {
 		padding-left: 2rem;
@@ -168,10 +168,10 @@ media queries
 		flex-direction: row;
 	}
 
-	.tabs ul li {
+	/* .tabs ul li {
 		margin-right: 0.25rem;
 
-	}
+	} */
 
 	.tabs .activeBtn {
 		border-bottom-width: 0px;
@@ -228,6 +228,10 @@ media queries
 		display: none;
 	}
 
+	.progress .name { 
+		font-size: 1.4rem;
+	}	
+
 }
 
 @media (min-width: 700px) {
@@ -268,6 +272,10 @@ media queries
 		display: none;
 	}
 
+	.breadcrumb {
+		margin-top: .75rem;
+		margin-bottom: 0;
+	}	
 	.search-panel {
 		flex: 1;
 		/* display: flex; */
@@ -360,11 +368,23 @@ media queries
 		flex-direction: row;
 	}
 
-       
+}
 
+@media (min-width: 717px) {
+	.header-nav {
+		display: none;
+	}
 
-     
+	.header-links {
+		display: flex;
+		align-items: flex-end;
+		flex-direction: row;
+	} 
 
+	#contact section {
+		display: flex;
+
+	}
 }
 
 @media (min-width: 732px) {
@@ -438,10 +458,14 @@ media queries
 	}
 
 
-	#myaddressfrm > div {
+	#updateaddressfrm > div {
 		flex-direction: row;
 		gap: 3em;
 	}
+
+	.progress .name { 
+		font-size: 1.6rem;
+	}	
 }
 
 @media (min-width: 1280px) {
@@ -472,7 +496,7 @@ media queries
 		max-width: 1496px;
 	} */
 
-	.modal {
+	.modal-container2 .fullsize {
 		max-width: 1260px;
-	}
+	} 
 }

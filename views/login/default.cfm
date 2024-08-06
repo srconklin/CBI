@@ -44,7 +44,13 @@
 				
 				<div>
 				
-					<form action="/login" method="post">
+					<form 
+						id="frmlogin" 
+						name="frmlogin" 
+						action="/login" 
+						method="post"
+						onsubmit="submitCap('frmlogin', '/login'); return false;"
+						>
 						<div class="form-row">
 							<input 
 								id="username"

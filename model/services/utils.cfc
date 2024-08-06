@@ -7,11 +7,11 @@ component accessors=true {
     }
         
     function validateCaptcha(captcha, route) {
-
         var result = false;
 
         // validate the g-captcha-repsonse
         if (len(arguments.captcha)) {
+
             //validate token with Google
             cfhttp(method="POST", url="https://www.google.com/recaptcha/api/siteverify", result="captchaResponse") {
                 cfhttpparam(name="secret", type="formfield", value=config.getSetting("captchasecret"));
@@ -19,24 +19,19 @@ component accessors=true {
                 cfhttpparam(name="Accept", type="header", value='application/json');
             }
             var response = deserializeJSON(captchaResponse.filecontent);
-            
-            var route = '/'& gettoken(arguments.route, 1, ".");
-            // writeDump(captcha);
-            // writeDump(route );
+            // writeDump(route);
             // writeDump(response);
             // abort;
-            if (response.success and response.score gt 0.5 and response.action eq route ) {
+            if (response.success and response.score gt 0.5 and response.action eq arguments.route ) {
                 result = true;	
             }
-            
+    
         }
-
-   
-        return result;
+        return result ;
         
     }
 
-    // decrypt and AES token
+    // decrypt an AES token
 	function decryptAESString(required string theString) {
 		var result = {
 			decString : '',
@@ -103,26 +98,26 @@ component accessors=true {
                 result.error = decomposedToken.error;
             } else {
             
-               // return email
-               // setEmail(decomposedToken.email);
                 result.email = decomposedToken.email;
 
                 //validate email against a user
                 var arUser = variables.userGateway.getUserbyEmail(result.email);
+                //writedump(var="#arUser#",  abort="true");
                
                 // email found in encrypted string comes back as not being excatly one row in the db. fishy or broken link
                 if (arUser.len() neq 1) {
                     result.error = 'toomanyornouser';
-                } else if (arUser[1].verifyVerified) {	
-                    result.error = 'emailAlreadyVerified';
-                
+                             
                 } else {
 
                     // register checks    
                     if (arguments.type eq 'register') {
                     
+                        if (arUser[1].verifyVerified eq 1) {	
+                            result.error = 'emailAlreadyVerified';
+                        }
                         // register token date link expired more than the threshold allows
-                        if ( datediff('n', arUser[1].verifyDateTime, now()) gt config.getSetting('threshold')) {	
+                        else if ( datediff('n', arUser[1].verifyDateTime, now()) gt config.getSetting('threshold')) {	
                             result.error = 'linkExpired';
                         // hash is invalid; something fishy    
                         } else if (! Argon2CheckHash( decomposedToken.secretGuid, arUser[1].verifyHash)) {
@@ -132,7 +127,7 @@ component accessors=true {
 
                     // password checks        
                     } else if (arguments.type eq 'password') {
-                        
+                       
                         // pwd token date link expired more than the threshold allows
                         if ( datediff('n', arUser[1].pwdDateTime, now()) gt config.getSetting('threshold')) {	
                             result.error = 'linkExpired';

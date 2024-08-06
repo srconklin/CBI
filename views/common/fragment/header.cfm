@@ -2,42 +2,27 @@
 <!--- header --->
 	<header class="header" x-cloak x-data="{showMenu : false, hidden: false}" @blur-bg.window="$event.detail?hidden = true:hidden=false;" :class="{ 'header-hidden': hidden }">
 		<div class="header-container">
-		  <!--- 2 column  wrapper --->
-		  <div class="header-column">
+		
+			<!--- 2 column  wrapper --->
+		  <!--- <div class="header-column"> --->
 	
 			<!--- logo --->
 			<div class="header-logo">
 				<a href="/">	
 					<img alt="Capovani Brothers" class="block" src="/images/logo_short2.png">
 				</a>		
-				<cfif local.route eq 'default'>
-					<h3><span>C</span>apovani <span>B</span>rothers <span>I</span>nc</h3>
-				</cfif>	
+						<!--- <cfif local.route eq 'default'>
+							<h3><span>C</span>apovani <span>B</span>rothers <span>I</span>nc</h3>
+						</cfif>	 --->
+					<!--- </div> --->
+		  	</div>
+			<!--- 	
+			<cfif local.route neq 'default'>
+				<div id="searchbox" class="searchbox-abbr"></div>
+			</cfif> --->
+			<div class="flex justify-center align-items" style="flex:2">
+				<div id="searchbox" style="max-width: 800px;"></div>
 			</div>
-			
-			<!--- menu icon --->
-			<div class="header-nav">
-	
-			  <button type="button" @click.prevent="showMenu = !showMenu ">
-	
-				<svg id="hamburger" xmlns="http://www.w3.org/2000/svg" class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x-show="!showMenu">
-				  <line x1="3" y1="12" x2="21" y2="12"></line>
-				  <line x1="3" y1="6" x2="21" y2="6"></line>
-				  <line x1="3" y1="18" x2="21" y2="18"></line>
-				</svg>
-				<svg id="close-vm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x-show="showMenu">
-				  <circle cx="12" cy="12" r="10"></circle>
-				  <line x1="15" y1="9" x2="9" y2="15"></line>
-				  <line x1="9" y1="9" x2="15" y2="15"></line>
-				</svg>
-	
-			  </button>
-			</div>
-		  </div>
-		<!--- 	
-		 <cfif local.route neq 'default'>
-			<div id="searchbox" class="searchbox-abbr"></div>
-		</cfif> --->
 
 		  <!--- links menu --->
 		  <div :class="{ 'hidden': !showMenu }" class="flex header-links">
@@ -50,6 +35,7 @@
 			<a href="/faq">
 			  FAQ
 			</a>
+			
 			<cfif rc.userSession.isLoggedIn >
 
 				<div x-data="{
@@ -82,7 +68,9 @@
 									<text x="50%" y="50%" fill="##fa0114" style="color: ##fa0114; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="30" font-weight="600" dy=".1em" dominant-baseline="middle" >#rc.userSession.avatar#</text></svg>
 							</cfoutput>
 						</button>
-						<cfif !rc.userSession.isEmailVerified><a href="/myprofile" title="Verify your eamil" style="opacity:1;"><div class="notify-badge" >!</div></a></cfif>
+						<cfif !rc.userSession.isEmailVerified>
+							<a href="/myprofile" title="Verify your eamil" style="opacity:1;"><div class="notify-badge" >!</div></a>
+						</cfif>
 
 					<!-- drop down menu -->
 					<div
@@ -113,19 +101,23 @@
 								<path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
 								<path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
 							  </svg> --->
-							  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" stroke-width="1.5" stroke="currentColor" >
+							  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
 								<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
 							  </svg>
 							  
 							<p>My Profile</p>
 						</a>
-					
-						<a href="/logout" class="entry">
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-								<path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+						<a href="/search/?query=favorites" class="entry">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
 							  </svg>
-							<p >Sign Out</p>
-						</a>
+							<p >My Favorites</p></a>
+						<a href="/logout" class="entry">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" >
+								<path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
+							  </svg>
+							  
+							<p >Sign Out</p></a>
 						<!-- </div> -->
 					</div>
 				</div>
@@ -138,10 +130,29 @@
 			
 			
 		  </div>
+
+		  <!--- menu icon --->
+		<div class="header-nav" :class="{ 'align-self': showMenu }">
+
+			<button type="button" @click.prevent="showMenu = !showMenu ">
+	
+				<svg id="hamburger" xmlns="http://www.w3.org/2000/svg" class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x-show="!showMenu">
+				<line x1="3" y1="12" x2="21" y2="12"></line>
+				<line x1="3" y1="6" x2="21" y2="6"></line>
+				<line x1="3" y1="18" x2="21" y2="18"></line>
+				</svg>
+				<svg id="close-vm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x-show="showMenu">
+				<circle cx="12" cy="12" r="10"></circle>
+				<line x1="15" y1="9" x2="9" y2="15"></line>
+				<line x1="9" y1="9" x2="15" y2="15"></line>
+				</svg>
+	
+			</button>
+		</div>
 		</div>
 		<!--- search bar --->
 		
-			<div class="header-searchbar">
+			<!--- <div class="header-searchbar">
 				
 				<div id="searchbox"></div>
 				<!--- <cfif local.route eq 'default'>
@@ -150,7 +161,7 @@
 						search
 					</h2> --->
 				</cfif>	 --->
-			</div>
+			</div> --->
 
 			
 			  

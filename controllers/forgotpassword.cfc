@@ -46,7 +46,7 @@ component accessors=true extends="controllers.base.common" {
 			// check that token is valid
 			if (!fp.verifyToken()) {
 				//error
-				rc.fpstatus  = handleServerError(fp.getErrorContext());
+				rc.fpstatus  = handleServerError(rc, fp.getErrorContext());
 				//redirect
 				renderResult(rc, '/forgotpassword', 'fpstatus' ) ;
 
@@ -112,12 +112,13 @@ component accessors=true extends="controllers.base.common" {
 				forgotpassword.generateLink();
 
 				if (forgotpassword.hasErrors()) {
-					handleServerError(forgotpassword.getErrorContext());
+					handleServerError(rc, forgotpassword.getErrorContext());
 					rc.fpstatus='linknotcreated'
 				}
 			} 
 
 		}	
+		//writedump(var="#rc.fpstatus#",  abort="true");
 		// go back to forgotpassword page
 		renderResult(rc, '/forgotpassword', 'fpstatus' ) ;
 		
@@ -126,7 +127,7 @@ component accessors=true extends="controllers.base.common" {
 
 	/*************************************
 	 submitresetpassword (POST)
-	 submits from pwd1 and pwd2 wdiget to 
+	 submits from pwd1 and pwd2 widget to 
 	 changing new password
 	 ajax : yes
 	******************************************/
@@ -135,57 +136,87 @@ component accessors=true extends="controllers.base.common" {
 		param name="rc.pwd2" default="";
 		// hidden form field
 		param name="rc.token" default="";
+		var noErrors = true;
+
+		// xtra bot protection
+		captchaProtect(rc);	
 		
-			//validate form submit portion by loading into bean
-			var pm = validateform(rc, 'passwordmgrbean');
-		
+		//validate form submit portion by loading into bean
+		var pm = validateform(rc, 'passwordmgrbean');
+		// use forgotpasswordbean for logic
+		var fp = variables.beanFactory.getBean( 'forgotpasswordbean' );
+
+		// conditions by which token validation is skipped:  when Executing a Complete Profile Process
+		// and the user already validated their email in step 1 of the process.
+		var performVerifyToken = true;
+		if(structKeyExists(rc.userSession, 'previouslyVerified')  and !rc.userSession.previouslyVerified and !len(rc.token)) 
+			performVerifyToken = false;
+
+		//  if we are NOT skipping token validation	
+		if (performVerifyToken) {
 			// revalidate the token to make sure nothing has changed 
 			// this includes decomposing it
-			var fp = variables.beanFactory.getBean( 'forgotpasswordbean' );
 			fp.setResetToken(rc.token);
 
 			// check that token is valid
 			// note fp.verify token returns a slug over a message
-			if (!fp.verifyToken()) {
+			 if (!fp.verifyToken()) {
 				// sets rc["response"]["errors"] to something
-				handleServerError(fp.getErrorContext());
-				
-			// no errors, move on to updating the password	
-			} else {
+				handleServerError(rc, fp.getErrorContext());
+				noErrors = false;
 
+			 } else 
+				//email retrieved from token
 				pm.setEmail(fp.getemail());
-
-				//try to reset/update the password
-				pm.resetPassword();
 				
-				if (pm.hasErrors()) 
-					// can be a cf exception on the update statement or emailnotfound
-					handleServerError(pm.getErrorContext());
-				
-				else {
+		} else {
+			pm.setEmail(rc.userSession.email);
+			fp.setEmail(rc.userSession.email);
+		}
+		
+			
+		// no errors, move on to: step 1 Reseting the password	
+		if (noErrors) {
+			//try to reset/update the password
+			pm.resetPassword();
+			if (pm.hasErrors()) {
+				// can be a cf exception on the update statement or emailnotfound
+				handleServerError(rc, pm.getErrorContext());
+				noErrors = false;
+		   } 
 
-					// update the security hashes to say we are done.
-					fp.markPasswordVerified();
+		}
 
-					if(fp.hasErrors()) {
-						handleServerError(fp.getErrorContext());
-					}
-					// no errors	
-					else {
-						rc["response"]["res"] = true;
-						// we are in an ajax handler; js payload response contains a redirect; JS uses that to relocate
-						rc["response"]["payload"]["redirect"] = '/passwordReset';
-					}
-	
-				}
-				
+		// no errors, move on to step 2 updating hashes
+		if (noErrors) {
+			// update the security hashes to say we are done.
+			fp.markPasswordVerified();
 
+			if(fp.hasErrors()) {
+				handleServerError(rc, fp.getErrorContext());
+				noErrors = false;
 			}
+		} 
+				
 
-			renderResult(rc);
+		// no errors, then move to step 2 reporting back and redirects
+		if (noErrors) {
+			rc["response"]["res"] = true;
+			// we are in an ajax handler; js payload response contains a redirect; JS uses that to relocate
+			// CPS =  Executing a Complete Profile Process, then send back to completeprofile via setpassword route
+			// with the hasPassword flag set to true
+			if (structKeyExists(rc, 'eacpp'))  {
+				variables.userService.setUserSession({'pwdVerified': 1});
+				rc["response"]["payload"]["redirect"] = '/setpassword';
+			}
+			else 
+			   rc["response"]["payload"]["redirect"] = '/passwordReset';
+
+		}
+
+		renderResult(rc);
+			
 	 }	
-
-	
   
 }
 

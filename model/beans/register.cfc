@@ -2,6 +2,7 @@ component accessors=true extends="model.beans.personal" {
 
   // accessors
   property agreetandc;
+  property route;
   property verifyToken;
   property bcast;
   property pno default="0" ;
@@ -13,7 +14,9 @@ component accessors=true extends="model.beans.personal" {
   // password manager bean
   variables.pm = '';
   // authenticated user array 
-  variables.user = '';
+  ///variables.user = '';
+
+  variables.verifylink;
 
   // dependencies 
   property utils;
@@ -48,6 +51,8 @@ component accessors=true extends="model.beans.personal" {
       form.phone1 = getPhone();
       form.password = variables.pm.getPwd1();
       form.bcast = getBcast();
+      form.route = getRoute();
+     
   
     }
   
@@ -55,9 +60,9 @@ component accessors=true extends="model.beans.personal" {
   //   return variables.emailexistsNV
   // }
   
-  function getUserData() {
-    return variables.user
-  }
+  // function getUserData() {
+  //   return variables.user
+  // }
   
   function signUp(){
 
@@ -83,7 +88,7 @@ component accessors=true extends="model.beans.personal" {
   
   }
 
-  function resendLink(  ) {
+  function resendLink() {
 
       //validate email against a user
       var arUser = variables.userGateway.getUserbyEmail(getEmail());
@@ -92,7 +97,7 @@ component accessors=true extends="model.beans.personal" {
       if (arUser.len() neq 1) {
         setErrorState( key='verifylinknotcreated', origStatus='toomanyornouser');
       // no reason to resend the link if the email has been verified
-      } else if (arUser[1].verifyVerified) {	
+      } else if (arUser[1].verifyVerified eq 1) {	
         setErrorState('emailAlreadyVerified');    
      
       // user email successfully verified    
@@ -103,7 +108,8 @@ component accessors=true extends="model.beans.personal" {
             form.firstname = arUser[1].firstname;
             form.lastname = arUser[1].lastname;
             form.resendVerifyLink = true;
-    
+            form.route = getRoute();
+
             include "/cbilegacy/legacySiteSettings.cfm"
             include "/cbilegacy/procreg2.cfm"
             
@@ -114,6 +120,16 @@ component accessors=true extends="model.beans.personal" {
       }
 
 	}
+
+  function markUserFullyValidated() {
+    clearErrors();
+    var result = variables.userGateway.markUserFullyValidated(getemail());
+    
+    if (!result['success'])
+      setErrorState(result['errors']);
+
+    return !hasErrors();
+  }
 
   function verifyToken(){
 
@@ -140,11 +156,11 @@ component accessors=true extends="model.beans.personal" {
           result = variables.userGateway.markEmailVerified(getemail());
           if (!result['success'])
             setErrorState(result['errors']);
-         else {
-           //re-retrieve user with updated security settings
-           arUser = variables.userGateway.getUserbyEmail(getEmail());
-           variables.user = arUser[1];
-         }
+        //  else {
+        //    //re-retrieve user with updated security settings
+        //    arUser = variables.userGateway.getUserbyEmail(getEmail());
+        //    variables.user = arUser[1];
+        //  }
       
     }
 

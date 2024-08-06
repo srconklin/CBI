@@ -13,30 +13,40 @@ component accessors=true extends="controllers.base.common" {
 	 my address forms
 	*************************************/
 	public void function default(struct rc = {}) {
+		rc.myaddress = {
+			locGid : ''
+		};
+
+		if (!rc.userSession.isEmailVerified or !rc.userSession.hasPassword) 
+			renderResult(rc, '/completeprofile');
+	     
 		// populate the update contact info form
 		rc.user = usergateway.getContactInfo(rc.userSession.pno);
 		//populate the myaddress form
 		var user = usergateway.getUserPrimaryAddress(rc.userSession.pno);
 		
-		rc.myaddress = {};
-	    if (arrayLen(user)) {
+		if (arrayLen(user)) {
 			rc.myaddress = user[1];
 		} 
+				
 	}
-
 	 
 	/***********************************************
 		updateContactInfo (POST)
-		my account update contact information
+		My Profile update contact information
 		ajax :yes
 	**********************************************/
 	public void function updateContactInfo(struct rc = {}) {
 		rc.pno = rc.userSession.pno;
+		
+		// xtra bot protection
+		captchaProtect(rc);	
+
 		var cb = validateform(rc, 'contactInfobean');
 		cb.update();
 
 		if(cb.hasErrors()) {
-			handleServerError(cb.getErrorContext());
+			handleServerError(rc, cb.getErrorContext());
 			
 		} else {
 			rc["response"]["res"] = true;
@@ -49,17 +59,20 @@ component accessors=true extends="controllers.base.common" {
    	 
 	/***********************************************
 		updateAddress (POST)
-		my account enter update an address
+		My Profile enter update an address
 		ajax :yes
 	**********************************************/
 	public void function updateAddress(struct rc = {}) {
 		rc.pno = rc.userSession.pno;
 		
+		// xtra bot protection
+		captchaProtect(rc);	
+
 		var ua = validateform(rc, 'updateaddressbean');
 		ua.update();
 
 		if(ua.hasErrors()) {
-			handleServerError(ua.getErrorContext());
+			handleServerError(rc, ua.getErrorContext());
 			
 		} else {
 			rc["response"]["res"] = true;
@@ -70,20 +83,49 @@ component accessors=true extends="controllers.base.common" {
    }
 	/***********************************************
 		changepassword (POST)
-		my account change password
+		My Profile change password
 		ajax :yes
 	**********************************************/
 	public void function changepassword(struct rc = {}) {
 		rc.pno = rc.userSession.pno;
+		
+		// xtra bot protection
+		captchaProtect(rc);	
+
 		var pm = validateform(rc, 'passwordmgrbean');
 		pm.changePassword();
 
 		if(pm.hasErrors()) {
-			rc["response"]["errors"] = pm.getErrorContext();
+			//rc["response"]["errors"] = pm.getErrorContext();
+			handleServerError(rc, pm.getErrorContext());
 		} else {
 			rc["response"]["res"] = true;
 		}
 
+		renderResult(rc);
+	
+   }
+	/***********************************************
+		updateCommPref (POST)
+		My Profile update communication preferences
+		ajax :yes
+	**********************************************/
+	public void function updateCommPref(struct rc = {}) {
+		param name="rc.bcast" default="0";
+
+		// xtra bot protection
+		captchaProtect(rc);	
+
+		var cp = validateform(rc, 'updatecommpref');
+		cp.setPno(rc.userSession.pno);
+		cp.updateCommPref();
+
+		if(cp.hasErrors()) {
+			handleServerError(rc, cp.getErrorContext());
+		} else {
+			rc["response"]["res"] = true;
+		}
+		//writedump(var="end of updateCommpref",  abort="true");
 		renderResult(rc);
 	
    }

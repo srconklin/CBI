@@ -5,9 +5,9 @@
     margin-top: 1.5rem;
 } */
 /* my address */
-#nav {
+/* #nav {
     position: static;
-}
+} */
 .pac-icon {
     display: none;
 }
@@ -54,3 +54,14 @@
         gap: 0;
     }
 
+#myprofile  {
+    margin-left: .5rem; 
+    margin-top: 0.1rem; 
+}  
+
+#myprofile .email-status {
+    font-weight: bold;
+    column-gap: 10px;
+}
+
+ 

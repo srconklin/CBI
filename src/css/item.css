@@ -78,6 +78,7 @@ article.item {
     justify-content: center;
     /* flex-shrink: 0; */
     font-size: 14px;
+    margin-top: .5rem; 
 }
 
 .item .userprefs a {
@@ -88,7 +89,7 @@ article.item {
 }
 
 .item .userprefs div {
-    padding-top: 1rem;
+    /* padding-top: 1rem; */
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -101,9 +102,10 @@ article.item {
 }
 
 .item .userprefs svg {
-    width: 17px;
-    height: 17px;
+    /* width: 17px;
+    height: 17px; */
     margin-right: 6px;
+    /* margin-top: 1px; */
 }
 
 .item .offers {
@@ -154,6 +156,10 @@ article.item {
 
 .item .headline {
     font-size: 18px;
+}
+
+.favorite {
+    color: #fa0114 !important;
 }
 
 .item .footer {

@@ -1,36 +1,26 @@
-/* global instantsearch */
-// import instantsearch from 'instantsearch.js';
+/*************************************
+ * 
+ * 
+ * InstantSearch manages a state called uiState. It contains information like query, facets, or the current page, including the hierarchy of the added widgets.
+
+To persist this state in the URL, InstantSearch first converts the uiState into an object called routeState. This routeState then becomes a URL. Conversely, when InstantSearch reads the URL and applies it to the search, it converts routeState into uiState. This logic lives in two functions:
+
+stateToRoute: converts uiState to routeState.
+routeToState: converts routeState to uiState.
+ *
+ * refer to uiState docs for details: https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
+ */
 
 import {
 	history as historyRouter
   } from 'instantsearch.js/es/lib/routers';
  
- // import { simple as simpleMapping } from 'instantsearch.js/es/lib/stateMappings';
-
-// const encodedCategories = {
-// 	Cameras: 'Cameras & Camcorders',
-// 	Cars: 'Car Electronics & GPS',
-// 	Phones: 'Cell Phones',
-// 	TV: 'TV & Home Theater',
-//   };
-  
-//   const decodedCategories = Object.keys(encodedCategories).reduce((acc, key) => {
-// 	const newKey = encodedCategories[key];
-// 	const newValue = key;
-  
-// 	return {
-// 	  ...acc,
-// 	  [newKey]: newValue,
-// 	};
-//   }, {});
-  
   // Returns a slug from the category name.
   // Spaces are replaced by "+" to make
   // the URL easier to read and other
   // characters are encoded.
   function getCategorySlug(name) {
 	//const encodedName = decodedCategories[name] || name;
-  
 	return name
 	  .split(/\s/g)
 	  .map(encodeURIComponent)
@@ -51,6 +41,10 @@ import {
     
    const router = historyRouter({
 
+	/********************************************************
+		windowTitle: a method to map the routeState object 
+		returned from stateToRoute to the window title.
+	*******************************************************/
 	windowTitle(routeState) {
 
 	  const { category, query } = routeState;
@@ -63,13 +57,18 @@ import {
 	  return queryTitle;
 	},
   
+	/************************************************************************
+		createURL: a method called every time you need to create a URL. When:
+		You want to synchronize the routeState to the browser URL
+		You want to render a tags in the menu widget
+		You call createURL in one of your connectors’ rendering methods.
+	 *************************************************************************/
 	createURL({ qsModule, routeState, location }) {
 	  const urlParts = location.href.match(/^(.*?)\/search/);
 	  const baseUrl = `${urlParts ? urlParts[1] : ''}/`;
-	  	    
-	  const categoryPath = routeState.category
-		? `${getCategorySlug(routeState.category)}/`
-		: '';
+	  
+	  const categoryPath = routeState.category ? `${getCategorySlug(routeState.category)}/` : '';
+
 	  const queryParameters = {};
   
 	  if (routeState.query) {
@@ -87,9 +86,14 @@ import {
 		arrayFormat: 'repeat',
 	  });
   
+	  
 	  return `${baseUrl}search/${categoryPath}${queryString}`;
 	},
   
+    /************************************************************************
+		parseURL: a method called every time the user loads or reloads the page,
+		or clicks on the back or next buttons of the browser.
+	*************************************************************************/
 	parseURL({ qsModule, location }) {
 	  const pathnameMatches = location.pathname.match(/search\/(.*?)\/?$/);
 	  const category = getCategoryName(
@@ -111,34 +115,30 @@ import {
   
 //   
   const stateMapping = {
+
+	// stateToRoute: converts uiState to routeState.
+	// implement stateToRoute to flattem the uiState object into a URL
 	stateToRoute(uiState) {
 		
 	  const indexUiState = uiState['cbi'] || {};
 	  let widgets = {
 			query: indexUiState.query
 		}
+
 		if(document.getElementById('breadcrumb')) {
 			widgets= {...widgets, 
 				page: indexUiState.page,
 				mfrs: indexUiState.refinementList && indexUiState.refinementList.mfr,
 				category: indexUiState.hierarchicalMenu && indexUiState.hierarchicalMenu['categories.lvl0'].join('_'),}
 		}
-		return {
-			widgets
-		}
-	  // refer to uiState docs for details: https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
-	//   return {
-	// 	query: indexUiState.query,
-	// 	page: indexUiState.page,
-	// 	mfrs: indexUiState.refinementList && indexUiState.refinementList.mfr,
-	// 	// category: indexUiState.hierarchicalMenu && indexUiState.hierarchicalMenu.categories
-	// 	category: indexUiState.hierarchicalMenu && indexUiState.hierarchicalMenu['categories.lvl0'].join('_'),
-	//   };
+
+		return widgets;
 	},
   
+	// routeToState: converts routeState to uiState.
+	// restore the URL into a UI state to sync refinements
 	routeToState(routeState) {
-		// console.log('routeToState', routeState);
-	  // refer to uiState docs for details: https://www.algolia.com/doc/api-reference/widgets/ui-state/js/
+	    
 	  let widgets = { 
 		query: routeState.query
 	  }
@@ -147,26 +147,16 @@ import {
 		widgets = {
 			...widgets, 
 			page: routeState.page,
+
 			hierarchicalMenu: {
-			'categories.lvl0': routeState.category && routeState.category.split('_')
+				'categories.lvl0': routeState.category && routeState.category.split('_')
 			},
 			refinementList: {
-			mfr: routeState.mfrs,
+				mfr: routeState.mfrs,
 			}
 		}
 	  }
 	  return {
-		// eslint-disable-next-line camelcase
-		// cbi: {
-		//   query: routeState.query,
-		//   page: routeState.page,
-		//   hierarchicalMenu: {
-		// 	'categories.lvl0': routeState.category && routeState.category.split('_')
-		//   },
-		//   refinementList: {
-		// 	mfr: routeState.mfrs,
-		//   }
-		// }
 		cbi: widgets
 	  };
 	},

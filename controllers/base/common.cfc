@@ -12,33 +12,86 @@ component accessors=true {
      extends this base controller
 	*********************************************************************/
     function before( struct rc = {} ) {
+        
+        
         // basic response structure for controllers
         rc["vars"] = {};
 		rc["response"]["res"] = false;
 		rc["response"]["payload"] = {};
 		rc["response"]["errors"] = '';
-		
-        //CAPTCHA
-		// if post request AND form is captacha protected then validate
-		if(GetHttpRequestData().method eq 'post' 
-            and listfindnocase( config.getsetting('captchaProtect'), variables.fw.getFullyQualifiedAction() )) {
-			param name="rc['g-recaptcha-response']" default="";
-			if(not utils.validateCaptcha(rc['g-recaptcha-response'], rc.action)) {
-                // ajax form then we can just abort submission and show error via Js fetch callback.
-                // otherwise we catch the response.errors rc values and proceed in traditional form submissions
-                if (utils.isAjaxRequest()) {
-                    rc["response"]["errors"] = config.lookupStatus('captchaProtect');
-                    variables.fw.renderData().type( 'json' ).data( rc.response ).statusCode( 200 ).statusText( "Successful" );
-                    variables.fw.abortController();
-                } else {
-                    rc["response"]["errors"] = 'invalidCaptcha';
-                }
-			}
-          
-		}
+		//writedump(var="before with rc.action #rc.action#  (internally known as :  #variables.fw.getFullyQualifiedAction()# ) and method #GetHttpRequestData().method#",  abort="false");
+
+        if(!listfindnocase('main.error', variables.fw.getFullyQualifiedAction() )) {
+
+            /*******************
+            Security
+            *******************/
+            authorize(rc);
+
+            /*******************
+            CAPTCHA
+            *******************/
+            validateCaptcha(rc)
+        }
 
     }
 
+    /********************************************************
+     validateCaptcha
+	 all post requests validatecaptcha 
+     ********************************************************/
+     function validateCaptcha( struct rc = {} ) {
+        
+        // if post request AND form is captacha protected then validate
+		if(GetHttpRequestData().method eq 'post' ) {
+            // and listfindnocase( config.getsetting('captchaProtect'), variables.fw.getFullyQualifiedAction() )) {
+             param name="rc['g-recaptcha-response']" default="";
+             var route = '/' & getToken(variables.fw.getRoutePath(), 2, "/");
+             if(not utils.validateCaptcha(rc['g-recaptcha-response'], route)) {
+                 // ajax form then we can just abort submission and show error via Js fetch callback.
+                 // otherwise we catch the response.errors rc values and proceed in traditional form submissions
+                 if (utils.isAjaxRequest()) {
+                     rc["response"]["errors"] = config.lookupStatus('captchaProtect');
+                     renderResult(rc=rc,abort=true);
+                 } else {
+                     rc["response"]["errors"] = 'captchaProtect';
+                     
+                 }
+             }
+           
+         }
+
+     }
+
+    /********************************************************
+     authorize
+	 secrity checked for pages that require authentication
+     ********************************************************/
+     function authorize( struct rc = {} ) {
+		
+        var sl = config.getSetting("securelist");
+        
+		// check if resource is secured
+		if(structKeyExists(sl, variables.fw.getSection() ) && listfindnocase(sl[variables.fw.getSection()], variables.fw.getItem() )) {
+            // check to make sure the user is logged on and skip exempt pages
+            if (!rc.userSession.isloggedIn 
+                    && !listfindnocase( 'login', variables.fw.getSection() ) 
+                    && !listfindnocase( 'main.error', variables.fw.getFullyQualifiedAction() ) ) {
+
+                if (utils.isAjaxRequest()) {        
+                    rc["response"]["payload"]["redirect"] = '/login';
+                    renderResult(rc=rc,abort=true);
+                } else {
+                    rc.destination = variables.fw.getSection();	
+                    renderResult(rc, '/login', 'destination' ) ; 
+
+                }
+
+            }
+            
+        }
+		
+    }
     /*********************************************************************
 	 validateForm 
      standard method to validate a form submit using fw bean/populate
@@ -55,8 +108,7 @@ component accessors=true {
             // if ajax form submit is detected; then stop processing here and render data back to client.
             if (utils.isAjaxRequest()) {
                 rc["response"]["errors"] = thebean.getErrors();
-                variables.fw.renderData().type( 'json' ).data( rc.response ).statusCode( 200 ).statusText( "Successful" );
-                variables.fw.abortController();
+                 renderResult(rc=rc,abort=true);
             } else {
                 // slug only in errors so that it can be looked up from content to page in view or redirect
                 rc["response"]["errors"] = thebean.getStatus();
@@ -71,25 +123,22 @@ component accessors=true {
      can be an exact error message, a slug for a lookup or cf 
      exception
 	**************************************************************/
-	function handleServerError(required struct e) {
+	function handleServerError(struct rc = {}, required struct e) {
        
         /*
             e.error can be
-
                cleansed cf exception response
                are own harvested cf thrown message
                looked up message in messages struct
                for non-ajax cases it it not applicable but it should be 
                filled with next best choice from the content struct
         */
-      
-
         rc["response"]["errors"] = e.error;
 
         // cf thrown exception
         if(e.errortype eq "CFException" or !structIsEmpty(e.originalError)) {
             //email original exception
-            request.exception = e.orignalError;
+            request.exception = e.originalError;
             sendErrorEmail(rc);
         }
         // custom thrown exception
@@ -97,7 +146,6 @@ component accessors=true {
             // save message to show later
             session.dperror =  e.error;
         }
-
        
         // e.clearErrors
         /* status can be set to
@@ -109,35 +157,6 @@ component accessors=true {
         return e.status;
 
     }
-	// function handleServerError(struct e = {}) {
-    //     var result = '';
-
-    //     // cf exception object
-    //     if(e.errortype contains "Exception") {
-    //         rc["response"]["errors"] = e.error;
-    //        // rc["response"]["errors"] = e.errors.message;
-    //         // returns the errocode of the exception
-    //         result= e.status;
-    //         request.exception = e.errors;
-    //         sendErrorEmail(rc);
-        
-    //         // an actual message
-    //     } else if (e.errortype eq "message") {
-    //         rc["response"]["errors"] = e.error;
-    //         // returns actual error we found in the status messages struct
-    //         result= e.error;
-        
-    //         // slug to lookup a message    
-    //     } else {
-    //         rc["response"]["errors"] = e.status;
-    //         // return the slug for lookup in content later
-    //         result= e.status;
-    //     }
-
-    //     return result;
-
-    // }
-    
      /**********************************************************
 	 sendErrorEmail
      generic email handler for errors both explicity and implicity
@@ -167,19 +186,32 @@ component accessors=true {
 		}
 
 	}
+
+    function captchaProtect (struct rc= {}) {
+        	// captcha - extra protection against bots
+			if(rc.response.errors eq 'captchaProtect') { 
+				throw(message='sorry, we think you are not human', errorcode='not_human');
+			}	
+    }
     
     /**********************************************************
 	renderResult
     navigation renderer, either an ajax call so just renderdata 
     in place ot redirect to destiation 
 	*********************************************************/
-	function renderResult(struct rc = {}, string destination = '', string peristvars='') {
+	function renderResult(struct rc = {}, string destination = '', string peristvars='', boolean abort = false) {
 
+        
         if (len(arguments.destination) )
-            variables.fw.redirectCustomURL(arguments.destination, arguments.peristvars );
-        else
+            if(left(arguments.destination , 8) eq '//search') 
+                location(mid(arguments.destination,3, len(arguments.destination)), "false", "301"); 
+            else
+               variables.fw.redirectCustomURL(arguments.destination, arguments.peristvars );
+        else {
             variables.fw.renderData().type( 'json' ).data( rc.response ).statusCode( 200 ).statusText( "Successful" );
-    }
+            if (arguments.abort)
+                variables.fw.abortController();
 
-   
+        }
+    }
 }    

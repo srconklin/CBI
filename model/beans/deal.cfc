@@ -13,19 +13,42 @@ component accessors=true extends="model.beans.personal" {
     // private data
     variables.offerSent = false;
     
-    // business logic data
-    //set in legacy system 0=exisiting email; 1=found
+    /* 
+      business logic data:
+	
+		These variables CAN  be set in the legacy system:
+		pno  
+        newperson -  0=exisiting email; 1=found 
+        validated
+        regstat
+
+	
+    */
+    // 
     variables.newperson; 
-      
-    //set in legacy system;
+   
+    // the registration profile setting that is stored in the db of a user. 
     // 0=found in db but never logged in. inserted from a previous offer/inquiry, no passsord and should not be able to manage profile
-    // 1=found in db and user has properly registered; set a password and verified email ownership
+    // 1=found in db and user has properly registered; set a password and verified email ownership (in legacy system 1 means all fields entered)
+    // read bt proctrans when partially logging the user in
     variables.regstat; 
-    // CHANGED in legacy system (0 -> when user is not recognized)
-    // current logged in user status
-    // 0=not recoginized; 1=recognized so partially logged in; 2=fully logged in with complete profile
+
+    // validated is current status of the user making the offer/inquiry  (in memory variable that shows the follwoing status)
+    // 0=guest who has an account but is not logged in OR a new user we don't know about; the default
+    // 1=recognized so partially logged in;  (session.validate to 1 in proctrans)
+    // 2=fully logged in with complete profile
+    // note if the user came in with a 0 then it gets flipped to one; can be 2 from a login in which case it is it not affected by proctrans
     variables.validated;
+    
+    // the pno can be set from 0 to 1 if the user is recognized in the system based on the email.
     variables.pno;
+    
+    // if the user has a password set
+    variables.hasPassword = 0
+    
+    // if the user has verified their email
+    variables.verifyVerified = 0
+
     variables.vizPagetop;
 
     //dependencies
@@ -127,7 +150,7 @@ component accessors=true extends="model.beans.personal" {
     try{
         include "/cbilegacy/legacySiteSettings.cfm";
         include "/cbilegacy/proctrans.cfm";
-       
+        
     } catch (e) {
         setErrorState(e)
         
@@ -136,6 +159,7 @@ component accessors=true extends="model.beans.personal" {
   }
 
   private function setOfferer(user={}) {
+    
     variables.validated = user.validated;
     variables.pno = user.pno;
     variables.vizPagetop = user.vwrCoRelatNo;

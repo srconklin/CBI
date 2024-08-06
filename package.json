@@ -9,18 +9,20 @@
   "browserslist": "last 2 versions, not dead, > 0.2%",
   "devDependencies": {
     "@deanc/esbuild-plugin-postcss": "^1.0.2",
-    "esbuild": "^0.15.16",
+    "esbuild": "0.15.18",
     "glob": "^8.0.3"
   },
   "dependencies": {
     "@alpinejs/focus": "^3.10.5",
     "@googlemaps/js-api-loader": "^1.16.2",
+    "@popperjs/core": "^2.11.8",
     "algoliasearch": "^4.14.2",
     "alpinejs": "^3.10.5",
     "instantsearch.css": "^7.4.5",
     "instantsearch.js": "^4.49.1",
     "intl-tel-input": "^17.0.19",
     "modern-normalize": "^1.1.0",
-    "smoothscroll-polyfill": "^0.4.4"
+    "smoothscroll-polyfill": "^0.4.4",
+    "tippy.js": "^6.3.7"
   }
 }

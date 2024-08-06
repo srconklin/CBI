@@ -41,8 +41,8 @@ facet placeholders
 	/* width: 26vw; */
 	width: 90%;
 	/* when  search box is on same row as links and logo */
-	min-width: 250px;
-	max-width: 640px;
+	/* min-width: 250px; */
+	max-width: 800px;
     
 	box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
@@ -100,6 +100,8 @@ facet placeholders
 *********************/
   
 .breadcrumb {
+	margin-top: 1.0rem;
+	margin-bottom: .75rem;
 	/* padding: .5rem 2rem .5rem 2rem; */
 	/* background-color: #ffeb00; */
 	 /* background-color: #e5e7eb;  */
@@ -120,15 +122,23 @@ facet placeholders
   }
 
   .ais-Breadcrumb-link {
-	font-size: .9rem;  
-	text-decoration: underline !important;
+	font-size: 16px;  
+	font-weight: 400;
+	/* font-size: .9rem;   */
+	/* text-decoration: underline !important; */
   }
 
+  .ais-Breadcrumb-link:hover {
+	text-decoration: underline;
+  }
+
+
   .ais-Breadcrumb-item {
-	font-size: .9rem;
+	font-size: 16px;
 	/* display: inline; */
   }
 
+  
   .noCrumbs {
 	  display: none;
   }
@@ -378,12 +388,8 @@ facet placeholders
   .ais-SearchBox-input {
 	padding-left: .5rem;
 	padding-right: .5rem;
-	/* padding-top: 0.75rem;
-	padding-bottom: 0.75rem; */
-	/* padding-top: 0.35rem;
-	padding-bottom: 0.40rem;  */
-	padding-top: 0.4rem;
-    padding-bottom: 0.4rem;
+	padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
 	/* line-height: 1.25; */
 	color: rgba(55, 65, 81, 1.0);
   
@@ -480,3 +486,6 @@ facet placeholders
 
 }
   
+.ais-SearchBox-reset {
+    right: 2.0rem;
+}

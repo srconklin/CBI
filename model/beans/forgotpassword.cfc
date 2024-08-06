@@ -2,6 +2,7 @@ component accessors=true extends="model.beans.common" {
     //accessors
 	property email;
 	property resetToken;
+	property route;
     
     // private data
    
@@ -39,8 +40,9 @@ component accessors=true extends="model.beans.common" {
             setErrorState(result['errors']);
     }
 
-    function generateLink(){
+    function generateLink() {
         form.email = getEmail();
+        form.route = getRoute();
 
         try{
             include "/cbilegacy/legacySiteSettings.cfm";
@@ -57,19 +59,19 @@ component accessors=true extends="model.beans.common" {
 
         clearErrors();
 
+     
        var result = variables.utils.verifyToken(getResetToken(), 'password');
         if (!result.success) {
 
             setErrorState(result['error']);
             
              // rules to reset errorstate to something else than techie results
-            if (getOriginalStatus() eq 'linkExpired') {
+            if (getOriginalStatus() eq 'linkExpired') 
                 setErrorState(key='passwordLinkExpired', origStatus=getOriginalStatus());
-            // everything but alreadyverified is getting turned into a simple message 
+            // everything else getting turned into a simple message 
             // if we have a cfexception is it stored in originalerror 
-            } else if (getOriginalStatus() neq 'emailAlreadyVerified') {
+            else
                 setErrorState(key='passwordNotReset' , origStatus=getOriginalStatus());
-            }
             
             
         }

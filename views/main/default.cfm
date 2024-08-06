@@ -57,6 +57,8 @@
 </div>
 
 <cfoutput>
-  #view( 'common/fragment/item/QuickView')#
-  
+
+ #view('common/fragment/itemPreview')#
+ #view('/common/fragment/login')# 
+
 </cfoutput>

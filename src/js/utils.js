@@ -81,9 +81,14 @@ window.formatter = new Intl.NumberFormat('en-US', {
   
   window.fetchItemAsJSON = async (itemno)  => {
     const response = await fetch(`/data/${itemno}.json`, { method: 'GET' });
-    return await response.json();;
+    return await response.json();
   }
-
+  
+  window.buildItemURI = (itemno, title)  => {
+     const fullHost = window.location.protocol + '//' + window.location.host;
+     const sestext = title.toLowerCase().replace(/'/g, '').replace(/\s/g, '+')
+     return encodeURI(`${fullHost}/items/${itemno}/${sestext}`);
+  }
   window.getCaptchaToken = (route) => {
     // https://www.delftstack.com/howto/javascript/javascript-wait-for-function-to-finish/
     return new Promise((res, rej) => {
@@ -101,6 +106,13 @@ window.formatter = new Intl.NumberFormat('en-US', {
     });
   }
 
+  window.getUserFavs = async () => {
+    const response = await fetch("/getfavorites");
+    const data = await response.json();
+     return data.payload;
+  }
+
+
   window.submitForm = async (route, data) => {
     const response = await fetch( route, {
       headers: {
@@ -115,7 +127,6 @@ window.formatter = new Intl.NumberFormat('en-US', {
   window.submitCap = (frm, route) => {
         window.getCaptchaToken(route) 
           .then(token => { 
-            console.log(token);
             let theForm = document.forms[frm];
             let input = document.createElement('input');
             input.type = 'hidden';
@@ -124,7 +135,7 @@ window.formatter = new Intl.NumberFormat('en-US', {
             theForm.appendChild(input);
             theForm.submit();
           })
-          .catch(error =>  console.log(`Error recieved in getting captcha token/processing form ${error}`))
+          .catch(error =>  console.log(`Error received in getting captcha token/processing form ${error}`))
   }
 
   

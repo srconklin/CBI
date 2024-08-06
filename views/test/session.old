@@ -1,0 +1,8 @@
+component accessors=true {
+    property userService;
+
+    function create( rc ) {
+        variables.userService.defaultUserSession();
+    }
+   
+}

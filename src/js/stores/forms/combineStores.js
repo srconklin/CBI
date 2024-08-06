@@ -3,14 +3,17 @@ import Alpine from 'alpinejs';
 // combine 2nd level stores function
 const getStoreKeysFromFile = (store) => Object.keys(Alpine.store(store)).filter(key => key!='init');
 
-// dynamic stores
+// virtual stores
 Alpine.store('updatecontactinfo', {});
 Alpine.store('resetpassword', {});
+Alpine.store('updateCommPref', {'generalError' : ''});
 
 // The stores that need annotating 
-const stores = ['offer', 'inquiry', 'register', 'updatecontactinfo', 'changepassword','myaddress','resetpassword'];
+const stores = ['offer', 'inquiry', 'register', 'updatecontactinfo', 'changepassword','updateaddress','resetpassword','contact'];
 
-// every store gets the standard base functions
+/************************************************
+ every store gets the standard base functions
+************************************************/
 for(let i = 0; i< stores.length;i++) {
     const store = stores[i];
     Alpine.store(store)['generalError']  = '';
@@ -18,7 +21,10 @@ for(let i = 0; i< stores.length;i++) {
     Alpine.store(store)['toggleError']  = (name) => Alpine.store(store)[name].errorMessage.length>0 && Alpine.store(store)[name].blurred;
 }
 
-// forms that need the PERSONAL fields
+/*************************************
+  forms that need the PERSONAL fields
+*************************************/
+
 const personforms = ['offer', 'inquiry', 'register', 'updatecontactinfo'];
 // personal fields 
 const personalfields = ['firstName', 'lastName', 'email', 'coname', 'phone'];

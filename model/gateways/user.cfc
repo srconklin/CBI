@@ -8,6 +8,7 @@ component accessors=true {
 		return 'select distinct  p.pno, p.userID, p.email, p.firstname, p.lastname, p.coname, p.phone1, p.regstat,
 		ISNULL(PV.CoRelatNo, 0) as pvcorelatno,
 		ISNULL(Permits.CoRelatNo,0) as corelatno,
+		PV.bcast,
 		s.verifyVerified, s.verifyHash, isnull(s.verifyDateTime, ''1990-01-01'') as verifyDateTime,
 		s.pwdVerified, s.pwdHash, isnull(s.pwdDateTime, ''1990-01-01'') as pwdDateTime	
 		FROM people p 
@@ -74,6 +75,25 @@ component accessors=true {
       
     }
 
+	function getUserFavorites( required numeric pno) {
+            
+        var params = {
+            pno: arguments.pno
+        };
+            
+        var sql = ' select Itemno FROM userfavorites where pno = :pno; '
+
+        var arUser = queryExecute( sql, params,  { returntype="array" });
+
+		
+		// trurn a std lucee query of array object into a plain array of itemnos
+		items = arrayMap( arUser, function(ele){
+			return ele.itemno;
+		 });
+        
+        return items;
+      
+    }
     function getContactInfo(required numeric pno) {
 		var user ='';
 		
@@ -119,6 +139,32 @@ component accessors=true {
 				
 	}
 
+	function markUserFullyValidated(required string email ) {
+		var result = {};
+    	result['success']=true;
+		result['errors']='';
+
+		
+		var params = {
+			email: arguments.email
+		};
+
+		var sql = 'SET nocount on;
+					UPDATE people set regstat=1 
+					WHERE email = :email;'
+			
+			try {
+				var qry = queryExecute( sql, params);
+				
+			}  catch (e) {
+				result['success']=false;
+				result['errors']=e;
+			}
+
+			return result;
+				
+	}
+
 	function markEmailVerified(required string email ) {
 		var result = {};
     	result['success']=true;
@@ -131,7 +177,7 @@ component accessors=true {
 
 		var sql = 'SET nocount on;
 					UPDATE securityHashes set verifyVerified=1, verifyHash=null, 
-					verifyGUID=null, verifyDateTime=null  WHERE email = :email;'
+					verifyGUID=null, verifyDateTime=getDate()  WHERE email = :email;'
 			
 			try {
 				var qry = queryExecute( sql, params);
@@ -161,6 +207,31 @@ component accessors=true {
 		
 				var sql = 'SET nocount on;
 						   UPDATE people SET password= :password WHERE email = :email;'
+			
+						   
+				var qry = queryExecute( sql, params);
+				
+			}  catch (e) {
+				result['success']=false;
+				result['errors']=e;
+			}
+
+			return result;
+	}
+	function updateCommPref(required number pno, required binary bcastSetting ) {
+		var result = {};
+    	result['success']=true;
+		result['errors']='';
+		
+			try {
+
+				var params = {
+					pno : {value=arguments.pno, cfsqltype="integer"},
+					bcast : {value=arguments.bcastSetting, cfsqltype="bit"},
+				};
+		
+				var sql = 'SET nocount on;
+						   UPDATE permits SET bcast= :bcast WHERE pno = :pno and vtid = #config.getSetting('VTID')#	;'
 			
 						   
 				var qry = queryExecute( sql, params);

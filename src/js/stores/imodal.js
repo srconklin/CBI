@@ -18,7 +18,8 @@ Alpine.store('imodal', {
         try {
                 fetchItemAsJSON(itemno).then(data => {
                 this.content = data;
-                this.content.itemses = data.pagetitle.toLowerCase().replace(/\s/g, '+');
+                //this.content.itemses = data.pagetitle.toLowerCase().replace(/\s/g, '+');
+                this.content.URI =  window.buildItemURI(this.content.itemno, data.pagetitle) 
                 this.modal = true;
                 //document.getElementById('priceStated').focus();
             });
@@ -27,4 +28,5 @@ Alpine.store('imodal', {
             console.log(error);
         }
     }
+    
 });

@@ -1,10 +1,11 @@
+<cfparam name="local.concise" default="false" >
 
 <cfoutput>
-
+	
 	<!--- <div class="register"> --->
 					
 		<!-- flex centering -->
-		<div class="center-w-flex mt-8">
+		<div class="center-w-flex  <cfif not local.concise> mt-8 </cfif>">
 
 		<cfif structKeyExists(rc, 'showregister')>
 
@@ -12,13 +13,13 @@
 				create an account 
 			------------------------->
 			<!--- id="register-account" --->
-			<div class="panel box-shadow2" style="max-width:1024px;">
+			<div class="panel <cfif not local.concise>box-shadow2</cfif>" style="max-width:1024px;">
 						
-				<div class="page-title">
+				<div class="operation-title text-center">
 					<h1>Create an Account</h1>
 				</div>
 						
-				<p class="mb-8">
+				<p class="mb-8 text-center">
 				Signing up for an account is free, quick and easy. Members can more quickly submit offers and inquiries.
 				</p>
 				
@@ -35,12 +36,12 @@
 														
 								<div class="flex flex-direction-column" style="gap: 3em;">
 									<div class="flex-child" >
-										<cfoutput>#view( 'common/fragment/item/personal', {store='register'})#</cfoutput>
+										<cfoutput>#view( 'common/fragment/personal', {store='register'})#</cfoutput>
 									</div>	
 									
 									<!--- personal fields --->
 									<div class="flex-child" >
-										<cfoutput>#view( 'common/fragment/item/pwd', {label = 'Password', store='register'})# </cfoutput>
+										<cfoutput>#view( 'common/fragment/pwd', {label = 'Password', store='register'})# </cfoutput>
 
 										<div class="form-row checkbox-container">
 											<label for="bcast" >
@@ -114,7 +115,7 @@
 									</button>
 								</div>
 
-								<div class="form-row" style="text-align: center;">
+								<div class="form-row text-center">
 									Already have an account?<div><a href="/login" class="redlink">Log In</a> here</div>
 								</div>
 
@@ -130,26 +131,31 @@
 				----------------->
 				<!--- id="register-login" --->
 
-				<div class="panel box-shadow2" style="max-width:375px;">
-						
-						<div class="page-title">
-							<h1>Log In</h1>
+				<div  <cfif not local.concise>class="panel box-shadow2" </cfif> style="width:100%; max-width: 375px;"
+					x-data="{title: 'Log In'}" 
+					@show-login.window="title=$event.detail.title;open=true"
+					x-id="['title']"
+					:aria-labelledby="$id('title') " 
+					>
+						<div class="operation-title text-center" >
+							<h1 :id="$id('title')" x-text="title"></h1>
 						</div>
 						
 						<cfif structKeyExists(rc, 'message')>
-							#view( 'common/fragment/errorbox', { messages =  rc.message } )#
+							#view( 'common/fragment/errorbox', { message =  rc.message } )#
 						</cfif>
-						
-						
-						<p class="mb-8">
-						if you have an account, log in with your username/email address
+												
+						<p class="mb-8 text-center">
+						Log in with your username/email address
 						</p>
 
 						<div>
-						
 							<form 
+								id="frmlogin"
+								name="frmlogin"
 								action="/login" 
-								method="post">
+								method="post"
+								onsubmit="submitCap('frmlogin', '/login'); return false;">
 
 								<div class="form-row">
 									<input 
@@ -185,12 +191,14 @@
 										Log In
 									</button>
 									<cfif structKeyExists(rc, 'destination')>
-										<input type="hidden" value="#rc.destination#" name="destination" />
+										<input id="destination" type="hidden" value="#rc.destination#" name="destination" />
+									<cfelse>
+										<input id="destination" type="hidden" name="destination" />	
 									</cfif>
 							
 								</div>
 
-							<div class="form-row"  style="text-align: center;">
+							<div class="form-row text-center">
 								<a href="/forgotpassword" class="redlink">Forgot Password?</a>
 								<div>
 									Don't have an account? <a href="/register" class="redlink">Register</a> here

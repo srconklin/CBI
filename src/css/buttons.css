@@ -22,6 +22,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
   }
 
   
@@ -33,6 +34,7 @@
     padding-left: 3rem;
     padding-right: 3rem;
   }
+
   /* small button */
   .btn-small {
     display: flex;
@@ -62,6 +64,13 @@
     color: white;
     background-color: #fa0114;
     border-color: #fa0114;
+  
+  }
+
+  .btn-white {
+    color: #4B5563; ;
+    background-color: #ffffff;
+    border-color: #ffffff;
   
   }
   

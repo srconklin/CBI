@@ -1,5 +1,30 @@
 <div id="myprofile">
 <div class="container">
+    <h2>My Profile</h2>
+    <cfoutput>
+        <div class="email-status flex align-center">
+            <p>#rc.userSession.email#</p>
+            
+            <cfif rc.userSession.isEmailVerified>
+                <span style="color:##2f855a;">EMAIL VERIFIED</span>
+                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"  style="color:##2f855a; width:1.5rem; height: 1.5rem;">
+                    <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+                </svg>
+
+            <cfelse>
+                <div class="error">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="color:##b91c1c;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        <title>Email not Verified</title>
+                      </svg>
+                    Your email is not verified!&nbsp;<a href="/resendlink">send/resend</a>&nbsp;an email to verify your account now.
+
+            </cfif>
+        </div>
+
+    </cfoutput>
+
+    <cfif (rc.userSession.validated eq 2)>
 	<div class="panel box-shadow2 mt-8">
 
 		<div class="verttabs" x-data>
@@ -38,7 +63,7 @@
                             $store.updatecontactinfo.phone.value = '#rc.user.phone1#';
                         " 
                         @submit.prevent="$store.forms.submit('updatecontactinfo')">
-						#view( 'common/fragment/item/personal', {store='updatecontactinfo',mode='edit'})#
+						#view( 'common/fragment/personal', {store='updatecontactinfo',mode='edit'})#
 						</cfoutput>
 						
 						<div
@@ -109,7 +134,7 @@
 										<!--- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"  --->
 										<!--- style="min-width: 350px;"  --->
 										data-msg='["valueMissing:Please enter a new password"]'
-										autocomplete="new-password"
+										autocomplete="off"
 										<!--- alpine --->
 										:class="{'invalid':$store.changepassword.toggleError('pwdcurrent')}"  
 										@blur="$store.changepassword.validate($event)" 
@@ -123,7 +148,7 @@
 											x-text="$store.changepassword.pwdcurrent.errorMessage" >
 										</p>
 							</div> 
-                            #view( 'common/fragment/item/pwd', {label = 'New Password', store='changepassword'})#
+                            #view( 'common/fragment/pwd', {label = 'New Password', store='changepassword'})#
 						</cfoutput>
 						
 						<div
@@ -165,17 +190,17 @@
                         <!--- <div class="center-w-flex mt-8">
                         <div style="max-width:1024px;width:100%"> --->
                                 <form 
-                                id="myaddressfrm"
-                                action="/myaddress" 
+                                id="updateaddressfrm"
+                                action="/updateaddress" 
                                 method="post" 
                                 autocomplete="off"
                                 x-data 
                                 x-init="
-                                $store.myaddress.address1.value = '#rc.myaddress.street1#';
-                                $store.myaddress.address2.value = '#rc.myaddress.street2#';
-                                $store.myaddress.postalcode.value = '#rc.myaddress.postalcode#';
+                                $store.updateaddress.address1.value = '#rc.myaddress.street1#';
+                                $store.updateaddress.address2.value = '#rc.myaddress.street2#';
+                                $store.updateaddress.postalcode.value = '#rc.myaddress.postalcode#';
                                 " 
-                                @submit.prevent="$store.forms.submit('myaddress')">
+                                @submit.prevent="$store.forms.submit('updateaddress')">
 
                                                               
                                 <div class="flex flex-direction-column">
@@ -200,16 +225,16 @@
                                                     oninput="this.value=stripInvalidChars(this.value, 'ad');" 
                                                     
                                                     <!--- alpine --->
-                                                    :class="{'invalid':$store.myaddress.toggleError('address1')}"  
-                                                    x-model="$store.myaddress.address1.value" 
-                                                    @blur="$store.myaddress.validate($event)" 
-                                                    @focus="$store.myaddress.generalError=''"
+                                                    :class="{'invalid':$store.updateaddress.toggleError('address1')}"  
+                                                    x-model="$store.updateaddress.address1.value" 
+                                                    @blur="$store.updateaddress.validate($event)" 
+                                                    @focus="$store.updateaddress.generalError=''"
                                                 >
                                                <p 
                                                     class="helper error-message" 
                                                     x-cloak 
-                                                    x-show="$store.myaddress.toggleError('address1')" 
-                                                    x-text="$store.myaddress.address1.errorMessage" >
+                                                    x-show="$store.updateaddress.toggleError('address1')" 
+                                                    x-text="$store.updateaddress.address1.errorMessage" >
                                                </p>    
                                             </div>	
                                             <div class="form-row">
@@ -226,16 +251,16 @@
                                                     oninput="this.value=stripInvalidChars(this.value, 'ad');"
                                                     
                                                     <!--- alpine --->
-                                                    :class="{'invalid':$store.myaddress.toggleError('address2')}"  
-                                                    x-model="$store.myaddress.address2.value" 
-                                                    @blur="$store.myaddress.validate($event)" 
-                                                    @focus="$store.myaddress.generalError=''"
+                                                    :class="{'invalid':$store.updateaddress.toggleError('address2')}"  
+                                                    x-model="$store.updateaddress.address2.value" 
+                                                    @blur="$store.updateaddress.validate($event)" 
+                                                    @focus="$store.updateaddress.generalError=''"
                                                 />
                                                 <p 
                                                     class="helper error-message" 
                                                     x-cloak 
-                                                    x-show="$store.myaddress.toggleError('address2')" 
-                                                    x-text="$store.myaddress.address2.errorMessage" >
+                                                    x-show="$store.updateaddress.toggleError('address2')" 
+                                                    x-text="$store.updateaddress.address2.errorMessage" >
                                                 </p>    
                                                         
                                             </div>	
@@ -260,17 +285,17 @@
                                                     style="max-width:117px;"
                                                 
                                                     <!--- alpine --->
-                                                    :class="{'invalid':$store.myaddress.toggleError('postalcode')}"  
-                                                    x-model="$store.myaddress.postalcode.value" 
-                                                    @blur="$store.myaddress.validate($event)" 
-                                                    @focus="$store.myaddress.generalError=''"
+                                                    :class="{'invalid':$store.updateaddress.toggleError('postalcode')}"  
+                                                    x-model="$store.updateaddress.postalcode.value" 
+                                                    @blur="$store.updateaddress.validate($event)" 
+                                                    @focus="$store.updateaddress.generalError=''"
                                                  
                                                 >
                                                 <p 
                                                     class="helper error-message" 
                                                     x-cloak 
-                                                    x-show="$store.myaddress.toggleError('postalcode')" 
-                                                    x-text="$store.myaddress.postalcode.errorMessage" >
+                                                    x-show="$store.updateaddress.toggleError('postalcode')" 
+                                                    x-text="$store.updateaddress.postalcode.errorMessage" >
                                                  </p>    
                                             </div>	
                                           
@@ -325,10 +350,10 @@
                                         id="generalError"
                                         class="form-row" 
                                         x-cloak 
-                                        x-show="$store.myaddress.generalError">
+                                        x-show="$store.updateaddress.generalError">
                                             <p 
                                                 class="helper error-message" 
-                                                x-html="$store.myaddress.generalError">
+                                                x-html="$store.updateaddress.generalError">
                                             </p>
                                         </div> 
 
@@ -380,28 +405,60 @@
                     </cfoutput>
 				</div>
 				<div class="fadein" x-show="$store.tabs.openTab === 4">
-					<div class="shipping">
-						<h2>Shipping & Handling</h2>
-						<p>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-						</p>
-						
-					</div>
-					<div class="payment">
-						<h2>Payment</h2>
-						<p>
-							Minimum order of $50 required.
-							We offer terms of net 30 days to all companies that have established credit with Capovani Brothers Inc. and have paid within terms.
-							All federal, state, local governments and their agencies, as well as institutions of higher learning automatically receive terms.
-							All other sales, including foreign sales, are prepayment only.
-							MasterCard, VISA, Discover and AMEX are accepted at sellers discretion.
+						<h2 class="mb-8">Communication Preferences</h2>
+						<form 
+						id="updateCommPreffrm"
+						action="/updateCommPref" 
+						method="post" 
+						x-data 
+                        @submit.prevent="$store.forms.submit('updateCommPref')">
+                       
+                        <div
+                            id="generalError"
+                            class="form-row" 
+                            x-cloak 
+                            x-show="$store.updateCommPref.generalError">
+                                <p 
+                                    class="helper error-message" 
+                                    x-html="$store.updateCommPref.generalError">
+                                </p>
+                        </div> 
 
-						</p>
-
-				</div>
+                        <div class="form-row checkbox-container">
+                            <label for="bcast">
+                                <input 
+                                    id="bcast"
+                                    name="bcast"
+                                    type="checkbox" 
+                                    class="checkbox" 
+                                    value="1" 
+                                    <cfif rc.user.bcast eq 1>checked</cfif>
+                                    title="allow us to send you occasional email offers" 
+                                    >
+                                <span>Send me occasional email offers about new listings and featured items.
+                            </label>
+                        </div>	
+                        <button 
+                        id="updatecommprefs"
+                        name="updatecommprefs"
+                        type="submit" 
+                        class="btn btn-red" 
+                        title="Save Changes"
+                        <!--- alpine --->
+                        :class="{'submitting' :$store.forms.submitting}" 
+                        :disabled="$store.forms.submitting"
+                        >
+                        <svg x-show="$store.forms.submitting" class="animate-spin processing"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle style="opacity: .25"  cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path style="opacity: .75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>Save Changes
+                     </button>
+                    
+                    </form>
 			</div>
 		</div>
 	</div>
+    </cfif>
 </div>
 </div>
 
@@ -420,7 +477,7 @@
       // Add other bootstrap parameters as needed, using camel case.
     });
   </script> --->
- <script  src="/dist/aac-GESJCR6K.js" type="module"></script>
+ <script  src="/dist/aac-OZNIJNGD.js" type="module"></script>
 
  <cfif len(rc.myaddress.LocGID)>
 

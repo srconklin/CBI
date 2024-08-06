@@ -2,6 +2,7 @@ component accessors=true extends="controllers.base.common" {
 
 	property fw;
     property userService;
+    property config;
 
     function before( rc ) {
         if (rc.userSession.isloggedIn &&  variables.fw.getItem() != "logout" ) {
@@ -39,21 +40,22 @@ component accessors=true extends="controllers.base.common" {
         
         // captcha
 		if(len(rc.response.errors)) { 
-			rc.fpstatus = rc.response.errors;	
+			rc.message = config.lookupStatus('captchaProtect');	
 		} else {
 			
             //validate form by loading into bean
             var user = validateform(rc, 'userbean');
             
             // bean validation errors
-            if(len(rc.response.errors)) 
-                rc.message = rc.response.errors;
+            if(user.hasErrors()) 
+                rc.message = user.getErrors();
+           // if(len(rc.response.errors)) 
+              //  rc.message = rc.response.errors;
             
-            // instead of using a service layer, add business logic to domain object to make the rich (non-anemic)
-            // check if user is real - > makes an odbc call authenticate user
-            else if(!user.isUserValid()) 
-                rc.message = [user.getErrors()];
-
+            // check if user credentails are valid and attempt to login them
+            else if(!user.attemptLogin()) 
+                rc.message = user.getErrors();
+            // log user in
             else {
                 // set up user session
                 variables.userService.setUserSession(user.getUserData());

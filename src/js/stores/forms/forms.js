@@ -1,6 +1,5 @@
 
 import Alpine from 'alpinejs';
-import '../../utils';
 
 //--------------------
 //FORMS
@@ -99,7 +98,7 @@ validateForm() {
     for(let i = 0; i<arEles.length;i++){
         let key = arEles[i]
         // the blur property is an indication that the field is to be validated
-        if (this.fobj[key].hasOwnProperty('blurred')) {
+        if (this.fobj[key].hasOwnProperty('blurred') && document.getElementsByName(key).length) {
             // get a handle to the dom element
             const el = document.getElementsByName(key);
             
@@ -144,19 +143,18 @@ submit(frm) {
  },
 
  handleFormSubmitResponse(resobj) {
-     
         /*******************************
          *  server side errors   
         *********************************/
         if (!resobj.res) {
-
+          
             // an error that we don't report to same data input screen but rather redirect to a new route  
             if (resobj.payload.redirect)
-            location.href = resobj.payload.redirect;
+             location.href = resobj.payload.redirect;
     
         // error is a string from backend then form must have a general error div
         if( typeof resobj.errors === 'string' ) {
-            this.fobj.generalError =`OOPS! a systems error has occurred: ${resobj.errors}`;
+            this.fobj.generalError =`${resobj.errors}`;
             // this.fobj.generalError = resobj.errors;
         // bean errors in the form of object with key values    
         } else {
@@ -175,8 +173,9 @@ submit(frm) {
         sessionStorage.setItem(this.form, true);
     
             if (Object.keys(resobj.payload).length > 0) {
-        
-                sessionStorage.setItem('firstName', resobj.payload.firstName);
+                
+                if (resobj.payload.firstName)
+                   sessionStorage.setItem('firstName', resobj.payload.firstName);
         
                 // push message into session storage if we have one
                 if (resobj.payload.message)

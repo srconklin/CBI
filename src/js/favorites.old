@@ -1,0 +1,33 @@
+export default (itemno=0, favorite =false) => ({
+    favorite: favorite,
+    itemno : itemno,
+    
+    init () {
+        console.log('favorite component initialized');
+    },
+
+    toggle: {
+        ['@click.prevent']() {
+            this.favorite = !this.favorite;
+
+            let formData = new FormData();
+            formData.append('itemno', this.itemno);
+            formData.append('isFavorite', this.favorite);
+     
+             // get a capatcha token 
+             window.getCaptchaToken('/togglefavorite')
+             // append token to form object
+             .then(token => formData.append('g-recaptcha-response', token))
+             // post to backened
+             .then(() => window.submitForm('/togglefavorite', formData).then(resObj => console.log(resObj)));
+            
+            
+        },
+    },
+
+    get isFavorite() { return this.favorite },
+
+    destroy() {
+        console.log('favorite component destroyed');
+    }
+})

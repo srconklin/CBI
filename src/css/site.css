@@ -7,8 +7,10 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
-  color: #595e61;
+  /* color: #595e61; */
+  color: rgb(76 83 115);
   overflow-y: auto;
+  font-family: BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 }
 
 
@@ -17,6 +19,16 @@ button:focus-visible,
 ul:focus-visible {
   outline: 2px solid #fa0114;
   /* outline-offset: 2px; */
+}
+
+svg {
+  width: 1.2rem;
+  height: 1.2rem;
+    /* tag is inline-block element, setting line-height:0; to parent element will fix it.  
+    Inline boxes inherit inheritable properties such as font-size, line-height etc from their block parent element, and creates space/margin. 
+    OR just make them block
+    */
+  display: block;
 }
 
 svg:focus-visible {
@@ -73,11 +85,15 @@ textarea:focus {
   align-items: center;
 }
 
+.align-self {
+  align-self: flex-start;
+}
+
 .flex-direction-column {
   flex-direction: column;
 }
 
- .center-w-flex {
+.center-w-flex {
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -97,23 +113,48 @@ textarea:focus {
   display: block !important;
 }
 
+
 .hidden {
   display: none;
 }
 
-/* margin */
-.mb-2 {
-  margin-bottom: .5rem;
+.horizontal-divider {
+  width: 100%;
+  display: block;
+  margin: 1rem 0;
+  border-top: 1px solid #d5d8df;
 }
+
+/* margin */
+
+.mx-auto {
+  margin: 0 auto;
+}
+
+.mt-2 {
+  margin-top: .5rem;
+}
+
 .mt-6 {
   margin-top: 1.5rem;
 }
-.mb-6 {
-  margin-bottom: 1.5rem;
-}
+
 .mt-8 {
   margin-top: 2.0rem;
 }
+
+.mb-2 {
+  margin-bottom: .5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1.0rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
 .mb-8 {
   margin-bottom: 2.0rem;
 }
@@ -244,6 +285,25 @@ hr {
   margin-left: .2rem;
 }
 
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.text-muted {
+  color: #888;
+}
+
+.text-center {
+ text-align: center;
+}
+.text-italic {
+  font-style: italic;
+}
 /**********************
  error/success boxes
 *********************/
@@ -270,7 +330,7 @@ hr {
   color: #dc3545;
 }
 
-.error-message a {
+.error a, .error-message a {
   color: #777;
   text-decoration: underline;
 }
@@ -349,7 +409,7 @@ hr {
 .instruction {
   margin-top: 1rem;
   margin-bottom: 1rem;
-  max-width: 600px;
+  max-width: 850px;
 }
 
 .lead-title {
@@ -358,11 +418,9 @@ hr {
 }
 
 .icon-title {
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
 }
-
-/* buttons was here  */
 
 .processing {
   transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
@@ -376,11 +434,11 @@ hr {
 /***********
  scrollbar
  ***********/
-
+/* 
 * {
   scrollbar-width: thin;
   scrollbar-color: #f1f1f1 orange;
-}
+} */
 
 /* Let's get this party started */
 ::-webkit-scrollbar {
@@ -500,26 +558,28 @@ hr {
   align-items: center;
   margin-bottom: 1.0rem;
 
-
 }
 
 /* page title header */
 
-.page-title {
-  text-align: left;
+.operation-title {
   margin-bottom: 1.5rem;
-  /* text-align: center; */
   font-weight: 700;
   font-size: 1.5rem;
 }
 
-.page-title h1 {
+
+/********************
+ general page tools 
+ ****************/ 
+
+ .operation-title h1 {
   position: relative;
   font-size: 26px;
   display: inline-block;
 }
 
-.page-title h1:before {
+.operation-title h1:before {
   content: " ";
   margin: 0 auto;
   position: absolute;
@@ -535,9 +595,72 @@ hr {
 /* a generic panel */
 
 .panel {
-  /* display: flex;
-  flex-direction: column; */
   border-radius: 0.25rem;
   background-color: rgba(255, 255, 255, 1.0);
   padding: 1.5rem;
 }
+.general-page p {
+  margin-bottom: 1.50rem;
+}
+
+.general-page .content {
+  line-height: 1.65;
+  text-align: center;
+  padding: 1rem 2rem;
+  display: block;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  position: relative;
+}
+
+/* about page layout */ 
+.about-header {
+  background: url(/images/automation-banner-2.jpg) center/cover no-repeat;
+  background-color: #fff;
+  margin-bottom: 3rem;
+  position: relative;
+  background-position: 69% 3%;
+  min-height: 220px;
+}
+
+.about-header .content {
+  color: white;
+}
+
+.about-header .cover {
+  position: absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  background-color: #000;
+  opacity: .5;
+} 
+
+/* Privacy page layout */ 
+.privacy-header {
+  background-color: #e7ebed;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+/* terms page layout */ 
+.terms-header {
+  background-color: transparent;
+  /* margin-bottom: 3rem; */
+  position: relative;
+}
+
+/* contact us  */
+.open-schedule {
+  display:grid; grid-template-columns:  111px 150px;
+}
+
+
+/* testing */
+/* background: #fffbc2;
+background: linear-gradient(to right,#f7f1a4,#f5e947);
+background: linear-gradient(to right,#fffbc2,#f5e947); 
+background: linear-gradient(to right, #f9d4d4, #b3c6f9);
+*/

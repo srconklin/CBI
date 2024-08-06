@@ -34,11 +34,11 @@ const options =  {
 const init  = () => {
     searchgeo.value= '';
     geoError.style.display = 'none';
-    lp.style.display = 'none';
-    for (let key in eles) {
-            eles[key]['txt'].innerHTML = '';
-            eles[key]['gid'].value = '';
-    }     
+    // lp.style.display = 'none';
+    // for (let key in eles) {
+    //         eles[key]['txt'].innerHTML = '';
+    //         eles[key]['gid'].value = '';
+    // }     
 }
 
 const onGeoFocused = () =>  init();
@@ -53,38 +53,65 @@ const onPlaceChanged = () => {
     let formData = new FormData();
         formData.append('placesResponse', JSON.stringify(place));
 
-    fetch('/locationlookup', {
-            headers: {
-                'X-Requested-With' : 'XMLHttpRequest'
-            },
-            method: 'POST',
-            body:  formData
-        })
-        .then(response => response.json())
-        .then(resObj => {
-            /*********************************
-            *  server side error  
-            *********************************/
-            if (!resObj.res) {
-                geoError.querySelector("p").innerHTML = resObj.errors;
-                geoError.style.display = 'block';
+    // get a capatcha token 
+    window.getCaptchaToken('/locationlookup')
+    // append token to form object
+    .then(token => formData.append('g-recaptcha-response', token))
+    // js fetch
+    .then(() => window.submitForm('/locationlookup', formData).then(resObj => handleFormSubmitResponse(resObj)))
+
+    // fetch('/locationlookup', {
+    //         headers: {
+    //             'X-Requested-With' : 'XMLHttpRequest'
+    //         },
+    //         method: 'POST',
+    //         body:  formData
+    //     })
+    //     .then(response => response.json())
+    //     .then(resObj => {
+    //         /*********************************
+    //         *  server side error  
+    //         *********************************/
+    //         if (!resObj.res) {
+    //             geoError.querySelector("p").innerHTML = resObj.errors;
+    //             geoError.style.display = 'block';
             
-            }
-            /*********************************
-            *  success no validation errors    
-            *********************************/
-            else {
-                    for (const geolvl of resObj.geoChain) {
-                        eles[geolvl.TYPE]['txt'].innerHTML = geolvl.LNM;
-                        eles[geolvl.TYPE]['gid'].value = geolvl.GID;
-                    }
-                    lp.style.display = 'block';
-            }
+    //         }
+    //         /*********************************
+    //         *  success no validation errors    
+    //         *********************************/
+    //         else {
+    //                 for (const geolvl of resObj.geoChain) {
+    //                     eles[geolvl.TYPE]['txt'].innerHTML = geolvl.LNM;
+    //                     eles[geolvl.TYPE]['gid'].value = geolvl.GID;
+    //                 }
+    //                 lp.style.display = 'block';
+    //         }
             
-        });
+    //     });
             
 }
 
+const handleFormSubmitResponse = (resObj) => {
+     /*********************************
+            *  server side error  
+     *********************************/
+     if (!resObj.res) {
+        geoError.querySelector("p").innerHTML = resObj.errors;
+        geoError.style.display = 'block';
+    
+    }
+    /*********************************
+    *  success no validation errors    
+    *********************************/
+    else {
+            for (const geolvl of resObj.geoChain) {
+                eles[geolvl.TYPE]['txt'].innerHTML = geolvl.LNM;
+                eles[geolvl.TYPE]['gid'].value = geolvl.GID;
+            }
+            lp.style.display = 'block';
+    }
+}
 const observer = new MutationObserver(function (mutationsList, observer) {
     for (const mutation of mutationsList) {
         if (mutation.attributeName == 'autocomplete' && mutation.target.getAttribute('autocomplete') == 'off') {
@@ -101,7 +128,6 @@ observer.observe(searchgeo, { attributes: true });
 loader
 .importLibrary('places')
 .then(({Map}) => {
-    console.log('places loaded')
     autocomplete = new google.maps.places.Autocomplete(searchgeo, options);
     autocomplete.addListener('place_changed', onPlaceChanged);
     searchgeo.addEventListener('focus', onGeoFocused);

@@ -20,8 +20,11 @@
 
 
 .header-container {
+    display: flex;
+	justify-content: space-between;
+	align-items: center;
     margin-top: .4rem;
-    margin-bottom: 1.0rem;
+    margin-bottom: .6rem; 
 
 }
 
@@ -35,8 +38,8 @@
 .header-logo {
     display: flex;
     justify-content: center;
-    flex-direction: row; 
-    align-items: flex-end; 
+    flex-direction: column; 
+    align-items: flex-start; 
 
     /* keep text next to logo */
     /* flex-direction: row; */
@@ -57,13 +60,17 @@
 }
 
 .header-logo img {
-    max-width: 4rem;
+    max-width: 3rem;
 }
 
 .header-nav {
     display: block;
 }
 
+.header-nav svg {
+    width: 2.0rem;
+    height: 2.0rem;
+}
 .header-nav button {
     color: white;
     display: block;
@@ -109,6 +116,7 @@
     padding-right: .5rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
+    /* font-size: 16px; */
     font-size: 1.125rem;
     line-height: 1.75rem;
     font-weight: 500;
@@ -179,9 +187,10 @@
 }
 
 .header-user .entry svg {
-    width: 1.0rem;
+    /* width: 1.0rem; */
     /* margin-top: 0.2rem; */
     margin-right: 0.50rem;
+    flex-shrink: 0;
     /* height: 1.0rem; */
 }
 

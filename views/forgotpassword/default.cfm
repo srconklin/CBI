@@ -15,7 +15,7 @@
                   <!--- class="flex justify-center align-center flex-direction-column"  --->
                   action="/forgotpassword" 
                   method="post" 
-                  onsubmit="submitCap('frmForgotPassword', '/myprofile'); return false;"
+                  onsubmit="submitCap('frmForgotPassword', '/forgotpassword'); return false;"
                   >
                   <div class="form-row">
                       <input 
@@ -23,7 +23,7 @@
                           name="email"
                           class="form-control" 
                           type="email"
-                          placeholder="email@email.com"
+                          placeholder="example@email.com"
                           title="enter the email associated with the account"
                           required
                           />

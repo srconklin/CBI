@@ -6,7 +6,9 @@ Alpine.store('tabs', {
 
     openTab: 1,
     content: {
-        specstable: ''
+        specstable: '',
+        shipterms: '',
+        payterms: ''
     },
     activeTabClasses: 'activeTab',
     inactiveTabClasses: 'inActiveTab',
