@@ -24,4 +24,4 @@ data/**
 dist/**
 testbox/
 
-typesense-data/
+typesense-data/**
