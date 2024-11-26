@@ -2,9 +2,9 @@ import Alpine from 'alpinejs';
 
 // WATCHERS
 Alpine.effect(() => {
-    const modal = Alpine.store('imodal').modal;
-    const content = Alpine.store('imodal').content;
-    const hasLoaded = Alpine.store('imodal').hasLoaded;
+    const modal = Alpine.store('item').modal;
+    const content = Alpine.store('item').content;
+    const hasLoaded = Alpine.store('item').hasLoaded;
     
     // when the modal closes, then reset the caroursel and forms back to some defaults       
     if (modal === false) {
@@ -20,11 +20,11 @@ Alpine.effect(() => {
         Alpine.store('carousel').active = 0;
         Alpine.store('offer').priceStated = { ...Alpine.store('offer').priceStated, ...reset, ...{ value: '' } };
         Alpine.store('offer').qtyStated = { ...Alpine.store('offer').qtyStated, ...reset };
-        Alpine.store('imodal').content = false;
+        Alpine.store('item').content = false;
 
     } else if (modal && !hasLoaded) {
 
-        Alpine.store('imodal').hasLoaded =true;
+        Alpine.store('item').hasLoaded =true;
 
         // if the modal has received some new content from a new item fetch
         // reset the commponents with data fetched from the item 
@@ -41,7 +41,7 @@ Alpine.effect(() => {
             Alpine.store('offer').maxqty = content.qty;
             Alpine.store('offer').itemno.value = content.itemno;
             Alpine.store('inquiry').itemno.value = content.itemno;
-            //Alpine.store('imodal').content = { ...content, specstable: undefined, imagesXtra: undefined, imgMain: undefined };
+            //Alpine.store('item').content = { ...content, specstable: undefined, imagesXtra: undefined, imgMain: undefined };
 
             // reset the slider to the first scroll position
             setTimeout(() => {

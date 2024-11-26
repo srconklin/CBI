@@ -136,32 +136,30 @@ component accessors=true extends="model.beans.personal" {
     clearErrors();
 
     var result = variables.utils.verifyToken(getVerifyToken(), 'register');
+    setEmail(result.email);  
+
     if (!result.success) {
        
         setErrorState(result['error']);
 
         // custom rules to reset errorstate to something else other than techie errors
         if (getOriginalStatus() eq 'linkExpired') {
-          setErrorState(key='verifyLinkExpired', origStatus=getOriginalStatus());
-        // everything but alreadyverified is getting turned into a simple message 
-        // if we have a cfexception is it stored in originalerror 
-        } else if (getOriginalStatus() neq 'emailAlreadyVerified') {
+           setErrorState(key='verifyLinkExpired', origStatus=getOriginalStatus());
+       
+         // everything but the following 2  get turned into a simple message
+         // if we have a cfexception it is stored in originalerror 
+        } else if (!listfindnocase('emailAlreadyVerified,emailAlreadyVerifiedButNeedPassword', getOriginalStatus())) 
           setErrorState(key='emaildidnotverify' , origStatus=getOriginalStatus());
-        }
+      
       
     }
     else {
-           setEmail(result.email);  
+       
           // mark email as verified
           result = variables.userGateway.markEmailVerified(getemail());
           if (!result['success'])
             setErrorState(result['errors']);
-        //  else {
-        //    //re-retrieve user with updated security settings
-        //    arUser = variables.userGateway.getUserbyEmail(getEmail());
-        //    variables.user = arUser[1];
-        //  }
-      
+             
     }
 
     return !hasErrors();

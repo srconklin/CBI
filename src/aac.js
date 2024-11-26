@@ -59,39 +59,10 @@ const onPlaceChanged = () => {
     .then(token => formData.append('g-recaptcha-response', token))
     // js fetch
     .then(() => window.submitForm('/locationlookup', formData).then(resObj => handleFormSubmitResponse(resObj)))
-
-    // fetch('/locationlookup', {
-    //         headers: {
-    //             'X-Requested-With' : 'XMLHttpRequest'
-    //         },
-    //         method: 'POST',
-    //         body:  formData
-    //     })
-    //     .then(response => response.json())
-    //     .then(resObj => {
-    //         /*********************************
-    //         *  server side error  
-    //         *********************************/
-    //         if (!resObj.res) {
-    //             geoError.querySelector("p").innerHTML = resObj.errors;
-    //             geoError.style.display = 'block';
-            
-    //         }
-    //         /*********************************
-    //         *  success no validation errors    
-    //         *********************************/
-    //         else {
-    //                 for (const geolvl of resObj.geoChain) {
-    //                     eles[geolvl.TYPE]['txt'].innerHTML = geolvl.LNM;
-    //                     eles[geolvl.TYPE]['gid'].value = geolvl.GID;
-    //                 }
-    //                 lp.style.display = 'block';
-    //         }
-            
-    //     });
             
 }
 
+// call back handle the user selection
 const handleFormSubmitResponse = (resObj) => {
      /*********************************
             *  server side error  

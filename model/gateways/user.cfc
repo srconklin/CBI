@@ -1,6 +1,7 @@
 component accessors=true {
 
 	property config;
+	property generalGateway;
 
 	function getBaseUserQuery( ) {
 		
@@ -86,7 +87,7 @@ component accessors=true {
         var arUser = queryExecute( sql, params,  { returntype="array" });
 
 		
-		// trurn a std lucee query of array object into a plain array of itemnos
+		// turn a std lucee query of array object into a plain array of itemnos
 		items = arrayMap( arUser, function(ele){
 			return ele.itemno;
 		 });
@@ -94,6 +95,61 @@ component accessors=true {
         return items;
       
     }
+
+	function getOffers( required numeric pno) {
+            
+        var params = {
+            pno: { value=arguments.pno,	cfsqltype="integer"}
+        };
+            
+        var sql = "SELECT 
+				T.TransNo as refnr,
+				CASE WHEN T.TTypeNo = 11 THEN 'Offer'  ELSE 'Inquiry' end as type,
+				FORMAT(T.TransDate, 'MMM dd yyyy h:mm tt') as date,
+				I.ItemNo as itemno, 
+				I.Headline as description,
+				CASE when t2.transno is null then 'Pending' else 'Answered' end as status
+				FROM Transactions T
+				LEFT JOIN Transactions T2 on T2.LinkedTrans = T.linkedtrans and T2.LastLink = 1 and T2.InitPno <> T.InitPNo
+				INNER JOIN Items I on I.ItemNo=T.ItemNo
+				WHERE T.InitPNo= :pno 
+				AND T.VTID = #config.getSetting('VTID')#
+				AND T.LinkedTrans = t.TransNo
+				AND T.TTypeNo in (10,11,12)
+				ORDER BY T.TransNo DESC";
+
+        var arofTrans = queryExecute( sql, params,  { returntype="array" });
+        return  arofTrans;
+      
+    }
+	
+	function getOfferDetails( required numeric refnr) {
+            
+        var params = {
+            refnr: { value=arguments.refnr, cfsqltype="integer"}
+        };
+            
+        var sql = "SELECT 
+			T.TransNo as refnr, T.message, T.terms, t.pricestated, t.qtystated,
+			T.transdir,
+			CASE WHEN T.TTypeNo = 11 THEN 'Offer'  ELSE 'Inquiry' end as type,
+			FORMAT(T.TransDate, 'MMM dd yyyy h:mm tt') as date,
+			I.ItemNo as itemno, 
+			I.Headline as description,
+			Case when t.lastlink =1  THEN 
+				Case when  t.transdir = 1 then 'Answered' else 'Pending' END
+			ELSE 
+				'NA'end as status
+			FROM Transactions T
+			INNER JOIN Items I on I.ItemNo=T.ItemNo
+			WHERE T.Linkedtrans= :refnr AND T.VTID IN (#config.getSetting('VTID')#,#config.getSetting('IVTID')#)
+			ORDER BY T.TransNo desc";
+
+        var arofTrans = queryExecute( sql, params,  { returntype="array" });
+        return  arofTrans;
+      
+    }
+
     function getContactInfo(required numeric pno) {
 		var user ='';
 		
@@ -113,6 +169,50 @@ component accessors=true {
 
 	}
 
+
+	function createTT5Message(required numeric refnr, required numeric itemno, required string message, required numeric pno) {
+
+		var result = {};
+    	result['success']=true;
+		result['errors']='';
+
+		// we need to retrieve the recippno
+		var MsgToPNo = variables.generalGateway.getInvPnoforItem(arguments.itemno);
+		
+		var params = {
+			refnr: arguments.refnr,
+			pno: arguments.pno,
+			message: arguments.message
+		};
+
+		var sql = "SET nocount on;
+					INSERT INTO Transactions
+					(LinkedTrans,LastLink,InitPNo,RecipPNo,
+					cotid,VTID,DataTID,TransDir,TransType,TTypeNo,TStatusNo,TDispTypeNo,
+					ListNo,ItemNo,ItemEditDt,
+					QtyShown,PriceShown,QtyStated,PriceStated,SideStated,Priunit,Message)
+					SELECT
+					LinkedTrans,1,:pno,#MsgToPNo#,
+					cotid,VTID,dataTID,0,'Message',5,TStatusNo,TDispTypeNo,
+					ListNo,ItemNo,ItemEditDt,
+					QtyShown,PriceShown,QtyStated,PriceStated,0,priunit,:Message
+					FROM Transactions
+					WHERE TransNo=:refnr AND ArchDt IS NULL;
+
+					UPDATE Transactions SET LastLink=0 WHERE TransNo =:refnr;
+					";
+			
+			try {
+				var qry = queryExecute( sql, params);
+				
+			}  catch (e) {
+				result['success']=false;
+				result['errors']=e;
+			}
+
+			return result;
+
+	}
 	
 	function markPasswordVerified(required string email ) {
 		var result = {};

@@ -1,6 +1,7 @@
 component accessors=true extends="controllers.base.common" {
 	property generalgateway;
 	property usergateway;
+	property utils;
 
 	/******************************
 	 default controller (GET)
@@ -42,8 +43,10 @@ component accessors=true extends="controllers.base.common" {
 	public void function IsLoggedIn(struct rc = {}) {
 		rc["response"]["res"] = true;
 		rc['response']['payload'] =  rc.userSession.isloggedIn;
-		renderResult(rc);
+		renderResult();
 	}
+
+
 
 	/**********************************
 	 load all favorites for the logged
@@ -53,8 +56,10 @@ component accessors=true extends="controllers.base.common" {
 	public void function getFavorites(struct rc = {}) {
 		rc["response"]["res"] = true;
 		rc['response']['payload'] =  rc.userSession.favorites;
-		renderResult(rc);
+		renderResult();
 	}
+
+	
 
 	/*******************************
 	 make an item a favorite (POST)
@@ -71,9 +76,9 @@ component accessors=true extends="controllers.base.common" {
 				variables.generalGateway.toggleFavorite(rc.itemno, rc.userSession.pno, rc.isfavorite)
 				// update to session
 				var favs = variables.userGateway.getUserFavorites(rc.userSession.pno);
-				variables.userService.updateUserState(email=rc.userSession.email, state={'favorites': favs})
+				getUserByEmailAndSetSessionWithState(rc.userSession.email, {'favorites': favs});
 				rc["response"]["res"] = true;
-				rc['response']['paylaod'] = 'favorite for #rc.itemno# toggled to #rc.isfavorite#';
+				rc['response']['payload'] = 'favorite for #rc.itemno# toggled to #rc.isfavorite#';
 				
 			} 
 			catch(any e) {
@@ -82,9 +87,8 @@ component accessors=true extends="controllers.base.common" {
 
 		}
 		
-		renderResult(rc);
+		renderResult();
 	}
-
 	
 	/***********************************************
 		locationlookup (POST)
@@ -97,21 +101,21 @@ component accessors=true extends="controllers.base.common" {
 		rc['response']['geoChain'] = [];
 		
 		// xtra bot protection
-		captchaProtect(rc);	
+		captchaProtect();	
 		
 		var ll = variables.beanFactory.getBean( 'locationlookupbean' );
 		ll.setPlacesResponse(rc.placesResponse);
 		ll.performLookup();
 
 		if(ll.hasErrors()) {
-			handleServerError(rc, ll.getErrorContext());
+			handleServerError(ll.getErrorContext());
 			
 		} else {
 			rc["response"]["res"] = true;
 			rc['response']['geoChain'] = ll.getGeoChain();
 		}
 	
-		renderResult(rc);
+		renderResult();
 	
    }
 
@@ -123,7 +127,7 @@ component accessors=true extends="controllers.base.common" {
 	public void function submitContact(struct rc = {}) {
 
 		// contact form consists of personal fields + password mgmt widget
-			var contact = validateform(rc, 'contactbean');
+			var contact = validateform('contactbean');
 
 			// contact the user
 			contact.sendMessage();
@@ -135,14 +139,14 @@ component accessors=true extends="controllers.base.common" {
 				var err = contact.getErrorContext();
 			
 				// parse error
-				handleServerError(rc, err);
+				handleServerError(err);
 
 			} else {		
 				rc["response"]["res"] = true;
 				rc["response"]["payload"]["message"] = 'contact';
 			}
 			
-			renderResult(rc);
+			renderResult();
 		
 	}
 
@@ -151,7 +155,11 @@ component accessors=true extends="controllers.base.common" {
 	 site wide error handler
 	******************************/
 	function error(struct rc = {}) {
-		sendErrorEmail(rc)
+		sendErrorEmail();
+		if (utils.isAjaxRequest()) {
+			rc["response"]["errors"] = request.exception.message;
+			 renderResult(abort=true);
+		}	 
 		
 	}
 	

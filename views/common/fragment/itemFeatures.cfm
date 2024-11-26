@@ -2,9 +2,8 @@
 item features common template
 ---------------------------------------->
 <cfparam name="local.server" default="false">
-<cfoutput>
 
-<main> 
+<cfoutput>
 	<div class="userprefs">
 		<div>
 			<cfif rc.userSession.isLoggedIn >
@@ -34,7 +33,7 @@ item features common template
 			<cfif local.server>
 				<a href="##" x-on:click.prevent="$clipboard('#rc.URI#');$tooltip('Copied to clipboard!')"><svg  fill=none xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
 			<cfelse>
-				<a href="##" x-on:click.prevent="$clipboard($store.imodal.content.URI);$tooltip('Copied to clipboard!')"><svg  fill=none xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
+				<a href="##" x-on:click.prevent="$clipboard($store.item.content.URI);$tooltip('Copied to clipboard!')"><svg  fill=none xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
 			</cfif>
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
 				</svg>Share</a>
@@ -52,11 +51,11 @@ item features common template
 					<span class="qty">#rc.content.qty#</span> unit <cfif rc.content.qty gt 1><span>s</span></cfif> @ <span itemprop="price" class="price">#rc.content.price#</span>
 				</p>
 			<cfelse>
-				<h1 :id="$id('headline')" itemprop="name" class="headline" x-text="$store.imodal.content.headline"></h1> 
-				<p itemprop="category" class="category" x-text="$store.imodal.content.category"></p> 
-				<p itemprop="description" class="description" x-text="$store.imodal.content.description"></p> 
+				<h1 :id="$id('headline')" itemprop="name" class="headline" x-text="$store.item.content.headline"></h1> 
+				<p itemprop="category" class="category" x-text="$store.item.content.category"></p> 
+				<p itemprop="description" class="description" x-text="$store.item.content.description"></p> 
 				<p itemprop="offers" class="offers" itemscope itemtype="http://schema.org/Offer">
-					<span class="qty" x-text="$store.imodal.content.qty"></span> unit<span x-show="$store.imodal.content.qty > 1">s</span> @ <span itemprop="price" content=x-bind:content="$store.imodal.content.price" class="price" x-text="$store.imodal.content.price"></span>
+					<span class="qty" x-text="$store.item.content.qty"></span> unit<span x-show="$store.item.content.qty > 1">s</span> @ <span itemprop="price" content=x-bind:content="$store.item.content.price" class="price" x-text="$store.item.content.price"></span>
 				</p>
 			</cfif>
 		</div>
@@ -68,7 +67,7 @@ item features common template
 					<cfif local.server>
 						<span>#rc.content.mfr#</span>
 					<cfelse>
-						<span x-text="$store.imodal.content.mfr"></span>
+						<span x-text="$store.item.content.mfr"></span>
 					</cfif>
 				</p>
 				<p itemprop="model" class="model">
@@ -76,7 +75,7 @@ item features common template
 					<cfif local.server>
 						<span>#rc.content.model#</span>
 					<cfelse>
-						<span x-text="$store.imodal.content.model"></span>
+						<span x-text="$store.item.content.model"></span>
 					</cfif>
 				</p>
 				<p class="location">
@@ -84,7 +83,7 @@ item features common template
 					<cfif local.server>
 						<span>#rc.content.location#</span>
 					<cfelse>
-						<span x-text="$store.imodal.content.location"></span>
+						<span x-text="$store.item.content.location"></span>
 					</cfif>
 				</p>
 				<p itemprop="productID" class="itemno">
@@ -92,12 +91,11 @@ item features common template
 					<cfif local.server>
 						<span>#rc.content.itemno#</span>
 					<cfelse>
-						<span><a x-bind:href="$store.imodal.content.URI"  x-text="$store.imodal.content.itemno"></a></span>
+						<span><a x-bind:href="$store.item.content.URI"  x-text="$store.item.content.itemno"></a></span>
 					</cfif>
 				</p>
 			</div>
 		</div>
 	</div>
-	#view( 'common/fragment/itemTabs')#
-</main>
+
 </cfoutput>

@@ -16,6 +16,22 @@ component accessors=true {
         return arGeo;
 
 	}		
+	number function getInvPnoforItem( required number itemno ) {
+		
+        var params = {
+            itemno: arguments.itemno,
+        };
+            
+        var sql ='SELECT VI.PNo as InvPNo
+            FROM Items I
+            INNER JOIN CoVenues VI ON VI.VTID=I.IVTID
+            WHERE ItemNo = :itemno';
+
+        var arRS = queryExecute( sql, params, { returntype="array" });
+        
+        return arRS[1].InvPNo;
+
+	}		
 	function toggleFavorite( required number itemno =0, required number pno, required boolean isfavorite ) {
 
 		if(arguments.itemno gt 0 and arguments.pno gt 0) {
@@ -27,25 +43,7 @@ component accessors=true {
             }
         }
 	}		
-	// function loadFavorite( required number itemno =0, required number pno) {
 
-	// 	if(arguments.itemno gt 0 and arguments.pno gt 0) {
-    //         var params = {
-    //             itemno: arguments.itemno,
-    //             pno: arguments.pno
-    //         };
-                
-    //         var sql ='Select * FROM userFavorites Where itemno = :itemno and pno = :pno'
-    
-    //         var fav = queryExecute( sql, params,  { returntype="array" });
-    //         if(arrayLen(fav))
-    //             return 1;
-    //         else 
-    //             return 0;
-           
-    //     }
-    //     return 0;
-	//}		
 
 	function getVenueContacts() {
 		

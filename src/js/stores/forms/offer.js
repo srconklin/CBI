@@ -16,6 +16,8 @@ Alpine.store('offer', {
     qtyShown: {value:1, ele:'hidden'}, // set on onload of modal watcher
     priceShown: {value:0, ele:'hidden'}, // set on onload of modal watcher
     itemno: {value:0, ele:'hidden'}, // set on onload of modal watcher
+    refnr: {value:0, ele:'hidden'}, // set on onload for use when sending a TT5 message or an offer in dealmaking conversation 
+
 
     //utility defaults
     maxqty: 1, //set onLoad of modal watcher

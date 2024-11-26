@@ -8,25 +8,31 @@ const config = {
         },
         'offer': {
             title: 'Success! Your offer was received',
-            message: 'Someone will contact you soon.',
+            message: 'Thank you for your offer! A member of our team will contact you soon. ',
             type: 'success'
 
         },
         'inquiry': {
             title: 'Success! Your message was received',
-            message: 'Someone will contact you soon.',
-            type: 'success'
+            message: 'Thank you for your inquiry! A member of our team will contact you soon. To manage your inquiry, please ensure you’ve verified your email and set a password to complete your registration. Once fully registered, you can access Offers & Inquiries under your profile icon.',
+            type: 'info'
 
         },
         'isNewPerson': {
             title: 'Welcome firstName, We created a user account for you!',
-            message: 'Consider verifying your email by clicking the link in the email we sent you. After that, you can set a password on your profile to enjoy all the benefits of a membership.',
+            message: 'Consider verifying your email by clicking the link in the email we sent you. After that, you can set a password on your profile to enjoy all the benefits of a membership like managing your profile, favorites, and responding to offers & inquiries',
+            type: 'info'
+
+        },
+        'existingPersonnv': {
+            title: 'Welcome Back firstName!',
+            message: 'We noticed you have made an offer/inquiry before. Consider verifying your email and setting a password so that you can enjoy all the benefits of a full membership.',
             type: 'info'
 
         },
         'existingPerson': {
             title: 'Welcome Back firstName!',
-            message: 'We noticed you have made an offer/inquiry before. Consider verifying your email and setting a password so that you can enjoy all the benefits of a membership.',
+            message: 'We noticed you’ve previously made an offer or inquiry and are fully registered with a verified email address. Please consider logging in to enjoy all the benefits of your membership.',
             type: 'info'
 
         },

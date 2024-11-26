@@ -9,6 +9,8 @@ component accessors=true extends="model.beans.personal" {
 	property message;
     // deal type inquiry=10, offer=11
     property ttypeno;
+    // used in message=5 in dealmaking conversation thread manager
+    property refnr;
 	
     // private data
     variables.offerSent = false;
@@ -30,7 +32,7 @@ component accessors=true extends="model.beans.personal" {
     // the registration profile setting that is stored in the db of a user. 
     // 0=found in db but never logged in. inserted from a previous offer/inquiry, no passsord and should not be able to manage profile
     // 1=found in db and user has properly registered; set a password and verified email ownership (in legacy system 1 means all fields entered)
-    // read bt proctrans when partially logging the user in
+    // read by proctrans when partially logging the user in
     variables.regstat; 
 
     // validated is current status of the user making the offer/inquiry  (in memory variable that shows the follwoing status)
@@ -44,7 +46,7 @@ component accessors=true extends="model.beans.personal" {
     variables.pno;
     
     // if the user has a password set
-    variables.hasPassword = 0
+    variables.pwdVerified = 0
     
     // if the user has verified their email
     variables.verifyVerified = 0
@@ -55,6 +57,7 @@ component accessors=true extends="model.beans.personal" {
     property utils;
     property config;
     property userService;
+    property userGateway;
     
     
     function isValid( ){
@@ -117,7 +120,7 @@ component accessors=true extends="model.beans.personal" {
   function hiddenNotValid( ){
 
      //ttypeno 
-     if (!listfindnocase('10,11', getTTypeno())) {
+     if (!listfindnocase('5,10,11', getTTypeno())) {
        setErrorState('badTypeno'); 
      } 
      //itemno 
@@ -130,31 +133,53 @@ component accessors=true extends="model.beans.personal" {
     return !hasErrors();
 
   }
-
   function isNewPerson() {
        return variables.newPerson;
+  }  
+  function isDealaThread() {
+       return  getRefNr() gt 0 ? true : false;
   }  
 
   function offerSentSuccesfully() {
     return (hasErrors() or !variables.offerSent) ? false: true;
   }
+
+  function sendMesage() {
+
+    var result = variables.userGateway.createTT5Message(getRefNr(), getItemno(),  getMessage(), userService.getUserSession().pno);  
+    if (!result.success) 
+        setErrorState(result['errors']);
+   
+  }
     
   function sendOffer(){
+   
+    //send message
+    if(getttypeno() eq 5) {
+        sendMesage();
+    }
+     
+    // 10 and 11 defer to legacy system proctrans
+    else {
+      
+         // interface to dynabuilt system by meeting requirements of template as an include
+        setOfferer(userService.getUserSession());
 
+        setForm();
+
+        try{
+            include "/cbilegacy/legacySiteSettings.cfm";
+            include "/cbilegacy/proctrans.cfm";
+            
+        } catch (e) {
+            setErrorState(e)
+            
+        }    
+
+    }    
+    
     variables.offerSent = true;
 
-    // interface to dynabuilt system by meeting requirements of template as an include
-    setOfferer(userService.getUserSession());
-    setForm();
-
-    try{
-        include "/cbilegacy/legacySiteSettings.cfm";
-        include "/cbilegacy/proctrans.cfm";
-        
-    } catch (e) {
-        setErrorState(e)
-        
-    }    
     return offerSentSuccesfully();
   }
 

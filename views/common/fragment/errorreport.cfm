@@ -22,5 +22,8 @@
     #writedump(var=CGI, format="html")#
     <h2 style="margin:1rem 0 1rem 0;background-color:pink;">Session</h2> 
     #writedump(var=session, format="html")#
-</div>
+    <cfif structkeyexists(request.exception,  "sql")>
+        <pre><cfdump var="#request.exception.sql#" label="SQL STATEMENT "/></pre>
+    </cfif>    
+        
 </cfoutput>

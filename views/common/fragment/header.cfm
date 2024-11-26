@@ -40,7 +40,7 @@
 
 				<div x-data="{
 						showUM : false,
-						close() {
+						closeUM() {
 							this.showUM = false
 						},
 						open() {
@@ -50,9 +50,9 @@
 					x-ref="uMenu"
 					class="header-user" 
 					@mouseenter="open()" 
-					@mouseleave="close()"
-					@keydown.escape.prevent.stop="close()"
-					@focusin.window="! $refs.uMenu.contains($event.target) && close()"
+					@mouseleave="closeUM()"
+					@keydown.escape.window="closeUM()"
+					@focusin.window="! $refs.uMenu.contains($event.target) && closeUM()"
 					x-id="['userMenu']">
 
 						<!-- button or link -->
@@ -69,14 +69,14 @@
 							</cfoutput>
 						</button>
 						<cfif !rc.userSession.isEmailVerified>
-							<a href="/myprofile" title="Verify your eamil" style="opacity:1;"><div class="notify-badge" >!</div></a>
+							<a href="/myprofile" title="Verify your eamil" style="opacity:1;"><div class="notify-badge" style=" background-color: gold;" >!</div></a>
 						</cfif>
 
 					<!-- drop down menu -->
 					<div
 						x-ref="dropdownmenu"
 						x-show="showUM"
-						@click.outside="close()"
+						@click.outside="closeUM()"
 						class="userdd box-shadow fadein"
 						<!--- x-transition.origin.top.left --->
 						:id="$id('userMenu')"
@@ -107,17 +107,25 @@
 							  
 							<p>My Profile</p>
 						</a>
-						<a href="/search/?query=favorites" class="entry">
+						<a href="/myfavorites" class="entry">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
 							  </svg>
-							<p >My Favorites</p></a>
+							<p >My Favorites</p>
+						</a>
+						<a href="/myoffers" class="entry">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v7.5m2.25-6.466a9.016 9.016 0 0 0-3.461-.203c-.536.072-.974.478-1.021 1.017a4.559 4.559 0 0 0-.018.402c0 .464.336.844.775.994l2.95 1.012c.44.15.775.53.775.994 0 .136-.006.27-.018.402-.047.539-.485.945-1.021 1.017a9.077 9.077 0 0 1-3.461-.203M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+							  </svg>
+							  
+							<p >My Offers/Inquiries</p>
+						</a>
 						<a href="/logout" class="entry">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" >
 								<path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
 							  </svg>
-							  
-							<p >Sign Out</p></a>
+							<p >Sign Out</p>
+						</a>
 						<!-- </div> -->
 					</div>
 				</div>
@@ -141,7 +149,7 @@
 				<line x1="3" y1="6" x2="21" y2="6"></line>
 				<line x1="3" y1="18" x2="21" y2="18"></line>
 				</svg>
-				<svg id="close-vm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x-show="showMenu">
+				<svg id="closeUM-vm" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" x-show="showMenu">
 				<circle cx="12" cy="12" r="10"></circle>
 				<line x1="15" y1="9" x2="9" y2="15"></line>
 				<line x1="9" y1="9" x2="15" y2="15"></line>

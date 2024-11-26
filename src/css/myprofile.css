@@ -61,7 +61,50 @@
 
 #myprofile .email-status {
     font-weight: bold;
-    column-gap: 10px;
+    column-gap: 8px;
+    background-color: #e6f4ea;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+    color: #666;
+    font-size: 14px;
 }
 
+/* unlock settings teaser */
+.unlock-container {
+    max-width: 700px;
+    margin: 0 auto; /* Centers horizontally */
+}
+
+.unlock-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    /* background-color: #eaeaea;   */
+    /* border-radius: 8px; */
+    margin-bottom: 30px;
+    margin-top: 30px;
+    border-left: 3px solid #666; /* Slightly darker border to add emphasis */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  */
+  }
+  
+  .unlock-icon {
+     margin-right: 15px;
+  }
+  
+   .unlock-text h1 {
+    font-size:  1.5rem;
+    margin-bottom: 5px;
+    /* color: #333; */
+  } *
+  
+  .unlock-text p {
+    /* font-size: 14px; */
+    color: #666;
+    margin-bottom: 15px;
+  }
+  
  

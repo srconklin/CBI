@@ -13,7 +13,7 @@
 		    close() {this.open=false; },
 			onShowLogin($event){
 				title=$event.detail.title;
-				open=true;
+				this.open=true;
 				document.getElementById('destination').value = window.location.pathname;
 			} 
 		}" 

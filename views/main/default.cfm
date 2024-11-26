@@ -48,7 +48,8 @@
         <div id="stats"></div>
         <div id="sort-by"></div>
       </div>
-      <div id="hits"></div>
+      <!--- hit cards --->
+      <div id="hits" ></div>
       <div id="pagination"></div>
     <!--- </div> --->
   </div>

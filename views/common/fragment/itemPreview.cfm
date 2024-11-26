@@ -1,24 +1,33 @@
 	<!------------------------------------------ 
-		item quick view as a modal
+		item preview as a modal
 	 ---------------------------------------->
 
 	<!--- set config options --->
 	<cfset fullsize =  true/>
-	<cfset xshow =  '$store.imodal.modal'/>
+	<cfset xshow =  'ipOpen'/>
 
 	<!--- xdata --->
 	<cfsavecontent variable="xdata">
 		x-cloak
 		x-data="{
-			 itemno: 0,
-			 close() {
-				$store.imodal.closeModal()
-			 }
+			itemno: 0,
+			ipOpen: false,
+		    close() {
+				this.ipOpen=false;
+				$store.itempreview.close();
+				
+			},
+			onShowItem($event) {
+				this.itemno=$event.detail.itemno;
+				$store.itempreview.showItem(this.itemno);
+				this.ipOpen = true;
+				
+			}
 		}" 
-		x-show="$store.imodal.modal"  
+		x-show="ipOpen"  
 		@keydown.escape.prevent.stop="itemno=0;close();"
-		@show-item.window="itemno=$event.detail.itemno;$store.imodal.showItem($event.detail.itemno);"
-		x-trap.noscroll.inert="$store.imodal.modal"
+		@show-item.window="onShowItem($event)"
+		x-trap.noscroll.inert="ipOpen"
 		role="dialog"
 		aria-modal="true"
 		x-id="['headline']"
@@ -35,7 +44,13 @@
 				#view('common/fragment/imageModal')#
 			</aside>
 			<!--- right column item detail --->
-			#view('common/fragment/itemFeatures' , {server=false})#
+			<main> 
+				#view('common/fragment/itemFeatures' , {server=false})#
+
+				<!--- tabs for specs  --->
+				#view('common/fragment/itemTabs')#
+			</main>
+
 		</article> 
 	</cfoutput>
 	</cfsavecontent>

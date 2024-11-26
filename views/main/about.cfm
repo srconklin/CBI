@@ -4,7 +4,7 @@
     <span class="cover"></span>  
     <div class="content">
       <h1 class="lead-title">What We Do</h1>
-        <h3 class="text-italic">
+        <h3 >
             CBI is Your Source for Buying and Selling Used Equipment
             for the Semiconductor and Scientific Communities.
         </h3>

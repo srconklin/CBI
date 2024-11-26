@@ -139,20 +139,15 @@
 
 	<cfset item['itemno'] =  "#getItem.Itemno#" />   
 	<cfset item['headline'] = "#trim(REReplaceNoCase(getItem.headline,"(<[^>]*>|&nbsp;|<br>)", " ","All"))#" />   
-	<cfset item['pagetitle'] =  len(getItem.pagetitle) gt 0 ?  trim(REReplaceNoCase(getItem.pagetitle,"(<[^>]*>|&nbsp;|<br>)", " ","All")) : item['headline'] />   
-	<cfset item['description'] = "#trim(REReplaceNoCase(getItem.descr,"(<[^>]*>|&nbsp;|<br>)", " ","All"))#"  />   
-	<cfset item['mfr'] =  "#getItem.maketxt#" />
-	<cfset item['model'] =  "#getItem.model#" />
-	<cfset item['price'] =  len(getItem.price) ? "#dollarFormat(getItem.price)#" : "Best Price" />
-	<cfset item['qty'] =  "#getItem.qty#" />
+	<cfset item['description'] = "#decodeForHTML(trim(REReplaceNoCase(getItem.descr,"(<[^>]*>|&nbsp;|<br>)", " ","All")))#"  />   
 	<cfset item['location'] =  "#getItem.citySnm#, #getItem.stSnm# #getItem.CySnm#"/>
 	<cfset item['category'] =  "#getItem.LNm#" />
+	<cfset item['mfr'] =  "#getItem.maketxt#" />
+	<cfset item['model'] =  "#getItem.model#" />
 	<cfset item['keywords'] =  "#trim(replace(getItem.syn, ',',' ','all'))#" />
-	<!--- <cfset item['adddate'] =  "#getItem.adddt#" />   --->
 	<cfset item['unixTimeStamp'] =  "#getItem.unixTimeStamp#" />  
 	<cfset item['popular'] =  "#getItem.popular#" />  
 	<cfset item['isFeatured'] =  "#getItem.isFeatured#" />  
-
 	
 	<!------------------------------------------- 
 	build menu heirarchy 
@@ -167,6 +162,34 @@
 		<cfset breadcrumbUI = breadcrumbUI & '<li class="ais-Breadcrumb-item"><span class="ais-Breadcrumb-separator" aria-hidden="true">&gt;</span><a class="ais-Breadcrumb-link" href="/search/#encodeForURL(trim(bcpath))#/">#trim(qryMenus.lnm)#</a></li>' />
 	</cfloop>	
 	<cfset breadcrumbUI = breadcrumbUI & '</ul>' />
+
+
+	<!------------------------------------------- 
+		images
+	 ------------------------------------------->
+
+	 <cfset item['imgbase'] =  "https://www.capovani.com/clientresources/" />  
+	 <cfif len(getItem.imgServNameMn)>
+		 <cfset item['imgMain'] =  "#Trim(getItem.CoTID)#/#getItem.IVTID#/#Trim(Right(getItem.DataTID,2))#/#getItem.DataTID#/#getItem.imgServNameMn#" />  
+	 <cfelse>
+		 <cfset item['imgMain'] =  "no-image.png" />
+	 </cfif>
+	 <cfset arImages =  [] />  
+ 
+	 <cfoutput>
+		 <cfif len(getItem.ServerName)>
+			 <cfset arrayAppend(arImages, "#Trim(getItem.CoTID)#/#getItem.IVTID#/#Trim(Right(getItem.DataTID,2))#/#getItem.DataTID#/#getItem.ServerName#") />
+		 </cfif>	
+	 </cfoutput>		
+ 
+	 <cfset item['imagesXtra'] = arImages />
+
+	<cfset arrayAppend(items, item) />
+
+	<!--- single file json data only --->
+	<cfset item['pagetitle'] =  len(getItem.pagetitle) gt 0 ?  trim(REReplaceNoCase(getItem.pagetitle,"(<[^>]*>|&nbsp;|<br>)", " ","All")) : item['headline'] />   
+	<cfset item['price'] =  len(getItem.price) ? "#dollarFormat(getItem.price)#" : "Best Price" />
+	<cfset item['qty'] =  "#getItem.qty#" />
 
 	<!------------------------------------------- 
 		specstable
@@ -207,26 +230,8 @@
 	<cfset pay =  trim(REReplaceNoCase(pay,'terms.cfm', '/terms','All')) >
 	<cfset item['payterms'] =  pay/>  
 
-	<!------------------------------------------- 
-		images
-	 ------------------------------------------->
-
-	<cfset item['imgbase'] =  "https://www.capovani.com/clientresources/" />  
-	<cfif len(getItem.imgServNameMn)>
-		<cfset item['imgMain'] =  "#Trim(getItem.CoTID)#/#getItem.IVTID#/#Trim(Right(getItem.DataTID,2))#/#getItem.DataTID#/#getItem.imgServNameMn#" />  
-	<cfelse>
-		<cfset item['imgMain'] =  "no-image.png" />
-	</cfif>
-	<cfset arImages =  [] />  
-
-	<cfoutput>
-		<cfif len(getItem.ServerName)>
-			<cfset arrayAppend(arImages, "#Trim(getItem.CoTID)#/#getItem.IVTID#/#Trim(Right(getItem.DataTID,2))#/#getItem.DataTID#/#getItem.ServerName#") />
-		</cfif>	
-	</cfoutput>		
-
-	<cfset item['imagesXtra'] = arImages />
-	<cfset arrayAppend(items, item) />
+	
+	
 
 	<!------------------------------------------- 
 		Create files

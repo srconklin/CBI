@@ -251,7 +251,8 @@ facet placeholders
   }
   
   .hit-detail .description {
-	 margin-top: 3px;
+	 margin-top: .5rem;
+	 margin-bottom: 1rem;
 	 overflow: hidden;
 	 max-height: 6.0rem;
 	 min-height: 4.0rem;

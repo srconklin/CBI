@@ -9,12 +9,16 @@ Alpine.store('favorites', {
     IsloggedIn : false,
 
     async init() {
-        this.IsloggedIn = (await (await fetch('/IsLoggedIn')).json()).payload
+        // console.log('favorites store initialized')
+         await window.httprequest('getfavorites').then(data => this.favs = data.payload);
+         await window.httprequest('IsLoggedIn').then(data => this.IsloggedIn = data.payload);
     },
 
-    async load() {
-        this.favs = await window.getUserFavs();
-    },
+    // async load() {
+    //     // this.favs = await window.getUserFavs();
+    //    await window.httprequest('getfavorites').then(data => this.favs = data.payload);
+    // },
+
     get favorites() { return this.favs },
 
     isFavorite(itemno=0)  {

@@ -24,22 +24,25 @@ import './css/megamenu.css';
 import './css/myprofile.css';  
 import './css/cookiebanner.css';  
 import './css/progresstracker.css';  
+import './css/tables.css';  
 import './css/media.css'; 
  
 //JS libs
-
-import { search } from './js/instantsearch'
+import './js/utils';
+import { asyncSearch } from './js/instantsearch'
 import smoothscroll from 'smoothscroll-polyfill'
 import { createPopper } from '@popperjs/core';
 import tippy from 'tippy.js';
 
 import Alpine from 'alpinejs';
 import focus from '@alpinejs/focus'
+import collapse from '@alpinejs/collapse'
+ 
 // stores
-
 import './js/stores/tabs';
 import './js/stores/carousel';
-import './js/stores/imodal';
+import './js/stores/item';
+import './js/stores/itempreview';
 import './js/stores/toasts';
 import './js/stores/favorites';
 
@@ -48,15 +51,16 @@ import './js/stores/forms/forms';
 import './js/stores/forms/pwd';
 import './js/stores/forms/changepassword';
 import './js/stores/forms/offer';
+import './js/stores/forms/reply';
 import './js/stores/forms/contact';
 import './js/stores/forms/inquiry';
 import './js/stores/forms/register';
 import './js/stores/forms/updateaddress';
 
 
-import './js/stores/forms/storewatcher';
+// import './js/stores/forms/storewatcher';
 import './js/stores/forms/combineStores';
-import './js/utils';
+
 
 //data components 
 // import favorites from './js/favorites';
@@ -65,11 +69,11 @@ import './js/utils';
 // smooth scroll
 smoothscroll.polyfill()
 
-// Instant Search
-search.start();
 
-// Alpine
+
+// Alpine plugins
 Alpine.plugin(focus)
+Alpine.plugin(collapse)
 
 // Magic Functions 
 
@@ -89,14 +93,28 @@ Alpine.magic('tooltip', el => message => {
 
 // dom is loaded
 domReady(() => {
+  console.log('dom loaded');
 
-  Alpine.start();
+  // slight delay then start alpine
+ // setTimeout(() => {
 
-  setTimeout(() => {
-    console.log('dom loaded')
+    Alpine.start();
+    console.log('alpine started');
+    // Instant Search
+    // getSearch().start();
 
-    // PAGE LOADED- KICKOFF
-    
+    (async () => {
+      const search = await asyncSearch;
+      search.start();
+      console.log('saerch started');
+    })();
+
+
+    // load the user favorites on page load for both Instasearch and backend item page  hearts
+    //(async () => await Alpine.store('favorites').load())();
+    //  Alpine.store('favorites').load();
+
+
     // server side item harvests data from HTML to and sets into the stores
     if (document.getElementById('item')) {
       Alpine.store('carousel').slides = Array(parseInt(document.getElementById('item').getAttribute('itemct')));
@@ -105,15 +123,11 @@ domReady(() => {
       Alpine.store('offer').priceStated.value = document.getElementById('item').getAttribute('price') == 'Best Price' ? '' : document.getElementById('item').getAttribute('price').replace('$', '');
       Alpine.store('offer').qtyStated.value = document.getElementById('item').getAttribute('qty');
 
-      () => (async () => await Alpine.store('favorites').load())();
-
-      
     }
 
     //if on a page reload and we have a toast to show
     Alpine.store('toasts').makeToast();
-   
     
- }, 200);
+// }, 75);
 });
 

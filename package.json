@@ -4,15 +4,20 @@
   "description": "cbi algolia powered venue",
   "scripts": {
     "start": "set NODE_ENV=development&&node esbuild.js",
-    "build": "set NODE_ENV=production&&node esbuild.js"
+    "build": "set NODE_ENV=production&&node esbuild.js",
+    "typesenseServer": "docker compose up",
+    "populateTypesenseIndex": "node ./admin/typesense/populateTypesenseIndex.js"
   },
   "browserslist": "last 2 versions, not dead, > 0.2%",
   "devDependencies": {
     "@deanc/esbuild-plugin-postcss": "^1.0.2",
+    "dotenv": "^16.4.5",
     "esbuild": "0.15.18",
-    "glob": "^8.0.3"
+    "glob": "^8.0.3",
+    "typesense": "^1.8.2"
   },
   "dependencies": {
+    "@alpinejs/collapse": "^3.14.1",
     "@alpinejs/focus": "^3.10.5",
     "@googlemaps/js-api-loader": "^1.16.2",
     "@popperjs/core": "^2.11.8",
@@ -21,8 +26,9 @@
     "instantsearch.css": "^7.4.5",
     "instantsearch.js": "^4.49.1",
     "intl-tel-input": "^17.0.19",
-    "modern-normalize": "^1.1.0",
+    "modern-normalize": "^3.0.1",
     "smoothscroll-polyfill": "^0.4.4",
-    "tippy.js": "^6.3.7"
+    "tippy.js": "^6.3.7",
+    "typesense-instantsearch-adapter": "^2.8.0"
   }
 }

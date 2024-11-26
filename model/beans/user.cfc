@@ -11,7 +11,7 @@ component accessors=true extends="model.beans.common"{
     1=recognized so partially logged in;  (session.validate to 1 in dealmkaing after execution of proctrans)
     2=fully logged in with complete profile
      set to 2 when a user logs into modern system   
-     (note: session.validate set to 2 in legacy system when a user logs in. )
+   
 
     regstat (read from db)
     the registration profile setting that is stored in the db of a user. 
@@ -85,8 +85,7 @@ component accessors=true extends="model.beans.common"{
        // retrieve the latest data from db.
        var user = this.getUserFromDB(arguments.email);
        // filter out irrelevant fields 
-       //var defaultUserData = variables.beanFactory.getBean( 'userbean' ).getUserData();
-       defaultUserData = getUserData();
+      defaultUserData = getUserData();
        relevantUserData = user.filter(function(key, value){
            return structKeyExists(defaultUserData, key)
       });
@@ -95,22 +94,6 @@ component accessors=true extends="model.beans.common"{
 
 
     }
-
-    
-    // log the user in either from a login screen or on a registration 
-    // function autoLoginUser(user= {}) {
-    //     //variables.userData=user;
-    //     // loop over the userdata and match it to default user data keys
-    //     for (currentKey in arguments.user) { 
-    //         if (structKeyExists(variables.userData, currentKey))
-    //              variables.userData[currentKey] = arguments.user[currentKey]
-    //      } 
-    //     variables.userData.vwrCorelatno = max(user.pvcorelatno, user.corelatno);
-    //    // writedump(var="#variables.userData#",  abort="false", label="2");
-    //     // user gets elevated to 2 if they are being logged in via the login screen.
-    //     //variables.userData.validated = 2;
-    // }
-
 
     function addUserData(userData = {}) {
         if(!structIsEmpty(userData))

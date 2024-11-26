@@ -1,7 +1,7 @@
 // esbuild src/app.js --bundle --loader:.png=file --entry-names=[dir]/[name]-[hash] --metafile=meta.json --outdir=dist --minify  --target=chrome58,edge16,firefox57,node12,safari11
 // esbuild src/app.js --bundle --loader:.png=file --outdir=dist --minify --watch --sourcemap  --target=chrome58,edge16,firefox57,node12,safari11
 //const isProduction = process.env.NODE_ENV == 'production'
-
+const dotenv = require('dotenv');
 const path = require('path');
 const fs = require('fs');
 const esbuild = require('esbuild');
@@ -14,6 +14,12 @@ const files = {
     'app' :  './layouts/default.cfm',
     'aac' :  './views/myprofile/default.cfm'
   };
+
+const envConfig = dotenv.parse(fs.readFileSync('.env'));
+const define = {};
+for (const key in envConfig) {
+    define[`process.env.${key}`] = JSON.stringify(envConfig[key]);
+}
 
 console.log('build mode',  process.env.NODE_ENV);
 
@@ -98,13 +104,14 @@ const config = {
     entryNames: '[dir]/[name]-[hash]',
     minify: isProduction,
     watch: !isProduction,
-
     loader: { '.png': 'file' },
    // target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
-   target: ['chrome58', 'firefox57', 'edge18', 'safari11'],
+    target: ['chrome90', 'firefox90', 'edge90', 'safari14'],
     outdir: 'dist',
     metafile:true,
-    plugins : plugins
+    plugins : plugins,
+    define,
+    format: 'esm',
 }
 
 esbuild.build(config)

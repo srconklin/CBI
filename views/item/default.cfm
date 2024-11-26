@@ -16,16 +16,24 @@
 		  </div>
 	
 		  <article class="item">
+
 			  <!--- left column image carousel --->
 			  <aside>
 				  <cfoutput>
 					 <!--- Note:  server side version of carousel places item list into html source:  SEO  --->
-					  #view( 'common/fragment/server/carousel')#
+					  #view( 'common/fragment/carousel' , {server=true})#
 				  	  #view( 'common/fragment/imageModal')#
-				</cfoutput>
+					</cfoutput>
 			  </aside>
-			  <!--- right column item detail --->
-			  #view('common/fragment/itemFeatures' , {server=true})#
+
+			 <!--- right column item detail --->
+			<main> 
+				#view('common/fragment/itemFeatures' , {server=true})#
+
+				<!--- tabs for specs  --->
+				#view('common/fragment/itemTabs')#
+			</main>
+
 		  </article> 					
 	  </div>
 	    

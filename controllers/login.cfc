@@ -5,10 +5,13 @@ component accessors=true extends="controllers.base.common" {
     property config;
 
     function before( rc ) {
-        if (rc.userSession.isloggedIn &&  variables.fw.getItem() != "logout" ) {
-            renderResult(rc, '/main') ;
-        }
         super.before(rc);
+
+        // if fully logged in then do not show or perform login methods; reroute to main
+        // allow partial 
+        if (rc.userSession.validated gt 1 && variables.fw.getItem() != "logout" ) {
+            renderResult('/main') ;
+        }
     }
 
 	/******************************
@@ -44,7 +47,7 @@ component accessors=true extends="controllers.base.common" {
 		} else {
 			
             //validate form by loading into bean
-            var user = validateform(rc, 'userbean');
+            var user = validateform('userbean');
             
             // bean validation errors
             if(user.hasErrors()) 
@@ -58,11 +61,11 @@ component accessors=true extends="controllers.base.common" {
             // log user in
             else {
                 // set up user session
-                variables.userService.setUserSession(user.getUserData());
+                updateUserSession(user.getUserData())
                 route = '/#rc.destination#';
             }
         }
-        renderResult(rc, route, 'message' ) ;
+        renderResult(route, 'message' ) ;
     }
     	 
 	/******************************

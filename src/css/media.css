@@ -10,51 +10,30 @@ media queries
 
 	.header-title {
 		font-size: 16px;
-		/* display: none; */
 	}
 
 }
 
 @media (min-width: 360px) {
 
-	
-
 	.header-logo h3 {
 		display: block;
 		color: white;
-		/* opacity: 0.40; */
 		letter-spacing: 1px;
 		margin-left: 0.4rem;
-		/* white-space: nowrap; */
 		
 	}
 
 	.lead-title {
 		font-size: 2em;
 	}
-
-
 	
-	/* .header-title {
-		display: block;
-	} */
-
-	/* .header-title {
-		font-size: 18px;
-	} */
-
 
 }
 
 @media (min-width: 499px) {
 	
 
-/* 
-	.header-title {
-		font-size: 22px;
-	} */
-
-	
 	.ais-Breadcrumb-item {
 		display: inline; 
 	  }
@@ -64,7 +43,7 @@ media queries
 		margin-bottom: 0;
 	}
 
-	.modal-container2 .fullsize {
+	.modal-container .fullsize {
 		max-width: 85%;
 	}
 
@@ -98,40 +77,25 @@ media queries
 		display: none;
 	}
 
+		
+	.deal-bubble {
+		width: 80%;
+	}
+
 }
 
 @media (min-width: 640px) {
 
 		
-
-	/* .header-container {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-	} */
-	/* .header-links {
-		display: flex;
-		align-items: flex-end;
-		flex-direction: row;
-	} */
-
-	/* .header-nav {
-		display: none;
-	} */
-	
 	.main {
 		padding-left: 2rem;
 		padding-right: 2rem;
 	}
 
 	.container {
-		/* max-width: 640px; */
 		 max-width: 600px; 
 	}
 	
-	
-
 	.footer-container {
 		display: flex;
 		justify-content: space-around;
@@ -140,11 +104,7 @@ media queries
 
 	}
 
-	.modal-header {
-		margin-bottom: 0;
-		padding-top: .5rem;
-	}
-
+	
 	.item .specs-summary {
 		margin: 0;
 		width: auto;
@@ -168,14 +128,9 @@ media queries
 		flex-direction: row;
 	}
 
-	/* .tabs ul li {
-		margin-right: 0.25rem;
-
-	} */
-
+	
 	.tabs .activeBtn {
 		border-bottom-width: 0px;
-		/* border-radius: 0px; */
 		border-bottom-left-radius: 0px;
 		border-bottom-right-radius: 0px;
 	}
@@ -185,9 +140,7 @@ media queries
 	}
 
 	.tabs .inActiveTab {
-		margin-bottom: -0.25rem
-			/* -4px */
-		;
+		margin-bottom: -0.25rem;
 	}
 
 	.verttabs {
@@ -219,10 +172,6 @@ media queries
 	.header-logo img, .footer-container img {
 		max-width: 5rem;
 	} 
-	/* .header-logo {
-		flex-direction: column;
-		align-items: flex-start; 
-	}   */
 
 	.header-logo h3 {
 		display: none;
@@ -232,12 +181,39 @@ media queries
 		font-size: 1.4rem;
 	}	
 
+	.deal-section {
+		display: flex;
+	  } 
+
+     .deal-offer-header {
+		margin-bottom: 0;
+		display: block;
+	  } 
+
+	  .deal-item-details{
+		flex-direction: row;
+		justify-content: center;
+		align-items: flex-start;
+		text-align: left;
+	
+	  }
+
+	  .deal-item-details .specs-wrapper {
+		display: block;
+	  }
+
+	  .deal-section .content img {
+		margin-bottom: 0;
+	}
+
+	.deal-bubble {
+		width: 67%;
+	}
+
 }
 
 @media (min-width: 700px) {
 
-
-	
 	.container {
 		max-width: 660px;
 	}
@@ -381,31 +357,27 @@ media queries
 		flex-direction: row;
 	} 
 
-	#contact section {
+	/* .general-page section {
 		display: flex;
 
-	}
+	} */
 }
 
 @media (min-width: 732px) {
 
 	#item .item .item-nav {
 		grid-template-columns: 1fr 1fr;
-		/* justify-items: stretch; */
 	}
-
-	 /* .header-logo {
-		flex-direction: row;
-		align-items: flex-end; 
-
-		
-	}   */
 
 	.header-logo h3 {
 		font-size:1.3rem;
 		display: block;
 	}
 
+	
+	.deal-bubble {
+		width: 56%;
+	}
 
 }
 
@@ -433,17 +405,6 @@ media queries
 		display: flex;
 
 	}
-/* 
-	.centering-wrapper {
-		justify-content: center;
-		align-items: flex-start;
-		flex-direction: row;
-	} */
-
-
-	/* #register-account {
-		margin-right: 3rem;
-	} */
 
 }
 
@@ -478,25 +439,11 @@ media queries
 		max-width: 984px;
 	}
 
-	/* .header-searchbar {
-		margin-top: 0;
-	} */
-
-	.ais-Hits-list {
-		/* grid-template-columns: 1fr 1fr 1fr; */
-	}
-
-
-
 }
 
 @media (min-width: 1536px) {
 
-	/* .container {
-		max-width: 1496px;
-	} */
-
-	.modal-container2 .fullsize {
+	.modal-container .fullsize {
 		max-width: 1260px;
 	} 
 }

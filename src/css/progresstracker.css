@@ -15,7 +15,7 @@ ol.progress[data-steps="9"] li { width: 11%; } */
     width: 100%;
     list-style: none;
     list-style-image: none;
-    margin: 20px 0 20px 0;
+    margin: 10px 0 20px 0;
     padding: 0;
 }
 

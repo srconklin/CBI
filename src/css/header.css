@@ -116,7 +116,6 @@
     padding-right: .5rem;
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
-    /* font-size: 16px; */
     font-size: 1.125rem;
     line-height: 1.75rem;
     font-weight: 500;
@@ -127,7 +126,6 @@
 }
 
 .header-links a:hover {
-    /* text-decoration: underline; */
     color: #ffeb00
 }
 
@@ -148,14 +146,12 @@
 
 .header-user .usericon svg {
     width: 2.0rem;
-    /* margin-top: 0.2rem; */
     height: 2.0rem;
     border-radius: 9999px;
 }
 
 .header-user .userdd {
     transform: translateX(0) translateY(0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1);
-    /* width: 10rem; */
     right: 0px;
     position: absolute;
     padding-top: 0.5rem;
@@ -187,11 +183,8 @@
 }
 
 .header-user .entry svg {
-    /* width: 1.0rem; */
-    /* margin-top: 0.2rem; */
     margin-right: 0.50rem;
     flex-shrink: 0;
-    /* height: 1.0rem; */
 }
 
 .header-user p {
@@ -218,8 +211,6 @@
 .header-title {
     color: White;
     opacity: .80;
-    /* margin-right: 1rem; */
-    /* margin-bottom: 1rem; */
     font-weight: 400;
     text-align: center;
 

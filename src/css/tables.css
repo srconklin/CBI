@@ -1,0 +1,112 @@
+    
+.table {
+    min-width: 100%;
+    border-collapse: collapse;
+}    
+
+
+.table th {
+    background-color: white;
+    padding-top: 0.875rem;
+    padding-bottom: 0.875rem;
+    
+}
+
+.table td  {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    /* white-space: nowrap; */
+    color: rgb(107 114 128 / 1);
+}    
+
+.table td, .table th {
+    /* font-size: 0.875rem; */
+    text-align: left;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+
+.table tr:nth-child(even) {
+    background-color:rgb(245 247 248);
+}
+
+.table tr:hover {
+    background-color: #ffcbcb; /* #b2dcee*/
+    cursor: pointer;    
+}
+
+.table tr {
+    border-bottom: 1px solid #ddd;
+ }
+
+ /* tbody {
+    border-top: 1px solid rgb(209 213 219 / 1);
+
+}  */
+    
+    /*
+	Max width before this PARTICULAR table gets nasty. This query will take effect for any screen smaller than 760px and also iPads specifically.
+	*/
+	@media only screen  and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+		/* Force table to not be like tables anymore */
+		.table table,  .table thead, .table tbody,  .table th,  .table td,  .table tr {
+			display: block;
+		}
+
+		/* Hide table headers (but not display: none;, for accessibility) */
+		.table thead tr {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+
+        .table tr {
+             margin: 0 0 1rem 0;
+             border-bottom: none;
+             border: 1px solid #ccc;
+             border-radius: 4px;
+        }
+        
+        .table td {
+            /* Behave  like a "row" */
+            border: none;
+          
+            position: relative;
+            padding-left: 50%;
+            padding-top: .5rem;
+            padding-bottom: .5rem;
+        }
+        .table td:not(:last-child) {
+            border-bottom: 1px solid #eee;
+
+        }
+
+
+        .table td:before {
+            /* Now like a table header */
+            position: absolute;
+            /* Top/left values mimic padding */
+            top: 0;
+            left: 6px;
+            width: 45%;
+            padding-right: 10px;
+            white-space: nowrap;
+            padding-top: .5rem;
+            font-weight: bold;
+        }
+
+        /*
+        Label the data
+        You could also use a data-* attribute and content for this. 
+        That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. 
+        Lea Verou has a clever way to handle with text-shadow.
+        */
+        .table td:nth-of-type(1):before { content: "Ref #"; }
+        .table td:nth-of-type(2):before { content: "Date"; }
+        .table td:nth-of-type(3):before { content: "Type"; }
+        .table td:nth-of-type(4):before { content: "Item ID"; }
+        .table td:nth-of-type(5):before { content: "Description"; }
+           
+	}

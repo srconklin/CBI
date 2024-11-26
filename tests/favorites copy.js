@@ -29,10 +29,7 @@ Alpine.store('favorites', {
     
     },
    async load(itemno, pno) {
-        //  this.isFavorite = loadFavoriteSetting(itemno, this.isFavorite).then(result => result);
-        //   const response = await fetch("/loadfavorite?" + new URLSearchParams({itemno:itemno, pno:pno}));
-        //   const data = await response.json();
-        //   this.isFavorite = await data.payload;
+  
         this.itemno =Number(itemno);
         this.pno =Number(pno);
         const favs = await window.getUserFavs();

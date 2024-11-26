@@ -1,5 +1,5 @@
 component accessors=true {
-
+    
     property fw;
 	property beanFactory;
     property userService;
@@ -18,20 +18,24 @@ component accessors=true {
         rc["vars"] = {};
 		rc["response"]["res"] = false;
 		rc["response"]["payload"] = {};
+		rc["response"]["status"] = 200;
 		rc["response"]["errors"] = '';
 		//writedump(var="before with rc.action #rc.action#  (internally known as :  #variables.fw.getFullyQualifiedAction()# ) and method #GetHttpRequestData().method#",  abort="false");
+
+        // Set rc in the variables scope to make it accessible across controllers
+        variables.rc = rc;
 
         if(!listfindnocase('main.error', variables.fw.getFullyQualifiedAction() )) {
 
             /*******************
             Security
             *******************/
-            authorize(rc);
+            authorize();
 
             /*******************
             CAPTCHA
             *******************/
-            validateCaptcha(rc)
+            validateCaptcha()
         }
 
     }
@@ -40,19 +44,23 @@ component accessors=true {
      validateCaptcha
 	 all post requests validatecaptcha 
      ********************************************************/
-     function validateCaptcha( struct rc = {} ) {
+    private function validateCaptcha() {
         
         // if post request AND form is captacha protected then validate
 		if(GetHttpRequestData().method eq 'post' ) {
-            // and listfindnocase( config.getsetting('captchaProtect'), variables.fw.getFullyQualifiedAction() )) {
-             param name="rc['g-recaptcha-response']" default="";
-             var route = '/' & getToken(variables.fw.getRoutePath(), 2, "/");
-             if(not utils.validateCaptcha(rc['g-recaptcha-response'], route)) {
+            
+            var route = '/' & getToken(variables.fw.getRoutePath(), 2, "/");
+
+             if (!structKeyExists(rc, "g-recaptcha-response")) {
+                rc["g-recaptcha-response"] = "";
+             }
+        
+            if(not utils.validateCaptcha(rc['g-recaptcha-response'], route)) {
                  // ajax form then we can just abort submission and show error via Js fetch callback.
                  // otherwise we catch the response.errors rc values and proceed in traditional form submissions
                  if (utils.isAjaxRequest()) {
                      rc["response"]["errors"] = config.lookupStatus('captchaProtect');
-                     renderResult(rc=rc,abort=true);
+                     renderResult(abort=true);
                  } else {
                      rc["response"]["errors"] = 'captchaProtect';
                      
@@ -67,7 +75,7 @@ component accessors=true {
      authorize
 	 secrity checked for pages that require authentication
      ********************************************************/
-     function authorize( struct rc = {} ) {
+    private function authorize() {
 		
         var sl = config.getSetting("securelist");
         
@@ -80,10 +88,10 @@ component accessors=true {
 
                 if (utils.isAjaxRequest()) {        
                     rc["response"]["payload"]["redirect"] = '/login';
-                    renderResult(rc=rc,abort=true);
+                    renderResult(abort=true);
                 } else {
                     rc.destination = variables.fw.getSection();	
-                    renderResult(rc, '/login', 'destination' ) ; 
+                    renderResult('/login', 'destination' ) ; 
 
                 }
 
@@ -97,7 +105,7 @@ component accessors=true {
      standard method to validate a form submit using fw bean/populate
      utilties
 	*********************************************************************/
-    function validateForm(struct rc = {}, string bean = '') {
+    private function validateForm(string bean = '') {
             
         // get the bean and populate it from form fields
 		var thebean = variables.beanFactory.getBean( arguments.bean );
@@ -108,7 +116,7 @@ component accessors=true {
             // if ajax form submit is detected; then stop processing here and render data back to client.
             if (utils.isAjaxRequest()) {
                 rc["response"]["errors"] = thebean.getErrors();
-                 renderResult(rc=rc,abort=true);
+                 renderResult(abort=true);
             } else {
                 // slug only in errors so that it can be looked up from content to page in view or redirect
                 rc["response"]["errors"] = thebean.getStatus();
@@ -123,12 +131,12 @@ component accessors=true {
      can be an exact error message, a slug for a lookup or cf 
      exception
 	**************************************************************/
-	function handleServerError(struct rc = {}, required struct e) {
+	private function handleServerError(required struct e) {
        
         /*
             e.error can be
                cleansed cf exception response
-               are own harvested cf thrown message
+               our own harvested cf thrown message
                looked up message in messages struct
                for non-ajax cases it it not applicable but it should be 
                filled with next best choice from the content struct
@@ -139,7 +147,7 @@ component accessors=true {
         if(e.errortype eq "CFException" or !structIsEmpty(e.originalError)) {
             //email original exception
             request.exception = e.originalError;
-            sendErrorEmail(rc);
+            sendErrorEmail();
         }
         // custom thrown exception
         else if(e.errortype eq "customException") {
@@ -162,7 +170,7 @@ component accessors=true {
      generic email handler for errors both explicity and implicity
      thrown
 	*********************************************************/
-	function sendErrorEmail(struct rc = {}) {
+	private function sendErrorEmail() {
         var mail = variables.config.getSetting('mail');
 		request.showDiagnostics = (variables.config.getSetting('env') eq 'dev') ? true : false;
         request.stacktrace ='';
@@ -187,31 +195,72 @@ component accessors=true {
 
 	}
 
-    function captchaProtect (struct rc= {}) {
+    private function captchaProtect () {
         	// captcha - extra protection against bots
 			if(rc.response.errors eq 'captchaProtect') { 
 				throw(message='sorry, we think you are not human', errorcode='not_human');
 			}	
     }
-    
+
+   
     /**********************************************************
 	renderResult
     navigation renderer, either an ajax call so just renderdata 
-    in place ot redirect to destiation 
+    in place or redirect to destination 
 	*********************************************************/
-	function renderResult(struct rc = {}, string destination = '', string peristvars='', boolean abort = false) {
+	private function renderResult(string destination = '', string peristvars='', boolean abort = false) {
 
         
         if (len(arguments.destination) )
             if(left(arguments.destination , 8) eq '//search') 
                 location(mid(arguments.destination,3, len(arguments.destination)), "false", "301"); 
             else
-               variables.fw.redirectCustomURL(arguments.destination, arguments.peristvars );
+               variables.fw.redirectCustomURL(uri=arguments.destination, preserve=arguments.peristvars );
         else {
-            variables.fw.renderData().type( 'json' ).data( rc.response ).statusCode( 200 ).statusText( "Successful" );
+            variables.fw.renderData().type( 'json' ).data( rc.response ).statusCode( rc.response.status ).statusText( "Successful" );
             if (arguments.abort)
                 variables.fw.abortController();
 
         }
     }
+
+    /**
+	 * getSessionEmail
+	 * Retrieves the registrant's email from the session.
+	 * 
+	 * @return The registrant's email if it exists in the session; otherwise, an empty string.
+	 */
+	private function getSessionEmail() {
+        return isDefined("variables.rc.userSession.email") ? variables.rc.userSession.email : "";
+	}
+
+    /**
+     * Retrieves a user by email, sets the user in the session, and updates the 
+     * the user session with whatever custom key value pairs passed.
+     * 
+     * @param email (string) - The email address used to retrieve the user.
+     * @param state (struct) - A key value pairs to append or overwrite into user session.
+     * 
+     */
+    private function getUserByEmailAndSetSessionWithState(required string email,  struct userdata={}) {
+        // get user from the database using their email
+        var user = variables.userService.getUserFromDb(email = arguments.email);
+        structAppend(user,arguments.userdata)
+        updateUserSession(user);
+    }
+    
+    /**
+     * update the user sesson and sync to rc
+     * 
+     * @param state (struct) - A key value pairs to append or overwrite into user session.
+     * 
+     */
+    private function updateUserSession(userdata={}) {
+      // persist to the session scope
+      variables.userService.SetUserSession(arguments.userdata);
+      // sync session to rc scope
+      variables.rc.userSession = variables.userService.getUserSession();
+
+    }
+
 }    

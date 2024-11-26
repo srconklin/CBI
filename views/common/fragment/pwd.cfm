@@ -1,5 +1,5 @@
 <cfparam name="local.label" default="Password">
-<cfparam name="local.store" default="">
+<cfparam name="local.store" default="setpassword">
 
 <cfif !len(local.store)>
     <p>STORE NOT SET</p>

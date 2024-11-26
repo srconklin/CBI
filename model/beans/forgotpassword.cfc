@@ -57,9 +57,7 @@ component accessors=true extends="model.beans.common" {
     
     function verifyToken(){
 
-        clearErrors();
-
-     
+       clearErrors();
        var result = variables.utils.verifyToken(getResetToken(), 'password');
         if (!result.success) {
 

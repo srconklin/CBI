@@ -9,15 +9,13 @@ component accessors=true {
 	function defaultUserSession( ) {
 		 // get the bean 
 		 var user = variables.beanFactory.getBean( 'userBean' );
-		 //structAppend(session, {user: user.getUserData()}, true);
-		// session.user = user.getUserData();
 		param name="session.user" default={};
 		setUserSession(user.getUserData());
 		
 	}
 
 	function getUserSession( ) {
-		var userSession = duplicate(session.user);
+		var userSession = session.user;
 
 		structAppend(userSession, {
 			isLoggedIn : isLoggedIn(),
@@ -40,19 +38,22 @@ component accessors=true {
 		defaultUserSession();
 	}
 	
+	/*
+		definition of logged in is recognized thru 
+		offer submit  validated=1
+		or user registration validated=2
+	*/
     private function isLoggedIn( ) {
-		// definition of logged is recognized thru offer submit or user registration log in
-		// validated 1 or 2
 		return structkeyExists(session.user, 'validated') and session.user.validated ? true : false;
 
 	}
-	function updateUserState(string email = '', state= {}) {
+
+	
+	function getUserFromDb(string email = '') {
 		var user = variables.beanFactory.getBean( 'userbean' );
 		user.refreshUserfromDB(arguments.email);
-		if(!structIsEmpty(arguments.state))
-			user.addUserData(arguments.state);
-		setUserSession(user.getUserData());
-	}
+		return user.getUserData();
 	
+	}
 	
 }

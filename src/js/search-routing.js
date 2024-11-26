@@ -1,9 +1,12 @@
 /*************************************
  * 
  * 
- * InstantSearch manages a state called uiState. It contains information like query, facets, or the current page, including the hierarchy of the added widgets.
+ * InstantSearch manages a state called uiState. 
+ * It contains information like query, facets, or the current page, including the hierarchy of the added widgets.
 
-To persist this state in the URL, InstantSearch first converts the uiState into an object called routeState. This routeState then becomes a URL. Conversely, when InstantSearch reads the URL and applies it to the search, it converts routeState into uiState. This logic lives in two functions:
+To persist this state in the URL, InstantSearch first converts the uiState into an object called routeState. 
+This routeState then becomes a URL. Conversely, when InstantSearch reads the URL and applies it to the search, 
+it converts routeState into uiState. This logic lives in two functions:
 
 stateToRoute: converts uiState to routeState.
 routeToState: converts routeState to uiState.
@@ -120,7 +123,7 @@ import {
 	// implement stateToRoute to flattem the uiState object into a URL
 	stateToRoute(uiState) {
 		
-	  const indexUiState = uiState['cbi'] || {};
+	  const indexUiState = uiState[process.env.INDEX] || {};
 	  let widgets = {
 			query: indexUiState.query
 		}
@@ -138,7 +141,8 @@ import {
 	// routeToState: converts routeState to uiState.
 	// restore the URL into a UI state to sync refinements
 	routeToState(routeState) {
-	    
+	  let index = process.env.INDEX;
+	   
 	  let widgets = { 
 		query: routeState.query
 	  }
@@ -157,7 +161,7 @@ import {
 		}
 	  }
 	  return {
-		cbi: widgets
+		[index]: widgets
 	  };
 	},
   };

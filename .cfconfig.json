@@ -72,5 +72,33 @@
 			"connectionLimit": "100",
 			"connectionTimeout": "1"
 		}
-	}
+	},
+	"debuggingDBEnabled":"true",
+    "debuggingDumpEnabled":"false",
+    "debuggingEnabled":"true",
+    "debuggingExceptionsEnabled":"false",
+    "debuggingImplicitVariableAccessEnabled":"false",
+    "debuggingQueryUsageEnabled":"true",
+    "debuggingTemplates":{
+        "modern":{
+            "custom":{
+                "callStack":"Enabled",
+                "colorHighlight":"Enabled",
+                "displayPercentages":"Enabled",
+                "expression":"Enabled",
+                "general":"Enabled",
+                "highlight":"250000",
+                "minimal":"0",
+                "sessionSize":"100"
+            },
+            "fullname":"lucee-server.admin.debug.Modern",
+            "id":"ae74ea4e2e865ed3fd60c18a06e69c65",
+            "iprange":"*",
+            "label":"modern",
+            "path":"/lucee-server/admin/debug/Modern.cfc",
+            "type":"lucee-modern"
+        }
+    },
+    "debuggingTimerEnabled":"true",
+    "debuggingTracingEnabled":"true",
 }

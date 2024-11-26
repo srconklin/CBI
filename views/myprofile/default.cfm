@@ -1,31 +1,53 @@
 <div id="myprofile">
-<div class="container">
-    <h2>My Profile</h2>
-    <cfoutput>
-        <div class="email-status flex align-center">
-            <p>#rc.userSession.email#</p>
-            
-            <cfif rc.userSession.isEmailVerified>
-                <span style="color:##2f855a;">EMAIL VERIFIED</span>
-                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"  style="color:##2f855a; width:1.5rem; height: 1.5rem;">
-                    <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
-                </svg>
 
-            <cfelse>
-                <div class="error">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="color:##b91c1c;">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                        <title>Email not Verified</title>
-                      </svg>
-                    Your email is not verified!&nbsp;<a href="/resendlink">send/resend</a>&nbsp;an email to verify your account now.
-
-            </cfif>
+    <!--- <h2>My Profile</h2> --->
+    <section class="center-w-flex mt-4">
+        <div class="lead-container">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+              </svg>
+            <h1 class="lead-title">My Profile</h1>
+        </div>
+        
+        <div class="instruction instruction-enhanced">
+            Manage your account details, update your contact info, adjust notifications, and keep your address current.
         </div>
 
-    </cfoutput>
+        <cfoutput>
+            <div class="mb-4">
+                <!--- <p>#rc.userSession.email#</p>  color:##2f855a;" --->
+                <cfif rc.userSession.isEmailVerified>
+                    <div class="message-box success"> 
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"  style="color:##2f855a; width:1.5rem; height: 1.5rem;">
+                             <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
+                        </svg>
+                        <span>
+                            <b>#rc.userSession.email#</b>&nbsp;VERIFIED!
+                        </span>
+                    </div>
+    
+                <!--- <cfelse>
+                    <div class="message-box error">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="color:##b91c1c;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                        </svg>
+                        <span>
+                            <b>#rc.userSession.email#</b> has been not verified yet!<br><a href="/resendlink">Send</a>&nbsp;an email to confirm your account now.
+                        </span>
+                        
+                    </div> --->
+                </cfif>
+            </div> 
 
-    <cfif (rc.userSession.validated eq 2)>
-	<div class="panel box-shadow2 mt-8">
+        </cfoutput>
+
+    </section>
+
+ <div class="container">
+
+
+    <!--- <cfif (rc.userSession.validated eq 2)> --->
+	<div class="panel" style="border-top: 1px solid #e5e5e5; border-radius:0">
 
 		<div class="verttabs" x-data>
 			<ul>
@@ -50,60 +72,70 @@
 			<div class="tabcontent">
 				<div class="fadein" x-show="$store.tabs.openTab === 1" >
 					<cfoutput>
-					<form 
-						id="updatecontactinfofrm"
-						action="/updatecontactinfo" 
-						method="post" 
-						x-data 
-						x-init="
-                            $store.updatecontactinfo.firstName.value = '#rc.user.firstName#';
-                            $store.updatecontactinfo.lastName.value = '#rc.user.lastName#';
-                            $store.updatecontactinfo.email.value = '#rc.user.email#';
-                            $store.updatecontactinfo.coname.value = '#rc.user.coname#';
-                            $store.updatecontactinfo.phone.value = '#rc.user.phone1#';
-                        " 
-                        @submit.prevent="$store.forms.submit('updatecontactinfo')">
-						#view( 'common/fragment/personal', {store='updatecontactinfo',mode='edit'})#
-						</cfoutput>
-						
-						<div
-						class="form-row" 
-						x-cloak 
-						x-show="$store.updatecontactinfo.generalError">
-							<p 
-								class="helper error-message-box error-message" 
-								x-html="$store.updatecontactinfo.generalError">
-							</p>
-						</div>
+                    <cfif (rc.userSession.validated eq 2)>    
+                        <form 
+                            id="updatecontactinfofrm"
+                            name="updatecontactinfofrm"
+                            action="/updatecontactinfo" 
+                            method="post" 
+                            x-data 
+                            x-init="
+                                $store.updatecontactinfo.firstName.value = '#rc.user.firstName#';
+                                $store.updatecontactinfo.lastName.value = '#rc.user.lastName#';
+                                $store.updatecontactinfo.email.value = '#rc.user.email#';
+                                $store.updatecontactinfo.coname.value = '#rc.user.coname#';
+                                $store.updatecontactinfo.phone.value = '#rc.user.phone1#';
+                            " 
+                            @submit.prevent="$store.forms.submit('updatecontactinfo')">
+                            #view( 'common/fragment/personal', {store='updatecontactinfo',mode='edit'})#
+                            
+                            
+                            <div
+                            class="form-row" 
+                            x-cloak 
+                            x-show="$store.updatecontactinfo.generalError">
+                                <p 
+                                    class="helper error-message-box error-message" 
+                                    x-html="$store.updatecontactinfo.generalError">
+                                </p>
+                            </div>
 
-						<div class="form-row">
-							<button 
-								id="updatecontactinfo"
-								name="updatecontactinfo"
-								type="submit" 
-								class="btn btn-red" 
-								title="save changes"
-								<!--- alpine --->
-								:class="{'submitting' :$store.forms.submitting}" 
-								:disabled="$store.forms.submitting"
-								>
-								<svg x-show="$store.forms.submitting" class="animate-spin processing"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-										<circle style="opacity: .25"  cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-										<path style="opacity: .75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-								</svg>Save Changes
-							</button>
-						</div>
+                            <div class="form-row">
+                                <button 
+                                    id="updatecontactinfo"
+                                    name="updatecontactinfo"
+                                    type="submit" 
+                                    class="btn btn-red" 
+                                    title="save changes"
+                                    <!--- alpine --->
+                                    :class="{'submitting' :$store.forms.submitting}" 
+                                    :disabled="$store.forms.submitting"
+                                    >
+                                    <svg x-show="$store.forms.submitting" class="animate-spin processing"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle style="opacity: .25"  cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path style="opacity: .75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>Save Changes
+                                </button>
+                            </div>
 
-					</form>	
-					
+                        </form>	
+                    <cfelse>
+                       #view( 'myprofile/unlocksettings')# 
+                    </cfif>
+
+				</cfoutput>
+
 				</div>
 				<!----------------------------------- 
 					change password
 				 ----------------------------------->
 				<div class="fadein" x-show="$store.tabs.openTab === 2">
 					<cfoutput>
+
+                    <cfif (rc.userSession.validated eq 2)>    
 			            <form 
 						id="changepasswordfrm"
+						name="changepasswordfrm"
 						action="/changepassword" 
 						method="post" 
 						x-data 
@@ -149,7 +181,7 @@
 										</p>
 							</div> 
                             #view( 'common/fragment/pwd', {label = 'New Password', store='changepassword'})#
-						</cfoutput>
+					
 						
 						<div
 						class="form-row" 
@@ -179,18 +211,25 @@
 							</button>
 						</div>
 
-					</form>				 
+                    <cfelse>
+                        #view( 'myprofile/unlocksettings')# 
+                     </cfif>
+					</form>	
+
+                 </cfoutput>			 
 				</div>
                 <!----------------------------------- 
 					My Address
 				 ----------------------------------->
 				<div class="fadein" x-show="$store.tabs.openTab === 3">
                      <cfoutput>
-                       
+
+                        <cfif (rc.userSession.validated eq 2)>    
                         <!--- <div class="center-w-flex mt-8">
                         <div style="max-width:1024px;width:100%"> --->
                                 <form 
                                 id="updateaddressfrm"
+                                name="updateaddressfrm"
                                 action="/updateaddress" 
                                 method="post" 
                                 autocomplete="off"
@@ -305,6 +344,7 @@
                                         <div class="form-row">
                                             <label for="searchgeo" class="form-label">
                                                 Type your c&##8204;ity to select your location<span>*</span>
+                                                
                                             </label>
                                             <input
                                                 id="searchgeo" 
@@ -318,7 +358,9 @@
                                                 autocorrect="off"
                                                 autocapitalize="off"
                                                 spellcheck="false"
+                                                oninput="this.value=romanAlphaOnly(this.value);" 
                                             >
+                                            <div class="note">Note: Only English or Latin-based language input is supported.</div>
                                         </div>	
 
                                         <!--- [CityTxt], [StateTxt], [CountryTxt], [LocGID], [StPGID], [CyGID] --->
@@ -401,13 +443,20 @@
                                     data-msg='["valueMissing:Country not found]' 
                                 >
                             </form>	 
-                      
+                        <cfelse>
+                            #view( 'myprofile/unlocksettings')# 
+                         </cfif>
+
                     </cfoutput>
 				</div>
 				<div class="fadein" x-show="$store.tabs.openTab === 4">
-						<h2 class="mb-8">Communication Preferences</h2>
+						
+
+                        <cfif (rc.userSession.validated eq 2)>    
+                            <h2 class="mb-8">Communication Preferences</h2>
 						<form 
 						id="updateCommPreffrm"
+						name="updateCommPreffrm"
 						action="/updateCommPref" 
 						method="post" 
 						x-data 
@@ -455,10 +504,15 @@
                      </button>
                     
                     </form>
+
+                <cfelse>
+                   <cfoutput> #view( 'myprofile/unlocksettings')# </cfoutput>
+                 </cfif>
+
 			</div>
 		</div>
 	</div>
-    </cfif>
+    
 </div>
 </div>
 
@@ -477,7 +531,7 @@
       // Add other bootstrap parameters as needed, using camel case.
     });
   </script> --->
- <script  src="/dist/aac-OZNIJNGD.js" type="module"></script>
+ <script  src="/dist/aac-EU2IF47H.js" type="module"></script>
 
  <cfif len(rc.myaddress.LocGID)>
 

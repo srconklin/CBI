@@ -5,10 +5,9 @@ window.formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD'
   });
-  // matches any kind of letter from any language and full stop,comma,apostrophe,dash and space
-  // window.stripInvalidChars = (s) => s.toString().replace(/[^\p{L} '.,-]/gui, '');
-  // window.stripInvalidCharsForPostal = (s) => s.toString().replace(/[^\p{L}[^0-9] -]/gui, '');
-  // window.stripInvalidCharsForAddress = (s) => s.toString().replace(/[^\p{L}[^0-9] #'.,-;]/gui, '');
+  window.romanAlphaOnly = (text) => {
+    return text.toString().replace(/[^a-zA-ZÀ-ÿ\s.',\-]/g, '');
+  };
   window.stripInvalidChars = (s, type) => {
     let regex;
 
@@ -28,7 +27,6 @@ window.formatter = new Intl.NumberFormat('en-US', {
   window.integerOnly = (n) => n.toString().replace(/[^0-9]/g, '');
   window.formatNumber = (n) => addCommas(integerOnly(n));
   // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
-  // window.addCommas = (x) => x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
   window.addCommas = (x) => {
     var parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -37,6 +35,7 @@ window.formatter = new Intl.NumberFormat('en-US', {
   window.validTelNumber = (n) => n.toString().replace(/[^0-9\s-\+()\.]/g, '');
   window.formatCurrency = (val, blur) => {
     if (!val) return '';
+    val = '' + val;
     const mapper = (e, i) => i == 1 ? (blur === "blur") ? formatNumber(e).concat('00').substring(0, 2) : formatNumber(e).substring(0, 2) : formatNumber(e);
     return (val.indexOf(".") >= 0) ? val.split(".").map(mapper).join(".") : (blur === "blur") ? formatNumber(val).concat('.00') : formatNumber(val);
   };
@@ -79,9 +78,14 @@ window.formatter = new Intl.NumberFormat('en-US', {
     return window.matchMedia("(max-width: 640px)").matches
   }
   
-  window.fetchItemAsJSON = async (itemno)  => {
-    const response = await fetch(`/data/${itemno}.json`, { method: 'GET' });
-    return await response.json();
+  // window.fetchItemAsJSON = async (itemno)  => {
+  //   const response = await fetch(`/data/${itemno}.json`, { method: 'GET' });
+  //   return await response.json();
+  // }
+
+   window.fetchHitTemplate = async ()  => {
+    const response = await fetch(`/data/template/hit.html`, { method: 'GET' });
+    return response.text();
   }
   
   window.buildItemURI = (itemno, title)  => {
@@ -109,7 +113,7 @@ window.formatter = new Intl.NumberFormat('en-US', {
   window.getUserFavs = async () => {
     const response = await fetch("/getfavorites");
     const data = await response.json();
-     return data.payload;
+    return data.payload;
   }
 
 
@@ -123,6 +127,72 @@ window.formatter = new Intl.NumberFormat('en-US', {
     });
     return await response.json();
   }
+
+
+
+  window.httprequest = (route, options={}) => {
+      const {headers, query=null, method= 'GET', body} = options;
+
+      const reqOptions = {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With' : 'XMLHttpRequest',
+          ...headers
+        }
+      };
+
+      if(body) {
+        reqOptions.body = typeof body === 'object' ? JSON.stringify(body) : body;
+      }
+
+      let queryString = ''
+      if(query) {
+        queryString = '?' + new URLSearchParams(query);
+      }
+
+      return fetch(`/${route}${queryString}`, reqOptions)
+              .then(parseResponse)
+            //.catch(error => console.log(error))
+  }
+
+  window.parseResponse = async (response) => {
+
+    try {
+      
+      //response not ok. network error
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      // we don't have json
+      // const contentType = response.headers.get("content-type");
+      // if (!contentType || !contentType.includes("application/json")) {
+      //   throw new Error("Oops, we haven't got JSON!");
+      // }
+
+      const resObj = await response.json();
+
+      // server threw false on success
+      if(resObj.hasOwnProperty('res') && !resObj.res)  {
+        // redirect key is filled so timeout or not logged in; redirect (login)
+        if (resObj.payload && resObj.payload.redirect)
+           location.href = resObj.payload.redirect + '/?destination=' + location.pathname.replace("/","");
+        else 
+          throw new Error(resObj.errors);
+       }
+        
+       return resObj;
+       //return resObj.payload;
+
+      } catch (e) {
+         // Promise.reject(e);
+         //console.log(resObj);
+         throw new Error(e.message);
+
+      }
+    
+  }
+  
 
   window.submitCap = (frm, route) => {
         window.getCaptchaToken(route) 

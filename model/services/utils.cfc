@@ -94,7 +94,7 @@ component accessors=true {
 
             //problem with token
             if(len(decomposedToken.error)) {
-                // decomposeResetToken returns very specific errors on issues that could have
+                // decomposeResetToken returns very specific errors on issues with token
                 result.error = decomposedToken.error;
             } else {
             
@@ -112,10 +112,11 @@ component accessors=true {
 
                     // register checks    
                     if (arguments.type eq 'register') {
-                    
-                        if (arUser[1].verifyVerified eq 1) {	
+             
+                        if (arUser[1].verifyVerified eq 1 && arUser[1].pwdVerified) {	
                             result.error = 'emailAlreadyVerified';
-                        }
+                        } else if (arUser[1].verifyVerified eq 1 && !arUser[1].pwdVerified)
+                           result.error = 'emailAlreadyVerifiedButNeedPassword';
                         // register token date link expired more than the threshold allows
                         else if ( datediff('n', arUser[1].verifyDateTime, now()) gt config.getSetting('threshold')) {	
                             result.error = 'linkExpired';

@@ -7,11 +7,11 @@
 
 <cfoutput>
 
-	<div class="modal-container2" 
+	<div class="modal-container" 
 	#xdata#
 	>
 
-		<!--- overlay  x-show="$store.imodal.modal" --->
+		<!--- overlay  x-show="$store.item.modal" --->
 		<div class="overlay"  x-show="#xshow#" x-transition.opacity.duration.500ms></div>	
 
 		<!--- positioning --->

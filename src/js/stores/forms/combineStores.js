@@ -5,11 +5,12 @@ const getStoreKeysFromFile = (store) => Object.keys(Alpine.store(store)).filter(
 
 // virtual stores
 Alpine.store('updatecontactinfo', {});
-Alpine.store('resetpassword', {});
+Alpine.store('setpassword', {});
 Alpine.store('updateCommPref', {'generalError' : ''});
 
 // The stores that need annotating 
-const stores = ['offer', 'inquiry', 'register', 'updatecontactinfo', 'changepassword','updateaddress','resetpassword','contact'];
+const stores = ['offer', 'reply', 'inquiry', 'register', 
+                'updatecontactinfo', 'changepassword','updateaddress','setpassword','contact'];
 
 /************************************************
  every store gets the standard base functions
@@ -49,7 +50,7 @@ for(let i = 0; i< personforms.length;i++) {
 // get the pwdmgr properties from the store file definition
 const pwdmgr = getStoreKeysFromFile('pwd');
 // forms that have the password mgr on the form
-const pwdforms = ['register', 'changepassword', 'resetpassword'];
+const pwdforms = ['register', 'changepassword', 'setpassword'];
 for(let i = 0; i< pwdforms.length;i++) {
     const store = pwdforms[i];
     for(let j = 0; j< pwdmgr.length;j++) {

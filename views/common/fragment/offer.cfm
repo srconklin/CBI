@@ -2,6 +2,7 @@
 	<form 
 		id="offerfrm" 
 		name="offerfrm" 
+		action="/offer"
 		method="post" 
 		x-data 
 		<!--- form name passed to submit form --->
@@ -87,6 +88,30 @@
 				x-text="$store.offer.priceStated.errorMessage">
 			</p>
 		</div>
+		
+		<div class="form-row" x-id="['message']">
+			<label :for="$id('message')" class="form-label">
+				Message or Notes
+			</label>
+			<textarea 
+				name="message"
+				class="form-control"
+				maxlength="250"
+				placeholder="enter any additional notes or comments regarding the offer"
+				title="enter any additional notes or comments regarding the offer"
+				<!--- optional --->
+				cols="50" 
+				rows="3" 
+			 	wrap="soft" 
+				<!--- alpine --->
+				:id="$id('message')"
+				x-model="$store.offer.message.value"
+				@blur="$store.offer.validate($event)"
+				></textarea>
+			<p class="count" x-cloak>
+				<span x-text="$store.offer.messageRemain"></span> characters remaining.
+		   </p>
+		</div>
 		<div class="form-row">
 			<label for="terms" class="form-label">
 				Qualifications or Contingencies
@@ -114,29 +139,7 @@
 			</p>
 
 		</div>
-		<div class="form-row" x-id="['message']">
-			<label :for="$id('message')" class="form-label">
-				Additional Notes
-			</label>
-			<textarea 
-				name="message"
-				class="form-control"
-				maxlength="250"
-				placeholder="enter any additional notes or comments regarding the offer"
-				title="enter any additional notes or comments regarding the offer"
-				<!--- optional --->
-				cols="50" 
-				rows="3" 
-			 	wrap="soft" 
-				<!--- alpine --->
-				:id="$id('message')"
-				x-model="$store.offer.message.value"
-				@blur="$store.offer.validate($event)"
-				></textarea>
-			<p class="count" x-cloak>
-				<span x-text="$store.offer.messageRemain"></span> characters remaining.
-		   </p>
-		</div>
+
 		<cfoutput>
 			#view( 'common/fragment/personal', {store='offer'})#
 		</cfoutput>

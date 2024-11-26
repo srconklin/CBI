@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  
+  # CFML Engine
+  cfml:
+    # container_name: cfml
+    image: ortussolutions/commandbox:lucee5
+   
+    # bind public port to 8080
+    ports:
+      - "8080:8080"
+   
+    volumes:
+    - .:/app
+    - /mnt/c/Users/scott/Projects/dynaprice/dynaclients/107/63160:/capovani
+    - /mnt/c/Users/scott/Projects/dynaprice/shared/CodeSnips/Server:/serverSnips
+    - /mnt/c/Users/scott/Projects/dynaprice/shared/customtags:/customtags
+    - /mnt/c/Users/scott/Projects/dynaprice/dynaclients:/clientSites
+    - /mnt/c/Users/scott//Projects/dynaprice/shared/classFiles:/classFiles
+
+    environment:
+      PORT: 8080
+      SSL_PORT: 8443
+      BOX_SERVER_CFCONFIGFILE: /app/.cfconfig.json
+      BOX_SERVER_PROFILE: "${ENVIRONMENT}"
+    
+    
+     

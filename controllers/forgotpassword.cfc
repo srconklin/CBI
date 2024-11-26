@@ -10,20 +10,21 @@ component accessors=true extends="controllers.base.common" {
  	/******************************
 	 forgotpassword (GET)
 	 clicked forgot password link
-	 where one can enter their email address
+	 shows a form w/ email box
 	*******************************/
 	public void function default(struct rc = {}) {
-		param name="rc.fpstatus" default="default";
+		param name="rc.fpstatus" default="forgotpassword";
 		//var validIconStatuses = 'default,linkCreated';
 	
 		// on successfully sending the email, don't show the send form; an extra step to prevent misuse.
 		rc.allowSend = rc.fpstatus eq 'success' ? false: true;
 		
+		// fetch the approproiate icon 
+	    rc.svg = config.getStatusIcon(rc.fpstatus);
+
 		// set the title and instruction as a function of the current status
 		structAppend(rc,config.getContent('forgotpassword', rc.fpstatus));
 	
-		rc.svg = config.getValidSVGIcon('forgotpassword', rc.fpstatus)
-		
 	 }	
 
 	 /***************************************
@@ -46,36 +47,44 @@ component accessors=true extends="controllers.base.common" {
 			// check that token is valid
 			if (!fp.verifyToken()) {
 				//error
-				rc.fpstatus  = handleServerError(rc, fp.getErrorContext());
+				rc.fpstatus  = handleServerError(fp.getErrorContext());
 				//redirect
-				renderResult(rc, '/forgotpassword', 'fpstatus' ) ;
+				renderResult('/forgotpassword', 'fpstatus' ) ;
 
 			// no errors	
 			} else {
 				// allow showing of pwd boxes which uses ajax to process form,
 				structAppend(rc, config.getContent('forgotpassword', 'resetPassword'));
-				rc.svg = config.getValidSVGICon('forgotpassword', 'default');
-				rc.fpstatus = 'default';
-				// view invoked here where password widget is displayed
+    			// fetch the approproiate icon 
+				rc.svg = config.getStatusIcon('resetPassword');
+				variables.fw.setview('forgotpassword.resetpassword')
 			}
 
 		} else {
 			//redirect
-			renderResult(rc, '/forgotpassword', 'fpstatus' ) ;
+			renderResult('/forgotpassword', 'fpstatus' ) ;
 		}
-		
 
 	}
 	
 	/*************************************************
-	 submitresetpassword (get)
+	 passwordResetComplete (get)
 	 final success screen after changing password
-	 has a view -> passwordReset
+	 has a view -> passwordResetComplete
 	**************************************************/
-	public void function passwordReset(struct rc = {}) {
+	public void function passwordResetComplete(struct rc = {}) {
+		if (structkeyExists(rc.userSession, 'pwdSuccessfullySet')) {
+			structAppend(rc, config.getContent('forgotPassword', 'passwordSuccessfulyReset'));
+			// fetch the approproiate icon 
+			rc.svg = config.getStatusIcon('passwordSuccessfulyReset');
+			variables.userService.logout();
+			
+		} else {
+			structAppend(rc, config.getContent('forgotPassword', 'passwordResetError'));
+			// fetch the approproiate icon 
+			rc.svg = config.getStatusIcon('passwordResetError');
+		}
 		
-		structAppend(rc, config.getContent('forgotPassword', 'passwordSuccessfulyReset'));
-		rc.svg = config.getValidSVGICon('forgotPassword', 'default')
 
 	}
 
@@ -91,7 +100,7 @@ component accessors=true extends="controllers.base.common" {
 	******************************/
 	public void function submitforgotpassword(struct rc = {}) {
 		param name="rc.email" default="";
-		rc.fpstatus='linkCreated';
+		rc.fpstatus='passwordlinkCreated';
 
 		// captcha
 		if(len(rc.response.errors)) { 
@@ -100,7 +109,7 @@ component accessors=true extends="controllers.base.common" {
 			
 			//validate form by loading into bean
 			// non ajax bean validation
-			var forgotpassword = validateform(rc, 'forgotpasswordbean');
+			var forgotpassword = validateform('forgotpasswordbean');
 			
 			// bean validation error
 			if(len(rc.response.errors)) 
@@ -112,23 +121,22 @@ component accessors=true extends="controllers.base.common" {
 				forgotpassword.generateLink();
 
 				if (forgotpassword.hasErrors()) {
-					handleServerError(rc, forgotpassword.getErrorContext());
-					rc.fpstatus='linknotcreated'
+					handleServerError(forgotpassword.getErrorContext());
+					rc.fpstatus='passwordlinknotcreated'
 				}
 			} 
 
 		}	
-		//writedump(var="#rc.fpstatus#",  abort="true");
 		// go back to forgotpassword page
-		renderResult(rc, '/forgotpassword', 'fpstatus' ) ;
+		renderResult('/forgotpassword', 'fpstatus' ) ;
 		
 	 }	
 	
 
 	/*************************************
 	 submitresetpassword (POST)
-	 submits from pwd1 and pwd2 widget to 
-	 changing new password
+	 submits form pwd1 and pwd2 widget to 
+	 reset password
 	 ajax : yes
 	******************************************/
 	public void function submitResetPassword(struct rc = {}) {
@@ -136,85 +144,73 @@ component accessors=true extends="controllers.base.common" {
 		param name="rc.pwd2" default="";
 		// hidden form field
 		param name="rc.token" default="";
-		var noErrors = true;
+		// flag to control program flow
+		var hasErrors = false;
 
-		// xtra bot protection
-		captchaProtect(rc);	
+		// xtra bot protection;
+		captchaProtect();	
 		
 		//validate form submit portion by loading into bean
-		var pm = validateform(rc, 'passwordmgrbean');
+		var pm = validateform('passwordmgrbean');
 		// use forgotpasswordbean for logic
 		var fp = variables.beanFactory.getBean( 'forgotpasswordbean' );
 
-		// conditions by which token validation is skipped:  when Executing a Complete Profile Process
-		// and the user already validated their email in step 1 of the process.
-		var performVerifyToken = true;
-		if(structKeyExists(rc.userSession, 'previouslyVerified')  and !rc.userSession.previouslyVerified and !len(rc.token)) 
-			performVerifyToken = false;
+		// revalidate the token to make sure nothing has changed 
+		fp.setResetToken(rc.token);
 
-		//  if we are NOT skipping token validation	
-		if (performVerifyToken) {
-			// revalidate the token to make sure nothing has changed 
-			// this includes decomposing it
-			fp.setResetToken(rc.token);
+ 		// note fp.verify token returns a slug over a message
+		 if (!fp.verifyToken()) {
+			handleServerError(fp.getErrorContext());
+			hasErrors = true;
 
-			// check that token is valid
-			// note fp.verify token returns a slug over a message
-			 if (!fp.verifyToken()) {
-				// sets rc["response"]["errors"] to something
-				handleServerError(rc, fp.getErrorContext());
-				noErrors = false;
-
-			 } else 
-				//email retrieved from token
-				pm.setEmail(fp.getemail());
+		//token ok move onto password manager	
+        } else 
+			pm.setEmail(fp.getemail());
 				
-		} else {
-			pm.setEmail(rc.userSession.email);
-			fp.setEmail(rc.userSession.email);
-		}
-		
 			
 		// no errors, move on to: step 1 Reseting the password	
-		if (noErrors) {
+		if (!hasErrors) {
 			//try to reset/update the password
 			pm.resetPassword();
 			if (pm.hasErrors()) {
 				// can be a cf exception on the update statement or emailnotfound
-				handleServerError(rc, pm.getErrorContext());
-				noErrors = false;
+				handleServerError(pm.getErrorContext());
+				hasErrors = true;
 		   } 
 
 		}
 
 		// no errors, move on to step 2 updating hashes
-		if (noErrors) {
+		if (!hasErrors) {
 			// update the security hashes to say we are done.
 			fp.markPasswordVerified();
 
 			if(fp.hasErrors()) {
-				handleServerError(rc, fp.getErrorContext());
-				noErrors = false;
+				handleServerError(fp.getErrorContext());
+				hasErrors = true;
 			}
 		} 
 				
 
-		// no errors, then move to step 2 reporting back and redirects
-		if (noErrors) {
+		// no errors, then move to step 3 reporting back and redirects
+		if (!hasErrors) {
+			variables.userService.setUserSession({'pwdSuccessfullySet': true});
 			rc["response"]["res"] = true;
-			// we are in an ajax handler; js payload response contains a redirect; JS uses that to relocate
-			// CPS =  Executing a Complete Profile Process, then send back to completeprofile via setpassword route
-			// with the hasPassword flag set to true
-			if (structKeyExists(rc, 'eacpp'))  {
-				variables.userService.setUserSession({'pwdVerified': 1});
-				rc["response"]["payload"]["redirect"] = '/setpassword';
-			}
-			else 
-			   rc["response"]["payload"]["redirect"] = '/passwordReset';
+			rc["response"]["payload"]["redirect"] = '/passwordresetcomplete';
+
+			// // we are in an ajax handler; js payload response contains a redirect; JS uses that to relocate
+			// // CPS =  Executing a Complete Profile Process, then send back to completeprofile via setpassword route
+			// // with the hasPassword flag set to true
+			// if (structKeyExists(rc, 'eacpp'))  {
+			// 	//variables.userService.setUserSession({'pwdVerified': 1});
+			// 	updateUserSession({'pwdVerified': 1});
+			// 	rc["response"]["payload"]["redirect"] = '/setpassword';
+			// }
+			// else 
 
 		}
 
-		renderResult(rc);
+		renderResult();
 			
 	 }	
   
