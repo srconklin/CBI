@@ -169,7 +169,7 @@ component accessors=true extends="model.beans.personal" {
 
         try{
             include "/cbilegacy/legacySiteSettings.cfm";
-            include "/cbilegacy/proctrans.cfm";
+            include "/cbilegacy/proctrans2.cfm";
             
         } catch (e) {
             setErrorState(e)

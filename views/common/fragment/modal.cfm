@@ -34,12 +34,13 @@
 				<div class="scroller">
 					<div class="flex mb-4">
 
-						<!--- content row --->
+						<!--- left margin --->
 						<div class="margin"></div>
 						<!--- content to be injected here --->
-						<div style="width:100%">
+						<div style="flex:1">
 							#content#
 						</div>
+						<!--- right margin --->
 						<div class="margin"></div>
 
 					</div> 

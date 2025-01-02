@@ -21,6 +21,7 @@
 				this.itemno=$event.detail.itemno;
 				$store.itempreview.showItem(this.itemno);
 				this.ipOpen = true;
+				window.addRecentlyViewedItem(this.itemno);
 				
 			}
 		}" 
@@ -39,7 +40,7 @@
 		<cfoutput>
 		<article class="item">
 			<!--- left column image carousel --->
-			<aside>
+			<aside clas="flex justify-center">
 				#view('common/fragment/carousel')#
 				#view('common/fragment/imageModal')#
 			</aside>

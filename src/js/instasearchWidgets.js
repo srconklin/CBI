@@ -1,4 +1,5 @@
 import {hierarchicalMenu, refinementList, searchBox, pagination, configure, hits, panel, breadcrumb, clearRefinements, sortBy, stats} from 'instantsearch.js/es/widgets';
+import { connectClearRefinements, connectBreadcrumb} from 'instantsearch.js/es/connectors';
 
 const validWidgets = [];
 
@@ -45,53 +46,168 @@ if (elementExists('#searchbox')) {
 
 if (elementExists('#breadcrumb')) {
     
-   const bc=  breadcrumb({
+//    const bc=  breadcrumb({
+//         container: '#breadcrumb',
+//         templates: {
+//             home(data, { html }) {
+//                 return html`<span class="non-clickable">All Categories</span>`;
+//             },
+            
+//         },
+//         // cssClasses: {
+//         //     noRefinementRoot: 'noCrumbs' 
+//         // },  
+//         attributes: [
+//             'categories.lvl0',
+//             'categories.lvl1',
+//             'categories.lvl2',
+//             'categories.lvl3',
+//             'categories.lvl4',
+//             'categories.lvl5',
+//         ],
+              
+//         })
+ 
+
+    const customBreadcrumb = connectBreadcrumb(
+        (renderOptions, isFirstRender) => {
+            const { items, refine, createURL } = renderOptions;
+            const container = document.querySelector('#breadcrumb');
+            
+            container.innerHTML = `
+                <div class="ais-Breadcrumb">
+                <ul class="ais-Breadcrumb-list">
+                    <li class="ais-Breadcrumb-item ais-Breadcrumb-link no-hover"><span>All Categories</span></li>
+                    ${items.map( (item) => {
+                       
+                        if (item.value === null) {
+                            return `
+                            <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+                                <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
+                                ${item.label}
+                            </li>
+                            `;
+                        } else {
+                            return `
+                            <li class="ais-Breadcrumb-item">
+                                <span class="ais-Breadcrumb-separator">></span>
+                                <a class="ais-Breadcrumb-link" href="${createURL(item.value)}" data-value="${item.value}">${item.label}</a>
+                            </li>`;
+
+                        }
+
+                    }).join('')}
+
+                </ul> 
+                </div>
+            `;
+         
+            container.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                  e.preventDefault();
+                  const value = event.currentTarget.dataset.value;
+                  refine(value);
+                });
+              }); 
+
+        });
+
+      customBreadcrumb({
+        // Widget parameters
         container: '#breadcrumb',
-        templates: {
-            home(data, { html }) {
-                return html`All Categories`;
-            }
-        },
-        cssClasses: {
-            noRefinementRoot: 'noCrumbs' 
-        },  
         attributes: [
-            'categories.lvl0',
-            'categories.lvl1',
-            'categories.lvl2',
-            'categories.lvl3',
-            'categories.lvl4',
-            'categories.lvl5',
-        ],
-        
-        })
-   
-    validWidgets.push(bc);
+                        'categories.lvl0',
+                        'categories.lvl1',
+                        'categories.lvl2',
+                        'categories.lvl3',
+                        'categories.lvl4',
+                        'categories.lvl5',
+                    ],
+      })
+
+      const customBreadcrumbWidget = customBreadcrumb({
+        container: document.querySelector('#breadcrumb'),
+        attributes: [
+                        'categories.lvl0',
+                        'categories.lvl1',
+                        'categories.lvl2',
+                        'categories.lvl3',
+                        'categories.lvl4',
+                        'categories.lvl5',
+                    ],
+
+    });
+    
+    validWidgets.push(customBreadcrumbWidget);
 
 }
 
 if (elementExists('#clear-refinements')) {
-    const clear =   clearRefinements({
-        container: '#clear-refinements',
+    // const clear =   clearRefinements({
+    //     container: '#clear-refinements',
 
-        templates: {
-            resetLabel({ hasRefinements }, { html }) {
-                return html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
-            </svg>clear filters`
-            }
-        },
-        cssClasses: {
+    //     templates: {
+    //         resetLabel({ hasRefinements }, { html }) {
+    //             return html`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+    //             <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+    //         </svg>clear filters`
+    //         }
+    //     },
+    //     cssClasses: {
             
-            button: [
-            'btn-small',
-            'btn-gray'
-            ],
-        }
-        })
+    //         button: [
+    //         'btn-small',
+    //         'btn-gray'
+    //         ],
+    //     }
+    //     })
 
-        validWidgets.push(clear);
-} 
+    //     validWidgets.push(clear);
+
+
+    // Custom Clear All Widget
+    const customClearRefinements = connectClearRefinements(
+        (renderOptions, isFirstRender) => {
+            const { 
+                canRefine, 
+                refine, 
+                widgetParams 
+            } = renderOptions;
+    
+            if (isFirstRender) {
+                const container = widgetParams.container;
+                const button = document.createElement('button');
+                button.classList.add('btn-small', 'btn-gray')
+                button.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+                    </svg> Clear Filters
+                `;
+                
+                // TO-DO global window object
+                button.addEventListener('click', () => {
+                    refine();
+                    // Assuming search is a global variable set in the main instantsearch initialization
+                    if (window.search && window.search.helper) {
+                        window.search.helper.setQuery('').search();
+                    }
+                });
+    
+                container.appendChild(button);
+            }
+    
+           // const button = widgetParams.container.querySelector('button');
+          //  button.disabled = !canRefine;
+        }
+    );
+    
+    const clearRefinementsWidget = customClearRefinements({
+        container: document.querySelector('#clear-refinements')
+    });
+    
+    validWidgets.push(clearRefinementsWidget);
+
+} // end of clear-refinements
 
 
 
@@ -99,9 +215,9 @@ if (elementExists('#categories')) {
 
     const HMWithPanel =  panel({
         collapsed: ()=> false,
-        hidden(options) {
-            return options.results.nbHits === 0;
-        },
+        // hidden(options) {
+        //     return options.results.nbHits === 0;
+        // },
         templates: {
             header(options, { html }) {
                 return html `Categories`
@@ -124,16 +240,16 @@ if (elementExists('#categories')) {
         })
 
         validWidgets.push(categories);
-}
+} 
 
 
-if (elementExists('#categories')) {
+if (elementExists('#mfr')) {
 
     const refinementListWithPanel =  panel({
         collapsed:  ()=> false,
-        hidden(options) {
-            return options.results.nbHits === 0;
-        },
+        // hidden(options) {
+        //     return options.results.nbHits === 0;
+        // },
         templates: {
             header(options, { html }) {
                 return html`Manufacturer`
@@ -145,7 +261,7 @@ if (elementExists('#categories')) {
         container: '#mfr',
         attribute: 'mfr',
         showMore: true,
-        showMoreLimit: 20,
+        showMoreLimit: 100,
         searchable: true,
         searchablePlaceholder: 'search a mfr...',
         sortBy: ['name:asc'],
@@ -232,7 +348,15 @@ const h = hits({
             document.getElementById('pagination').style.display = 'none';
             document.getElementById('stats').style.display = 'none';
             document.getElementById('sort-by').style.display = 'none';
-            document.getElementById('refinements').style.display = 'none'
+            document.getElementById('breadcrumb').style.display = 'none';
+            // document.getElementById('refinements').style.display = 'block';
+
+            // if the filterbar is visible (below 700 pixels) then we never hide the refinement list
+            //  it is hidden by the button contained within the filterbar (hide/show)
+            // const filterbar = document.getElementById('filterbar');
+            // if (getComputedStyle(filterbar).display !== 'none') 
+            //     document.getElementById('refinements').style.display = 'block'
+            
             return html`<h2>No matching results</h2><p>Try your search again or make sure to adjust any filters that could be limiting the search</p>`
         }, 
 
@@ -240,7 +364,19 @@ const h = hits({
             document.getElementById('pagination').style.display = 'block';
             document.getElementById('sort-by').style.display = 'block'
             document.getElementById('stats').style.display = 'block';
-            document.getElementById('refinements').style.display = 'block';
+            document.getElementById('breadcrumb').style.display = 'block';
+
+          //  const filterbar = document.getElementById('filterbar');
+            /* 
+                if the filterbar is NOT visible then we are above a 700px breakpoint which means
+                we always show the refinements panel 
+
+                note: if below 700px then filterbar is visible, then the showing of the refinement list is
+                a function of the alpinejs showfilter setting
+            */
+            // if (getComputedStyle(filterbar).display == 'none') {
+            //     document.getElementById('refinements').style.display = 'block';
+            // } 
                 
             const plural = hit.qty > 1 ? 's' : '';
             const encItemURI =  window.buildItemURI(hit.itemno, hit.pagetitle) 
@@ -282,7 +418,7 @@ const h = hits({
                             <a href="#" x-on:click.prevent="$store.favorites.IsloggedIn ? $store.favorites.toggle(${hit.itemno}) : $dispatch('show-login', { title: 'You must login to continue' })">
                                 <svg xmlns="http://www.w3.org/2000/svg"  
                                 :class="{ 'favorite': $store.favorites.isFavorite(${hit.itemno}) }" 
-                                :fill="$store.favorites.isFavorite(${hit.itemno}) ? '#fa0114' : 'none'"
+                                :fill="$store.favorites.isFavorite(${hit.itemno}) ? '#d84029' : 'none'"
                                 viewBox="0 0 24 24" stroke="currentColor"
                                 ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>Favorite

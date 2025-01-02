@@ -18,7 +18,7 @@
 		  <article class="item">
 
 			  <!--- left column image carousel --->
-			  <aside>
+			  <aside class="flex justify-center">
 				  <cfoutput>
 					 <!--- Note:  server side version of carousel places item list into html source:  SEO  --->
 					  #view( 'common/fragment/carousel' , {server=true})#

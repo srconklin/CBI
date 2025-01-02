@@ -9,7 +9,6 @@
 .verttabs > ul {
     min-width: fit-content;
     display: block;
-    padding-right: 2.5rem;
   
 }
 
@@ -19,7 +18,7 @@
 }
  
 .verttabs .activeBtn {
-    color: #fa0114;
+    color: #d84029;
 }
   
 
@@ -30,15 +29,16 @@
 
 .tabs > ul {
     margin-top: 1.5rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     flex-direction: column;
     display: flex;
-    border-bottom: 1px solid   #c2c3c5;
+    /* border-bottom: 1px solid   #c2c3c5; */
   
 }
 
 .tabs > ul li {
   margin-bottom: 0.5rem;
+  white-space: nowrap;
   text-align: center;
  }
 
@@ -68,17 +68,16 @@
 
 .tabs .activeBtn {
     /* color:white; */
-    color: #fa0114;
+    color: #d84029;
     border: 1px solid  #c2c3c5;
-    border-bottom-right-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem; 
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
+    border-radius: 0.25rem;
     background-color:#f7f7f7
 }
 
 .tabs .inActiveBtn, .verttabs .inActiveBtn  { 
     color: #4b5563;
+    border: 1px solid  #c2c3c5;
+    border-radius: 0.25rem;
 }
 
 .tabs .inActiveBtn:hover, .verttabs .inActiveBtn:hover { 
@@ -94,13 +93,24 @@
 }
 
 .tabs .tabcontent {
-    border-bottom-right-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem; 
+    border-radius: 0.25rem;
     background-color: #f7f7f7;
-    border-left: 1px solid #c2c3c5;
+    /* border-left: 1px solid #c2c3c5;
     border-right: 1px solid #c2c3c5;
-    border-bottom: 1px solid #c2c3c5;
+    border-bottom: 1px solid #c2c3c5; */
+    border: 1px solid #c2c3c5;
 }
+
+
+.verttabs .tabcontent {
+    padding: 1rem 0 1rem 0;
+ }
+
+ 
+.verttabs button {
+   width: 100%;
+ }
+
 /* 
 .tabelement {
     animation: fadeEffect .7s;

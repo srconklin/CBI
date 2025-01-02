@@ -5,13 +5,11 @@ import Alpine from 'alpinejs';
 Alpine.store('carousel', {
 
     slides : [],
-    skip : 1,
+    skip : 1, // amounty of slides to skip in one click
     active : 0,
 
     reset() {
         this.slides = [];
-        this.skip= 1;
-        this.active= 0;
         document.getElementById('slider').scrollLeft = 0;
        
     },
@@ -20,6 +18,7 @@ Alpine.store('carousel', {
     },
     next() {
         this.to((current, offset) => current + (offset * this.skip))
+        
     },
 
     prev() {
@@ -28,10 +27,10 @@ Alpine.store('carousel', {
 
     to(strategy) {
         let slider = document.getElementById('slider');
-
         let current = slider.scrollLeft
         let offset = slider.lastElementChild.getBoundingClientRect().width
         let goto = strategy(current, offset);
+        console.log(goto);
         slider.scrollTo({ left: goto, behavior: 'smooth' })
     }
 

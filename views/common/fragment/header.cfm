@@ -1,25 +1,16 @@
- <div id= "nav">
+ <div id="nav" class="box-shadow">
 <!--- header --->
 	<header class="header" x-cloak x-data="{showMenu : false, hidden: false}" @blur-bg.window="$event.detail?hidden = true:hidden=false;" :class="{ 'header-hidden': hidden }">
-		<div class="header-container">
+		<div class="header-container" :class="{ 'make-vertical' : showMenu }">
 		
-			<!--- 2 column  wrapper --->
-		  <!--- <div class="header-column"> --->
-	
 			<!--- logo --->
-			<div class="header-logo">
+			<div class="header-logo" :style="showMenu && { marginBottom: '15px'}">
 				<a href="/">	
 					<img alt="Capovani Brothers" class="block" src="/images/logo_short2.png">
 				</a>		
-						<!--- <cfif local.route eq 'default'>
-							<h3><span>C</span>apovani <span>B</span>rothers <span>I</span>nc</h3>
-						</cfif>	 --->
-					<!--- </div> --->
+						
 		  	</div>
-			<!--- 	
-			<cfif local.route neq 'default'>
-				<div id="searchbox" class="searchbox-abbr"></div>
-			</cfif> --->
+			
 			<div class="flex justify-center align-items" style="flex:2">
 				<div id="searchbox" style="max-width: 800px;"></div>
 			</div>
@@ -65,7 +56,7 @@
 							<cfoutput>
 								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 64 64" version="1.1">
 									<circle fill="##FFFFFF" cx="32" width="64" height="64" cy="32" r="32"/>
-									<text x="50%" y="50%" fill="##fa0114" style="color: ##fa0114; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="30" font-weight="600" dy=".1em" dominant-baseline="middle" >#rc.userSession.avatar#</text></svg>
+									<text x="50%" y="50%" fill="##d84029" style="color: ##d84029; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="30" font-weight="600" dy=".1em" dominant-baseline="middle" >#rc.userSession.avatar#</text></svg>
 							</cfoutput>
 						</button>
 						<cfif !rc.userSession.isEmailVerified>
@@ -140,7 +131,7 @@
 		  </div>
 
 		  <!--- menu icon --->
-		<div class="header-nav" :class="{ 'align-self': showMenu }">
+		<div class="header-nav" :class="{ 'swap': showMenu }">
 
 			<button type="button" @click.prevent="showMenu = !showMenu ">
 	

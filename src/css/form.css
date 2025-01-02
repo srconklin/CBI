@@ -40,11 +40,11 @@
   }
   
   .checkbox:checked {
-    background: #fa0114;
+    background: #d84029;
   }
   
   .checkbox:focus {
-    outline: 2px solid #fa0114;
+    outline: 2px solid #d84029;
   }
   
   

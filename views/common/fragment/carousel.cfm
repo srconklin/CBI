@@ -2,16 +2,24 @@
 <cfparam name="local.server" default="false">
 
 <cfoutput>
-<div class="carousel-sizer" 
+<!--- <div class="carousel-sizer" 
 x-cloak
 <cfif not local.server>
 	x-show="$store.carousel.slides"  
 </cfif>	
 x-data>
-	<div id="carousel"  class="carousel" >
+	<div id="carousel"  class="carousel" > --->
 		<!--- @keydown.right="$store.carousel.next"
 			@keydown.left="$store.carousel.prev" --->
-		<div  class="carousel-widget">
+		<div 
+		class="carousel-widget"
+		x-cloak
+        <cfif not local.server>
+	     x-show="$store.carousel.slides"  
+        </cfif>	
+        x-data
+		
+		>
 
 			<button 
 			<cfif not local.server>
@@ -66,8 +74,8 @@ x-data>
 				</svg>
 		 	</button>
 		</div>
-	</div>
+	<!--- </div>
 
-  </div>  
+  </div>   --->
 </cfoutput>
   

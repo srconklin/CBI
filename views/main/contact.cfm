@@ -1,6 +1,6 @@
 <div id="contact" class="general-page">
 
-  <section class="contact-header mt-2 full-width">
+  <section class="contact-header ">
     <div class="content">
       <h1 class="lead-title">Contact Us</h1>
         <!--- <h3 style="font-weight:normal">
@@ -11,11 +11,11 @@
 
   <div class="container">
 
-      <section class="mt-6 mb-8 justify-center" style="gap:60px;">
+      <section class="-8 justify-center" style="gap:60px;">
         <div class="mb-8 " style="flex-basis:530px;">
 
-            <div class="operation-title">
-              <h1>Question or Comment</h1>
+            <div class="form-header">
+              <h2>Question or Comment</h2>
             </div>
             
             <p class="mb-8">
@@ -150,14 +150,14 @@
             </div>
             
         </div>
-        <div style="font-weight:600">
+        <div style="font-weight:500" class="mt-8">
           
-            <p style="font-size:19px">704 Prestige Pkwy,
+            <p style="">704 Prestige Pkwy,
                <br>Scotia, NY 12302 USA
             </p>
             <p style="font-size:medium">email: <a href="mailto:info@capovani.com">info@capovani.com</a></p>
             <p>phone: (518) 602-5999</p>
-            <div style="font-size:large;">
+            <div class="flex flex-direction-column align-center">
                 <div class="open-schedule">
                   <div>Monday</div>
                   <div>9:00 am - 5:00 pm</div>

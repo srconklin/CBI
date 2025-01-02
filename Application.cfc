@@ -1,12 +1,13 @@
 component extends="framework.one" output="false" accessors=true {
 	setting showDebugOutput="false";
-	// this.name = ""
 	this.applicationTimeout = createTimeSpan(2, 0, 0, 0);
 	this.setClientCookies = true;
 	this.sessionManagement = true;
     this.sessionTimeout = createTimeSpan(0, 2, 0, 0);
 	this.datasource = 'dp_cat';
-	
+	// Define the debug flag as a property
+	this.debug = false;	
+
 	property userService;
 	property utils;
 	property botSessionManager;
@@ -21,6 +22,7 @@ component extends="framework.one" output="false" accessors=true {
 		SESOmitIndex = true,
 		decodeRequestBody = true,
 		maxNumContextsPreserved = 1,
+		missingview= 'main.notfound',
 		trace = false,
 		// diEngine = "di1",
 		// diComponent = "framework.ioc",
@@ -91,7 +93,8 @@ component extends="framework.one" output="false" accessors=true {
 				"$POST/updateCommPref/$" = "/myprofile/updateCommPref"
 			},
 
-			{ "$GET/search/" = "/main/default" },
+			{ "$GET/search/:term/" = "/main/search/term/:term" },
+			{ "$GET/search/$" = "/main/search" },
 			{ "$GET/contact/$" = "/main/contact" },
 			{ "$POST/contact/$" = "/main/submitContact" },
 			{ "$GET/faq/$" = "/main/faq" },
@@ -99,6 +102,7 @@ component extends="framework.one" output="false" accessors=true {
 			{ "$GET/terms/$" = "/main/terms" },
 			{ "$GET/privacy/$" = "/main/privacy" },
 			{ "$POST/locationlookup/$" = "/main/locationlookup" },
+			{ "$GET/recentlyviewed/items/:items/" = "/main/getrecentlyviewed/items/:items" },
 
 			{ "$GET/items/{id:[0-9]+}/" = "/main/showitem/id/:id" },
 
@@ -107,9 +111,7 @@ component extends="framework.one" output="false" accessors=true {
 
 			{ "$POST/togglefavorite/" = "/main/togglefavorite" },
 			{ "$GET/getfavorites/" = "/main/getFavorites" },
-			
-
-			{ "$GET/IsLoggedIn/" = "/main/IsLoggedIn" }
+			{ "$GET/IsLoggedIn/" = "/main/IsLoggedIn" },
 		 ]
 	};
 
@@ -123,57 +125,109 @@ component extends="framework.one" output="false" accessors=true {
 	};
 
 
+	  
+	  public void function setupApplication() {
+
+        // Read the contents of the file into a string
+        var fileContents = trim(fileRead('/data/validmenus.txt'));
+
+
+        // Split the string by commas and convert it to an array
+        var arValidMenus = listToArray(fileContents, ",");
+
+        // Store the list in the application scope for global use
+        application.arValidMenus = arValidMenus;
+    }
+
+	function setupRequest() {
+		  // Check if the 'action' parameter is present in the URL (traditional method)
+		  if (structKeyExists(url, "action") && len(url.action) > 0) {
+            // Redirect to the clean, SEO-friendly URL
+            var actionParts = listToArray(url.action, ".");
+
+			
+			if (arrayLen(actionParts) == 2) {
+				
+				var controller = actionParts[1]; // Extract the controller
+                var view = actionParts[2]; // Extract the view
+
+				 // Ensure no special characters (like ":" or "=") are in the controller/view
+				 if (not reFind("^[a-zA-Z0-9_-]+$", controller) || not reFind("^[a-zA-Z0-9_-]+$", view)) {
+                   // Perform a 404 page not found
+					location(url='/notfound');
+                  }
+
+	              var  cleanUrl = "/" & view;
+				  // Perform a 301 redirect to the friendly URL
+				  location(url=cleanUrl, statusCode=301);
+
+            } else {
+				// Perform a 404 page not found
+				location(url='/notfound');
+			}
+           
+            abort();  // Stop processing after redirect
+        }
+    }
+
 	public function before( struct rc = {} ) {
 		request.DSNCat =this.datasource;
+
 		// reset the application 
 		if(structKeyExists(rc, 'resetApp')) {
-			userService.logout();
-		} else if(!structKeyExists(session, 'user'))
+	
+			structClear(application);
+			sessionInvalidate();
+			writeOutput('<h1>Appplication Reset! click to reload</h1><a href="/">reload</a>');
+			abort;
+		} 
+	
+		// check if no user sesssionl; setup default
+		if(!structKeyExists(session, 'user'))
 			userService.defaultUserSession();
-
+		
 		// user session data
-		rc["userSession"] = variables.userService.getUserSession();
-
-		 // Enable only in development mode to avoid exposing data in production
-		 if (getEnvironment() eq "dev") {
-
-			if (!utils.isAjaxRequest()) {
-				// Enable debugging for non-AJAX requests
-				setting showDebugOutput="true";
-				// Trace the user session at the beginning of the request
-				// cftrace(var="rc", text="rc scope at begining of the request", type="information", category="requestDebug");
-				cftrace(var="rc.usersession", text="rc.usersession at begining of the request", type="information", category="SessionDebug");
-            
-			} 
-			       
-        }
+		rc["userSession"] = variables.userService.getUserSession();	
+		
+		if (!utils.isAjaxRequest() && getEnvironment() === "dev" && this.debug) {
+			// Enable debugging for non-AJAX requests
+			setting showDebugOutput = true;
+		}
+		
+		if (getEnvironment() === "prod") 
+			botSessionManager.detectAndManageBotSessions();
 				
 	}
 	
 
 	public function after(string controller, struct rc) {
-		// Enable only in development mode to avoid exposing data in production
-        if (getEnvironment() === "dev") {
-			if (!utils.isAjaxRequest()) {
-				// Enable debugging for non-AJAX requests
-				setting showDebugOutput="true";
-				// Trace the session scope at the end of the request
-				// cftrace(var="rc", text="rc scope at end of the request", type="information", category="requestDebug");
-				cftrace(var="rc.usersession", text="rc.usersession at request end", type="information", category="SessionDebug");
-			}
-        }
+		 traceSessionScope(rc); 
     }
 
 	public function setupResponse(struct rc) {
-		var isDev = getEnvironment() === "dev" ? true : false;
-		botSessionManager.detectAndManageBotSessions();
+		//var isDev = getEnvironment() === "dev" ? true : false;
+	//	botSessionManager.detectAndManageBotSessions();
+		
 	}
 
-	public string function onMissingView(struct rc = {}) {
-		//return "Error 404 - Page not found.";
-		return view( 'main/notFound' );
-	}
+	// public string function onMissingView(struct rc = {}) {
+	// 	//return "Error 404 - Page not found.";
+	// 	return view( 'main/notFound' );
+	// }
 
+		
+
+	// Function to trace session scope
+	private function traceSessionScope(rc) {
+		if (!utils.isAjaxRequest() && getEnvironment() === "dev" && this.debug)  {
+			// Enable debugging for non-AJAX requests
+			setting showDebugOutput = true;
+			// Trace the session scope at the end of the request
+			cftrace(var = "rc.usersession", text = "rc.usersession at request end", type = "information", category = "SessionDebug");
+		}
+	}
+	
+	
 	private function setupEnvironment(string env) {
 		if(arguments.env eq 'prod') 
 			this.mappings[ "/websnips" ] = "C:\inetpub\Dynaprice\shared\CodeSnips\Web";
@@ -182,11 +236,13 @@ component extends="framework.one" output="false" accessors=true {
 	}
 
 	private function getEnvironment() {
-		if ( findNoCase( "sandbox", CGI.SERVER_NAME ) ) 
+		if ( findNoCase( "sandbox", CGI.SERVER_NAME ) or findNoCase( "capovani", CGI.SERVER_NAME ) ) 
 			return "prod";
 		else 
 			return "dev";
 	}
+
+
 
 
 }

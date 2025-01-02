@@ -19,6 +19,7 @@
   "dependencies": {
     "@alpinejs/collapse": "^3.14.1",
     "@alpinejs/focus": "^3.10.5",
+    "@glidejs/glide": "^3.7.1",
     "@googlemaps/js-api-loader": "^1.16.2",
     "@popperjs/core": "^2.11.8",
     "algoliasearch": "^4.14.2",

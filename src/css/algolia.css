@@ -3,6 +3,21 @@
 facet placeholders
 ******************/
 #algolia {
+	overflow: hidden;
+	visibility: hidden;
+	opacity: 0;
+}
+
+#algolia.is-visible {
+	visibility: visible;
+	opacity: 1;
+    transition: opacity 1.75s ease;
+  }
+  #algolia.transitioning {
+	visibility: visible;
+ }
+
+/* #algolia {
 	visibility: hidden;
 	opacity: 0;
 	-webkit-transition: opacity 0.75s ease-in-out;
@@ -10,22 +25,20 @@ facet placeholders
     transition: opacity 0.75s ease-in-out;
 	width:0px;
 	height:0px;
-	/* margin-top: -99999px; */
 	position: absolute; 
 	top: -99999px;
-}
+} */
 
-#algolia.show {
+/* #algolia.show {
 	visibility: visible;
 	opacity: 1;
 	height: auto;
 	width: auto;
-	/* margin-top: 0; */
 	position: static;
 	top: 0;
   
   }
-  
+   */
 
 #categories {
 	margin-bottom: 2rem;
@@ -100,8 +113,8 @@ facet placeholders
 *********************/
   
 .breadcrumb {
-	margin-top: 1.0rem;
-	margin-bottom: .75rem;
+    margin-top: 1.75rem;
+    /* margin-bottom: .75rem; */
 	/* padding: .5rem 2rem .5rem 2rem; */
 	/* background-color: #ffeb00; */
 	 /* background-color: #e5e7eb;  */
@@ -123,15 +136,16 @@ facet placeholders
 
   .ais-Breadcrumb-link {
 	font-size: 16px;  
-	font-weight: 400;
+	font-weight: 500;
 	/* font-size: .9rem;   */
 	/* text-decoration: underline !important; */
   }
 
-  .ais-Breadcrumb-link:hover {
+  .ais-Breadcrumb-link:not(.no-hover):hover {
 	text-decoration: underline;
   }
 
+  
 
   .ais-Breadcrumb-item {
 	font-size: 16px;
@@ -288,7 +302,7 @@ facet placeholders
 	letter-spacing: 0.05em;
 	color: rgba(75, 85, 99, 1.0);
 	font-weight: 600;
-	color: #fa0114;
+	color: #d84029;
   }
   
   .hit-qty {
@@ -343,8 +357,8 @@ facet placeholders
   
   
    .ais-RefinementList-showMore, .ais-Pagination-item--selected .ais-Pagination-link {
-	background-color: #fa0114;
-	border-color: #fa0114;
+	background-color: #d84029;
+	border-color: #d84029;
   }
   
   .ais-ClearRefinements-button:focus, .ais-ClearRefinements-button:hover, .ais-CurrentRefinements-reset:focus, .ais-CurrentRefinements-reset:hover, .ais-GeoSearch-redo:focus, .ais-GeoSearch-redo:hover, .ais-GeoSearch-reset:focus, .ais-GeoSearch-reset:hover, .ais-HierarchicalMenu-showMore:focus,  .ais-InfiniteHits-loadMore:focus, .ais-InfiniteHits-loadMore:hover, .ais-InfiniteHits-loadPrevious:focus, .ais-InfiniteHits-loadPrevious:hover, .ais-InfiniteResults-loadMore:focus, .ais-InfiniteResults-loadMore:hover, .ais-Menu-showMore:focus, .ais-Menu-showMore:hover  {
@@ -354,7 +368,7 @@ facet placeholders
   }
   
   .ais-RefinementList-showMore:hover {
-	background-color: #fa0114;
+	background-color: #d84029;
 	opacity: .7;
   }
   .ais-SortBy-select {
@@ -366,7 +380,7 @@ facet placeholders
   
   }
   .ais-Panel-header {
-	color: #fa0114;
+	color: #d84029;
 	font-size: 1rem;
 	display: flex;
     align-items: center;
@@ -447,11 +461,15 @@ facet placeholders
   }
   
   .ais-Breadcrumb-link {
-	color: #444;
+	color: #777;
   }
 
   .ais-Breadcrumb-link:hover, .ais-HierarchicalMenu-link:hover, .ais-Menu-link:hover, .ais-Pagination-link:hover, .ais-RatingMenu-link:hover {
 	color: #FF0000
+  }
+
+  .ais-Breadcrumb-link.no-hover:hover {
+	color: #777;
   }
   
   .ais-Breadcrumb, .ais-ClearRefinements, .ais-CurrentRefinements, .ais-GeoSearch, .ais-HierarchicalMenu, .ais-Hits, .ais-HitsPerPage, .ais-InfiniteHits, .ais-InfiniteResults, .ais-Menu, .ais-MenuSelect, .ais-NumericMenu, .ais-NumericSelector, .ais-Pagination, .ais-Panel, .ais-PoweredBy, .ais-RangeInput, .ais-RangeSlider, .ais-RatingMenu, .ais-RefinementList, .ais-Results, .ais-ResultsPerPage, .ais-SearchBox, .ais-SortBy, .ais-Stats, .ais-ToggleRefinement {
@@ -476,6 +494,10 @@ facet placeholders
 	/* white-space: nowrap; */
   }
   
+  .non-clickable { 
+	pointer-events: none; 
+	cursor: default; 
+  }
 
   .ais-ClearRefinements-button--disabled {
 	  display: none;

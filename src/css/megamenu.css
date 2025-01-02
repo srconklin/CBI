@@ -5,7 +5,7 @@
 }
 
 .megamenu {
-  /* background-color: #fa0114;
+  /* background-color: #d84029;
   padding: 0 1rem;
   display: none; 
   place-items: center;
@@ -13,12 +13,12 @@
   box-shadow: 0px 8px 8px -6px rgb(0 0 0 / 50%); */
 
 
-   background-color:  #fa0114;
+   background-color:  #d84029;
     padding: 0 1rem;
     display: none;
     place-items: center;
     /* box-shadow: 0px 8px 8px -6px rgb(0 0 0 / 50%); */
-    /* border-bottom: 6px solid #fa0114; */
+    /* border-bottom: 6px solid #d84029; */
 }
 
 
@@ -263,7 +263,7 @@
 }
 
 .megamenu-sidepanel > .panel-container > .closebutton:hover {
-	color:#fa0114;  
+	color:#d84029;  
 }
 
 .megamenu-sidepanel > .panel-container > .content {
@@ -290,7 +290,7 @@
 
 /* Style the links inside the sidenav */
 .categoryheader .slider {
-  background-color: #fa0114;
+  background-color: #d84029;
   position: absolute;
   left: -127px;
   transition: 0.3s;
@@ -302,11 +302,13 @@
   border-radius: 0 5px 5px 0;
   display: flex;
   justify-content: space-between;
+  bottom: -23px;
 }
-
+/* 
 .categoryheader .slider:hover, .categoryheader .slider:active {
-  left: 0; /* On mouse-over, make the elements appear as they should */
-}
+  left: 0; 
+  
+} */
 .categoryheader a {
   text-decoration: none;
   color:white;
@@ -317,7 +319,7 @@
 }
 
 .megamenu-sidepanel nav .accordian > div.active {
-  background-color: #fa0114;
+  background-color: #d84029;
   
 }
 
@@ -361,7 +363,7 @@
 .megamenu-sidepanel nav .accordian > a:after {
   content: '\003E';
   font-weight: bold;
-   color: #fa0114;
+   color: #d84029;
   float: right;
 } */
 

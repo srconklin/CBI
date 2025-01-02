@@ -1,15 +1,17 @@
 article.item {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
 }
 
 .item aside {
-    margin-bottom: 1rem;
+    margin-bottom: 0;
     /* margin-right: 1rem;  */
-    flex: 0;
-    width: 100%;
+    /* flex: 0;
+    width: 100%; */
 }
 
 .item main {
@@ -36,7 +38,7 @@ article.item {
     text-align: left;
     line-height: 1.4;
     white-space: nowrap;
-    margin-top: 1.4rem;
+    /* margin-top: 1.4rem; */
     font-size: 14px;
 
 }
@@ -86,6 +88,7 @@ article.item {
     /* flex-shrink: 0; */
     font-size: 14px;
     margin-top: .5rem; 
+    margin-bottom: .5rem; 
 }
 
 .item .userprefs a {
@@ -114,8 +117,8 @@ article.item {
 }
 
 .item .offers {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
     letter-spacing: 0.025em;
     font-size: 18px;
 }
@@ -132,7 +135,7 @@ article.item {
 }
 
 .item .specs table {
-    table-layout: fixed;
+    /* table-layout: fixed; */
     width: 100%;
     /* font-size: 14px; */
 }
@@ -162,15 +165,15 @@ article.item {
     letter-spacing: 0.05em;
     color: rgba(75, 85, 99, 1.0);
     font-weight: 600;
-    color: #fa0114;
+    color: #d84029;
 }
 
 .item .headline {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .favorite {
-    color: #fa0114 !important;
+    color: #d84029 !important;
 }
 
 .item .footer {
@@ -197,10 +200,6 @@ article.item {
     padding-top: 25px;
 }
 
-#item .item .headline {
-    font-size: 26px;
-}
-
 
 #item .item .category {
     margin-top: 14px;
@@ -218,7 +217,7 @@ article.item {
 
 #item .section-header {
     font-weight: 600;
-    color: #fa0114;
+    color: #d84029;
     font-size: 24px;
     line-height: 1.2;
     
@@ -250,7 +249,7 @@ article.item {
 #item .section svg {
     width: 30px;
     margin-right: 6px;
-    color: #fa0114;
+    color: #d84029;
     display: block;
 }
 
@@ -322,4 +321,34 @@ article.item {
 .payment h2 {
     font-size: 18px;
     margin: 1rem 0;
+}
+
+
+.mini-item-card { 
+    display: flex;
+    /* align-items: center;  */
+    padding: 5px;
+    border-radius: 7px;
+    border: 1px solid #e5e7eb;
+    flex: none;
+    /* width: 390px; */
+    width: 340px;
+    position: relative;
+}
+
+.mini-item-card img {
+    width: 6rem;
+    height: 6rem; 
+    object-fit: contain;
+    margin-right: 10px;
+    
+}
+
+.mini-item-card content {
+    color: #64748b;
+} 
+
+.mini-item-card .headline {
+    font-size: 13px !important;
+    /* color: #676767; */
 }

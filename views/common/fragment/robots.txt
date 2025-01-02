@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /
+
+Allow: /$
+Allow: /about$
+Allow: /contact$
+Allow: /faq$
+Allow: /register$
+Allow: /terms$
+Allow: /privacy$
+Allow: /items/

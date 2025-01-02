@@ -1,18 +1,25 @@
 component {
-    public function detectAndManageBotSessions(boolean dev=false) {
+    public function detectAndManageBotSessions() {
         // Check for known bot user agents
-        if (isBot() || dev) {
+        if (isBot())  {
             // kill the session
             sessionInvalidate();
             //session.setMaxInactiveInterval(2); 
             // Optional: Log bot detection
-            if(dev)
-             logBotAccess();
+            logBotAccess();
         }
     }
     
     private function isBot() {
-        var userAgent = lCase(getHttpRequestData().headers['user-agent'] ?: '');
+
+        var headers = getHttpRequestData().headers;
+        var userAgent = "";
+
+        if (!structKeyExists(headers, "user-agent")) 
+            return true;
+
+       
+        userAgent = lCase(headers['user-agent']);
 
                    
         if (!structKeyExists(cookie, "CFID")) 

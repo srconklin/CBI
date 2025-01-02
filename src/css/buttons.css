@@ -1,7 +1,7 @@
 /* links */
 
 .redlink {
-  color: #fa0114;
+  color: #d84029;
   text-decoration: none;
 }
  
@@ -23,6 +23,7 @@
     align-items: center;
     justify-content: center;
     text-decoration: none;
+    width: fit-content;
   }
 
   
@@ -48,6 +49,7 @@
     font-size: .8rem;
     font-weight: 400;
     opacity: 1;
+    outline: none;
   }
   
   .btn-wy {
@@ -62,8 +64,8 @@
   
   .btn-red {
     color: white;
-    background-color: #fa0114;
-    border-color: #fa0114;
+    background-color: #d84029;
+    border-color: #d84029;
   
   }
 
@@ -73,14 +75,44 @@
     border-color: #ffffff;
   
   }
+
+  .btn-yellow {
+    background-color: #ffeb00;
+    border-color: #ffeb00;
+    color: #333;
+    font-weight: 500;
+  }
+
   
+  .btn-yellow:hover{
+    background-color: #e0c300;;
+    border-color: #e0c300;
+  }
+  
+  
+  .btn-blue-muted {
+    background-color: #375bbbe6; /* Muted blue button */
+  }
+
+  .btn-blue-muted:hover {
+    background-color: #2a4b99; 
+  }
+  
+  .btn-red-muted {
+    background-color: #b74e56; /* Muted red button */
+  }
+
+  .btn-red-muted:hover {
+    background-color: #9a3d46;
+  }
+
   .btn-red-hollow {
-    color: #fa0114;
+    color: #d84029;
   }
   
   .btn-red-hollow:hover {
     color: white;
-    background-color: #fa0114;
+    background-color: #d84029;
   }
   
   .btn-red:hover {
@@ -97,8 +129,8 @@
   
   .btn-gray:hover {
     opacity: .85;
-    color: #fa0114;
-    border-color: #fa0114;
+    color: #d84029;
+    border-color: #d84029;
   }
   
   

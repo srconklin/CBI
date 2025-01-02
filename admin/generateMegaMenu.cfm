@@ -2,7 +2,7 @@
 <cfsetting requesttimeout="240" />
 <cfsetting showDebugOutput="no" enablecfoutputonly="false">
 <cfset variables.itemColTolerance=10 />
-<cfset variables.vtid = 1546 />
+<cfset validmenus =''/>
 
 <cfscript>
 	string function stripCRLFAndMultipleSpaces(required string theString) {
@@ -38,7 +38,7 @@
   <cfquery name="getMenuTwoLevels" datasource="dp_cat">
     select lnm, anm, parLnm, Oseq, TypeID, MenuID, ParentMenuID, lvl
     FROM [dp_cat].[dbo].[OpsHierarchy2] oh
-    WHERE oh.vtid = #variables.vtid# and lvl in (1,2)
+    WHERE oh.vtid = #application.vtid# and lvl in (1,2)
     order by line
   </cfquery>
 
@@ -56,6 +56,7 @@
         <ul>
 
           <cfloop query="getMenuTwoLevels">
+           
             <!--- level 1 --->
             <cfif getMenuTwoLevels.lvl eq 1>
 
@@ -79,8 +80,11 @@
                 <a href="/search/#urlEncode(getMenuTwoLevels.Lnm)#" class="dropdown__title" aria-expanded="false"aria-controls="main-#replacenocase(getMenuTwoLevels.Lnm, ' ',  '-')#-dropdown">#getMenuTwoLevels.lnm#</a>
                 <ul class="dropdown__menu dd-vertical #(columns gt 1 ? 'dd-mega-group' : '')# #getClassOrientation(getMenuFirstLevel.recordCount, getMenuTwoLevels.Oseq)# dd-ease-out">
 
+                  <cfset validmenus = listAppend(validmenus, getMenuTwoLevels.Lnm) />
             <!--- level 2 --->
             <cfelse>
+
+                  <cfset validmenus = listAppend(validmenus, getMenuTwoLevels.parLnm &"_"& getMenuTwoLevels.Lnm) />
 
                     <cfif columns gt 1 and getMenuTwoLevels.OSeq eq 1>
                       <li>
@@ -119,8 +123,8 @@
   <cfsavecontent variable="menuslide">
     <cfoutput>
       <div class="categoryheader">
-      <div class="slider">
-          <a href="##" @click="$dispatch('open-megamenu', { open: true })" >Shop Categories</a><a class="anchor" href="##">&##10132;</a> 
+      <div class="slider"  @click="$dispatch('open-megamenu', { open: true })" >
+          <a href="##">Shop Categories</a><a class="anchor" href="##">&##10132;</a> 
       </div>
     </div>
     <div id="megamenu-sidepanel" class="megamenu-sidepanel" x-data="{open: false}" @open-megamenu.window="open = $event.detail.open" @keydown.escape="open = false">
@@ -192,5 +196,6 @@
   </cfsavecontent>
   
   <cfset fileWrite( ExpandPath( "../" ) & '/views/common/fragment/megamenu.cfm' , stripCRLFAndMultipleSpaces(themenues)) />
+  <cfset fileWrite( ExpandPath( "../" ) & '/data/validmenus.txt',  trim(validmenus)) />
 
   Done!

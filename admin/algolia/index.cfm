@@ -6,7 +6,7 @@
 
 	index = algoliaClient.initIndex( 'cbi' );
 	
-	if(url.reset) {
+//	if(url.reset) {
 		//clear the index	
 		index.clearIndex();
 		
@@ -26,8 +26,10 @@
 
 		//recreate the index with replica
 		index = algoliaClient.initIndex( 'cbi' );
+
+		writeOutput('<p>index deleted</p>');
 	
-	} else {
+//	} else {
 
 			items = deserializeJSON( fileRead(ExpandPath( "../../" ) & '/data/items.json' ) );
 			index.addObjects( items );
@@ -64,7 +66,8 @@
 
 				]
 			});
-}	
+
+			writeOutput('<p>index created and sent to algolia</p>');
+//}	
 </cfscript>
 
-done! 

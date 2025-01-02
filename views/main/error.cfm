@@ -14,7 +14,7 @@
 </cfoutput>
 
 
-<cfif request.showDiagnostics>
+<cfif getEnvironment() eq "dev">
 
   <cfoutput>
     <!--- #view('common/fragment/errorReport')#  --->

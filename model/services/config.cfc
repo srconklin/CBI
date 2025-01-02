@@ -3,20 +3,23 @@ component accessors=true {
       
         name : 'CBI',
         VTID : '63160',
+        TRANSVTID : '1546',
         IVTID : '108',
         COTID : '107',
-        dsn :  "dp_cat",
+        //dsn :  "dp_cat",
+        domain :  "https://www.capovani.com",
+        imgBase :  "https://www.capovani.com/clientresources/",
         aeskey : "XyekJNxLAIv2LlmULBkxNw==",
         captchasecret : "6LevHMkfAAAAAM2ohc3wTWLu8gYj0acuUXaG1_da",
         mail :  {
             errorTo : 'sconklin@dynaprice.net',
             errorFrom : 'sysadmin@dynaprice.com'
         },
-       // captchaProtect : "offer.create,inquiry.create,myprofile.submitforgotpassword,register.register",
-        env : CGI.SERVER_NAME eq '127.0.0.1' ? 'dev'  : 'prod',
+        // captchaProtect : "offer.create,inquiry.create,myprofile.submitforgotpassword,register.register",
+       //  env : CGI.SERVER_NAME eq '127.0.0.1' ? 'dev'  : 'prod',
         threshold : 120,
         securelist = {
-            'myprofile' :  'default,changepassword,updatecontactinfo,updateAddress,updateCommPref,myoffers,dealdetails,myfavorites'
+            'myprofile' :  'default,changepassword,updatecontactinfo,updateAddress,updateCommPref,myprofile,myoffers,dealdetails,myfavorites'
         }
         
     }
@@ -155,10 +158,6 @@ component accessors=true {
 
         },
         register = {
-            // 'completeProfileError' : {
-            //     'title' : "Hmm, something went wrong with completing your registration.",
-            //     'instruction' : "Looks like you are trying to verify your email, but the email is missing in the request.  Perhaps, you should try <a href='/register'>registering</a> again."
-            // },
             'completeAutoRegError' : {
                 'title' : "Hmm, something went wrong",
                 'instruction' : "It seems we were trying to create a user account for you or automatically log you in with your email, but something went wrong. We are looking into this."
@@ -175,15 +174,6 @@ component accessors=true {
                 'title' : "Account Setup Incomplete",
                 'instruction' : "To access your Account settings, you must verify your email and set up a password. Once these steps are complete, you'll be able to log in fully and manage your profile, favorites, offers, and inquiries.<br><br> Looks like your email has been successfully verified. The next step is to <b>set up your password!</b>"
             },
-            // 'default' : {
-            //     'title' : "Hmm, something not quite right with your verify link.",
-            //     'instruction' : "Looks like there was a problem. Likely, too much time has passed since the link to verify your email was created. <p class='mb-2 mt-2'>If you have already <b>registered</b> then you can login and visit <a href='/myprofile'>My Profile</a> to re-verify your email address.</p><p class='mb-2 mt-2'>If you <b>submitted an offer or inquiry</b>, then you can claim your auto-created account by <a href='/register'>registering</a> now.</p>"
-            // },
-           
-            // 'defaultCP' : {
-            //     'title' : "Hmm, Looks like something is not quite right with your request",
-            //     'instruction' : "Looks like you are trying to verify your email or set a new password, but some key information is missing.  Perhaps, you just completed setting up your profile, in which case you may <a href='/login'><u>log in</u></a> now. If not, maybe try your request again."
-            // },
             'ResendLinkError' : {
                 'title' : "Hmm, something went wrong sending a new verify link.",
                 'instruction' : "Looks like there was a problem. <p class='mb-2 mt-2'>If you have already <b>registered</b> visit <a href='/myprofile'>My Profile</a> and follow the instructions to re-verify your email address.</p><p class='mb-2 mt-2'>If you <b>submitted an offer or inquiry</b>, you can claim your auto-created account by <a href='/register'>registering</a> fully.</p>"
@@ -232,30 +222,7 @@ component accessors=true {
                 'title' :  'Hmm, something went wrong',
                 'instruction' :  'We are having trouble generating the verify link. Try entering your email to send the link again.'
             },
-            // 'showSetPassword' :  {
-            //     'title' :  'Set a Password',
-            //     'instruction' :  'Create a password on your account so you can enjoy all the benefits of a member.'
-            // },
-            // 'passwordEmailSuccessfullySent' : {
-            //     'title': 'Let''s make sure its you!',
-            //     'instruction' : "Before setting a password, we need to verify it's you. An email was [TRIES] to <strong>[EMAIL]</strong> with a link to set your password .<br>If you don't receive the email, please check your spam folder or request a new link below."
-            // },
-            // 'passwordSuccessfullyVerified' : {
-            //     'title': 'Great! Thanks for verifying! ',
-            //     'instruction' : "You may now set a new password using the form below:"
-            //  },
-            // 'passwordLinkExpired' :  {
-            //     'title' :  'Password Verificaton Link Expired',
-            //     'instruction' :  'Sorry, that link is not valid anymore. Please request a new link below.'
-            // },
-            // 'passwordNotReset' :  {
-            //     'title' :  'Hmm, something went wrong with resetting your password.',
-            //     'instruction' :  'Looks like there is a problem with the reset link. Please request a new link below.'
-            // },
-            // 'passwordResetError' : {
-            //     'title' : "Hmm, something went wrong setting your password",
-            //     'instruction' : "We encountered an issue verifying your identity, and we couldn't set your password. Please try again or contact support for assistance."
-            // },
+           
             'profileComplete' :  {
                 'title' :  'Password successfully Created',
                 'instruction' :  "Thank you! Your profile has been successfully set up. You can now <a href='/login'><u>log in</u></a> to get started!"

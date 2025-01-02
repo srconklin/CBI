@@ -12,9 +12,10 @@ const config = {
             type: 'success'
 
         },
+        // To manage your inquiry, please ensure you’ve verified your email and set a password to complete your registration. Once fully registered, you can access Offers & Inquiries under your profile icon.
         'inquiry': {
             title: 'Success! Your message was received',
-            message: 'Thank you for your inquiry! A member of our team will contact you soon. To manage your inquiry, please ensure you’ve verified your email and set a password to complete your registration. Once fully registered, you can access Offers & Inquiries under your profile icon.',
+            message: 'Thank you for your inquiry! A member of our team will contact you soon.',
             type: 'info'
 
         },

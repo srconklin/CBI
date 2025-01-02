@@ -5,6 +5,10 @@ component accessors=true {
     function hasHTML(str='') {
         return REFindNoCase("<[^>]*>",arguments.str);
     }
+
+    function buildURI(required number itemno, required string friendly)  {
+        return '/items/#itemno#/#lcase(reReplaceNocase(#friendly#, "\s", "+" , "all"))#';
+    }
         
     function validateCaptcha(captcha, route) {
         var result = false;

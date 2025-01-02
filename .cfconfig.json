@@ -46,32 +46,62 @@
         }
     },
 	"datasources": {
-		"${DB_DATABASE}": {
-			"host": "${DB_HOST}",
-			"dbdriver": "${DB_DRIVER}",
-			"database": "${DB_DATABASE}",
-			"dsn": "jdbc:mysql://{host}:{port}/{database}",
-			"custom": "useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=true&autoReconnect=true",
-			"port": "${DB_PORT}",
-			"class": "${DB_CLASS}",
-			"username": "${DB_USER}",
-			"password": "${DB_PASSWORD}",
-			"connectionLimit": "100",
-			"connectionTimeout": "1"
-		},
-        "${DB_DATABASE4}": {
-			"host": "${DB_HOST}",
-			"dbdriver": "${DB_DRIVER}",
-			"database": "${DB_DATABASE4}",
-			"dsn": "jdbc:mysql://{host}:{port}/{database}",
-			"custom": "useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=true&autoReconnect=true",
-			"port": "${DB_PORT}",
-			"class": "${DB_CLASS}",
-			"username": "${DB_USER}",
-			"password": "${DB_PASSWORD}",
-			"connectionLimit": "100",
-			"connectionTimeout": "1"
-		}
+            "dp_cat":{
+                "allow":"511",
+                "blob":"true",
+                "class":"com.microsoft.sqlserver.jdbc.SQLServerDriver",
+                "clob":"true",
+                "connectionLimit":"100",
+                "connectionTimeout":"1",
+                "custom":{
+                    "DATABASENAME":"dp_cat",
+                    "SelectMethod":"direct",
+                    "trustServerCertificate":"true"
+                },
+                "database":"dp_cat",
+                "dbdriver":"${DB_DRIVER}",
+                "dsn":"jdbc:sqlserver://{host}:{port}",
+                "host":"${DB_HOST}",
+                "id":"mssql",
+                "liveTimeout":"5",
+                "metaCacheTimeout":"60000",
+                "paramDelimiter":";",
+                "paramLeadingDelimiter":";",
+                "paramSeparator":"=",
+                "password":"${SA_PASSWORD}",
+                "port":"${DB_PORT}",
+                "storage":"false",
+                "username":"${DB_USER}",
+                "validate":"false"
+            },
+            "dp_logs":{
+                "allow":"511",
+                "blob":"true",
+                "class":"com.microsoft.sqlserver.jdbc.SQLServerDriver",
+                "clob":"true",
+                "connectionLimit":"100",
+                "connectionTimeout":"1",
+                "custom":{
+                    "DATABASENAME":"dp_logs",
+                    "SelectMethod":"direct",
+                    "trustServerCertificate":"true"
+                },
+                "database":"dp_logs",
+                "dbdriver":"${DB_DRIVER}",
+                "dsn":"jdbc:sqlserver://{host}:{port}",
+                "host":"${DB_HOST}",
+                "id":"mssql",
+                "liveTimeout":"5",
+                "metaCacheTimeout":"60000",
+                "paramDelimiter":";",
+                "paramLeadingDelimiter":";",
+                "paramSeparator":"=",
+                "password":"${SA_PASSWORD}",
+                "port":"${DB_PORT}",
+                "storage":"false",
+                "username":"${DB_USER}",
+                "validate":"false"
+            }
 	},
 	"debuggingDBEnabled":"true",
     "debuggingDumpEnabled":"false",

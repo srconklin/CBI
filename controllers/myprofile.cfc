@@ -4,21 +4,13 @@ component accessors=true extends="controllers.base.common" {
 	property config;
 
 	function before( rc ) {
-		// rc.loginTickler= '';
         super.before(rc);
 
 		if (!rc.userSession.isEmailVerified or !rc.userSession.hasPassword) {
 			rc.incompleteUserAccess = true;
 			renderResult('/completeautoreg', 'incompleteUserAccess');
 		}
-
-        // 
-       // if (rc.userSession.validated lt 2) {
-            // rc.loginTickler= variables.fw.view( 'common/fragment/unlocksettings');	
-			//return "myprofile.unlocksettings"; 
-			//variables.fw.setview('myprofile.unlocksettings');
-			//variables.fw.abortController();
-      //  }
+     
     }
 		
 	/************************************
@@ -35,8 +27,8 @@ component accessors=true extends="controllers.base.common" {
 			locGid : ''
 		};
 
-		if (!rc.userSession.isEmailVerified or !rc.userSession.hasPassword) 
-			renderResult('/completeAutoReg');
+		// if (!rc.userSession.isEmailVerified or !rc.userSession.hasPassword) 
+		// 	renderResult('/completeAutoReg');
 	     
 		// populate the update contact info form
 		rc.user = usergateway.getContactInfo(rc.userSession.pno);
@@ -61,10 +53,10 @@ component accessors=true extends="controllers.base.common" {
 	 ajax :no
 	************************************/
 	public void function myfavorites(struct rc = {}) {
-	// item preview modal is present on home page, need to param it so it does not break
-	param rc.content.specstable='';
-	param rc.content.payterms='';
-	param rc.content.shipterms='';
+		// item preview modal is present on home page, need to param it so it does not break
+		param rc.content.specstable='';
+		param rc.content.payterms='';
+		param rc.content.shipterms='';
 		
 		rc.favorites = []; 
 		var content = {}; 

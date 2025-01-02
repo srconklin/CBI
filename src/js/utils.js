@@ -208,12 +208,56 @@ window.formatter = new Intl.NumberFormat('en-US', {
           .catch(error =>  console.log(`Error received in getting captcha token/processing form ${error}`))
   }
 
+ window.isElementVisible = (selector) => {
+    const element = document.querySelector(selector);
+    console.log(element);
+    if (!element) return false; // Element doesn't exist
   
+    const { display, visibility, opacity } = window.getComputedStyle(element);
+
+    // Check if the element is not hidden via 'display', 'visibility', or 'opacity'
+    return display !== 'none' && visibility !== 'hidden' && opacity !== '0';
+  };
   window.domReady = (cb) => {
     document.readyState === 'interactive' || document.readyState === 'complete'
       ? cb()
       : document.addEventListener('DOMContentLoaded', cb);
   };
+
+  window.getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null; // Return null if the cookie is not found
+};
+
+window.setCookie = (name, value, days) => {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = `; expires=${date.toUTCString()}`;
+    document.cookie = `${name}=${value || ''}${expires}; path=/`;
+};
+
+
+window.addRecentlyViewedItem = (itemNumber) => {
+  // Check if itemNumber is a positive integer
+  if (!Number.isInteger(itemNumber) || itemNumber <= 0) {
+    console.warn('Invalid item number. Must be a positive integer.');
+    return;
+  }
+
+  const viewedItems = JSON.parse(window.getCookie('rv') || '[]');
+
+  if (!viewedItems.includes(itemNumber)) {
+      viewedItems.push(itemNumber);
+
+      if (viewedItems.length > 10) {
+          viewedItems.shift();
+      }
+
+      window.setCookie('rv', JSON.stringify(viewedItems), 7);
+  }
+};
   
 // // When the user scrolls the page, execute myFunction
 // window.onscroll = function() {

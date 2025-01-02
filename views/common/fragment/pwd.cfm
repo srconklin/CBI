@@ -23,7 +23,7 @@
             required
             <!--- pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"  --->
             <!--- style="min-width: 350px;"  --->
-            data-msg='["valueMissing:Please enter a new password]'
+            data-msg='["valueMissing:Please enter a new password"]'
             autocomplete="off"
             <!--- alpine --->
             :class="{'invalid':$store.#local.store#.toggleError('pwd1')}"  

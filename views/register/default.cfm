@@ -15,8 +15,8 @@
 			<!--- id="register-account" --->
 			<div class="panel <cfif not local.concise>box-shadow2</cfif>" style="max-width:1024px;">
 						
-				<div class="operation-title text-center">
-					<h1>Create an Account</h1>
+				<div class="form-header text-center">
+					<h1 class="lead-title">Create an Account</h1>
 				</div>
 						
 				<p class="mb-8 text-center">
@@ -137,8 +137,8 @@
 					x-id="['title']"
 					:aria-labelledby="$id('title') " 
 					>
-						<div class="operation-title text-center" >
-							<h1 :id="$id('title')" x-text="title"></h1>
+						<div class="form-header text-center" >
+							<h1 class="lead-title" :id="$id('title')" x-text="title"></h1>
 						</div>
 						
 						<cfif structKeyExists(rc, 'message')>

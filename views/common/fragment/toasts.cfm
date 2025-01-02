@@ -1,9 +1,5 @@
 
-<!--- 'from-blue-500 to-blue-600': toast.type === 'info',
-				'from-yellow-400 to-yellow-500': toast.type === 'warning',
-				'from-red-500 to-pink-500': toast.type === 'error',
-			 --->
-<div x-data  x-init="$el.style.top=0;" class="toast-container">
+<div x-data class="toast-container" :style="{ top: $store.toasts.containerTop }">
 			<template
 				x-for="(toast, index) in $store.toasts.list"
 				:key="toast.id"

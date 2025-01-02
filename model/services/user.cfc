@@ -20,8 +20,8 @@ component accessors=true {
 		structAppend(userSession, {
 			isLoggedIn : isLoggedIn(),
 			name: session.user.firstname & " " & session.user.lastname,
-			isEmailVerified: (session.user.verifyVerified or session.user.regstat gt 0) ? true: false,
-			hasPassword: (session.user.pwdVerified or session.user.regstat gt 0) ? true: false,
+			isEmailVerified: (session.user.verifyVerified eq 1 or session.user.regstat gt 0) ? true: false,
+			hasPassword: (session.user.pwdVerified eq 1 or session.user.regstat gt 0) ? true: false,
 			avatar: left(ucase(session.user.firstname),1) &  left(ucase(session.user.lastname),1)
 		}, true);
 
@@ -45,7 +45,6 @@ component accessors=true {
 	*/
     private function isLoggedIn( ) {
 		return structkeyExists(session.user, 'validated') and session.user.validated ? true : false;
-
 	}
 
 	

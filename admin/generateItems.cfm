@@ -6,7 +6,8 @@
 
 <!--- defaults --->
 <!--- vtid to use get menu structure data which is sbx in dynaspecs --->
-<cfset vtid = 1546 />
+
+<cfset imgbase = "https://www.capovani.com/clientresources/"  />
 <cfset items = [] /> 
 <cfset cacheMenu = {} /> 
 
@@ -34,7 +35,7 @@
 			-- Anchor member
 			SElECT oh.TID, oh.lnm, oh.MenuID, oh.ParentMenuID, oh.lvl, left(oh.MenuID, 3) as base
 			FROM [dp_cat].[dbo].[OpsHierarchy2] oh
-			WHERE  oh.vtid = #variables.vtid#
+			WHERE  oh.vtid = #application.vtid#
 			and oh.tid = #arguments.classTID#
 			<cfif len(arguments.MenuID)>
 				and ParentMenuID = '#arguments.MenuID#'
@@ -46,7 +47,7 @@
 			SELECT o.TID,o.lnm, o.MenuID, o.ParentMenuID, o.lvl, cte.base 
 			FROM [dp_cat].[dbo].[OpsHierarchy2] o
 			INNER JOIN cte_bredcrumb cte on cte.ParentMenuID =  o.MenuID
-			WHERE  o.vtid = #variables.vtid#  and o.lvl > 0 
+			WHERE  o.vtid = #application.vtid#  and o.lvl > 0 
 		)
 
 		SELECT MenuID, lnm, base, lvl
@@ -83,8 +84,8 @@
 	 EC1.Text AS ShipText,
 	 EC2.Text AS PayText,
 	 geo.citySnm, geo.stSnm, geo.CySnm
-	FROM Items I WITH (NOLOCK)
-	INNER JOIN OpsClasses C on C.VTID=#vtid# AND C.classTID=I.dataTID AND C.vizPagetop <= 0
+	FROM Items I 
+	INNER JOIN OpsClasses C on C.VTID=#application.vtid# AND C.classTID=I.dataTID AND C.vizPagetop <= 0
 	INNER JOIN CoVenues VP ON VP.VTID=I.VTID
 	LEFT JOIN ItemsImages II on II.ItemNo=I.Itemno  AND II.ArchDt IS NULL 
 	LEFT JOIN ECommerce AS EC1 ON EC1.ECommNo=I.ShippingInfo
@@ -94,7 +95,10 @@
 	<cfif len(url.itemno)>
 		AND I.Itemno = <cfqueryparam value="#url.itemno#" cfsqltype="cf_sql_integer" />
 	</cfif>
-	AND I.IVTID=108 AND (I.vizPub>=9 OR (I.PNo=0 AND 9 <= VP.viz))  AND (I.Qty>0 OR I.inAuction=1 OR 0 >= 3)  AND (I.Qty>0 OR I.OfferBid=1 OR I.inAuction>0 ) AND I.OfferBid=0
+	AND I.IVTID=#application.ivtid# 
+			AND (I.vizPub>=9 OR (I.PNo=0 AND 9 <= VP.viz)) 
+			AND (I.Qty>0 OR I.inAuction=1 OR 0 >= 3)  AND (I.Qty>0 OR I.OfferBid=1 OR I.inAuction>0 ) AND I.OfferBid=0
+
 	ORDER BY I.DataTID, I.Itemno
 		
 </cfquery>
@@ -125,9 +129,9 @@
 </cfif>
 
 
-<!------------------------------------------- 
- build the item json object
-------------------------------------------->
+<cftry>
+
+	
 <cfoutput query="getItem" group="itemno" >
 
 	<cfset breadcrumb = "" />
@@ -137,18 +141,6 @@
 
 	<cfset item = StructNew("Ordered") />  
 
-	<cfset item['itemno'] =  "#getItem.Itemno#" />   
-	<cfset item['headline'] = "#trim(REReplaceNoCase(getItem.headline,"(<[^>]*>|&nbsp;|<br>)", " ","All"))#" />   
-	<cfset item['description'] = "#decodeForHTML(trim(REReplaceNoCase(getItem.descr,"(<[^>]*>|&nbsp;|<br>)", " ","All")))#"  />   
-	<cfset item['location'] =  "#getItem.citySnm#, #getItem.stSnm# #getItem.CySnm#"/>
-	<cfset item['category'] =  "#getItem.LNm#" />
-	<cfset item['mfr'] =  "#getItem.maketxt#" />
-	<cfset item['model'] =  "#getItem.model#" />
-	<cfset item['keywords'] =  "#trim(replace(getItem.syn, ',',' ','all'))#" />
-	<cfset item['unixTimeStamp'] =  "#getItem.unixTimeStamp#" />  
-	<cfset item['popular'] =  "#getItem.popular#" />  
-	<cfset item['isFeatured'] =  "#getItem.isFeatured#" />  
-	
 	<!------------------------------------------- 
 	build menu heirarchy 
 	------------------------------------------->
@@ -163,12 +155,27 @@
 	</cfloop>	
 	<cfset breadcrumbUI = breadcrumbUI & '</ul>' />
 
+	<!------------------------------------------- 
+ 	build the item json object
+	------------------------------------------->
 
+	<cfset item['itemno'] =  "#getItem.Itemno#" />   
+	<cfset item['headline'] = "#trim(REReplaceNoCase(getItem.headline,"(<[^>]*>|&nbsp;|<br>)", " ","All"))#" />   
+	<cfset item['description'] = "#decodeForHTML(trim(REReplaceNoCase(getItem.descr,"(<[^>]*>|&nbsp;|<br>)", " ","All")))#"  />   
+	<cfset item['location'] =  "#getItem.citySnm#, #getItem.stSnm# #getItem.CySnm#"/>
+	<cfset item['category'] =  "#getItem.LNm#" />
+	<cfset item['mfr'] =  "#getItem.maketxt#" />
+	<cfset item['model'] =  "#getItem.model#" />
+	<cfset item['keywords'] =  "#trim(replace(getItem.syn, ',',' ','all'))#" />
+	<cfset item['unixTimeStamp'] =  "#getItem.unixTimeStamp#" />  
+	<cfset item['popular'] =  "#getItem.popular#" />  
+	<cfset item['isFeatured'] =  "#getItem.isFeatured#" />  
+	
 	<!------------------------------------------- 
 		images
 	 ------------------------------------------->
 
-	 <cfset item['imgbase'] =  "https://www.capovani.com/clientresources/" />  
+	 <cfset item['imgbase'] =  imgBase/>  
 	 <cfif len(getItem.imgServNameMn)>
 		 <cfset item['imgMain'] =  "#Trim(getItem.CoTID)#/#getItem.IVTID#/#Trim(Right(getItem.DataTID,2))#/#getItem.DataTID#/#getItem.imgServNameMn#" />  
 	 <cfelse>
@@ -184,9 +191,13 @@
  
 	 <cfset item['imagesXtra'] = arImages />
 
+	 <!--- add to batch --->
 	<cfset arrayAppend(items, item) />
 
-	<!--- single file json data only --->
+	<!--------------------------------------------------------- 
+		single file json data only 
+		from here on data is not sent typsense or algolia
+	---------------------------------------------------------->
 	<cfset item['pagetitle'] =  len(getItem.pagetitle) gt 0 ?  trim(REReplaceNoCase(getItem.pagetitle,"(<[^>]*>|&nbsp;|<br>)", " ","All")) : item['headline'] />   
 	<cfset item['price'] =  len(getItem.price) ? "#dollarFormat(getItem.price)#" : "Best Price" />
 	<cfset item['qty'] =  "#getItem.qty#" />
@@ -231,7 +242,6 @@
 	<cfset item['payterms'] =  pay/>  
 
 	
-	
 
 	<!------------------------------------------- 
 		Create files
@@ -245,6 +255,11 @@
 	#getItem.currentrow#  #getItem.Itemno#<br>
 	
 </cfoutput>
+
+<cfcatch>
+	<cfdump var="#cfcatch#" abort="true"/>
+</cfcatch>
+</cftry>
 
 	
 <!------------------------------------------- 

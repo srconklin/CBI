@@ -12,6 +12,37 @@ component accessors=true extends="controllers.base.common" {
 		param rc.content.specstable='';
 		param rc.content.payterms='';
 		param rc.content.shipterms='';
+		
+		if (structKeyExists(cookie, "rv") && len(cookie.rv) > 0) {
+			// Use regex to remove the square brackets of the string array representation
+			var rv = REReplace(cookie.rv, "[\[\]]", "", "all");
+			 if (listLen(rv)) {
+				rc.recentlyviewed=generalgateway.getSpecialityItems('recentlyviewed', rv);
+			 }
+		}
+		rc.featureds=generalgateway.getSpecialityItems('featureds');
+		rc.newones=generalgateway.getSpecialityItems('isnew');
+		rc.hotmfrs=generalgateway.getHotMfrs();
+
+	}
+
+	/******************************
+	 search controller (GET)
+	 algolia instasearch
+	******************************/
+	function search(struct rc = {}) {
+		// item preview modal is present on home page, need to param it so it does not break
+		param rc.content.specstable='';
+		param rc.content.payterms='';
+		param rc.content.shipterms='';
+		param url.query='';
+		param url.mfrs='';
+		param rc.term='';
+
+		if ( len(url.query) || len(url.mfrs) || arrayContains(application.arValidMenus, urlDecode(urlDecode(rc.term))) ) {
+			variables.fw.setView('main.search');
+		} else
+		   renderResult('/');
 	}
 
 	/******************************
@@ -26,7 +57,8 @@ component accessors=true extends="controllers.base.common" {
 			// structappend(rc, result,true);
 			
 			rc.content =deserializeJSON(fileRead(ExpandPath( "./" ) & '/data/#rc.id#.json', 'UTF-8'));
-			rc.URI = '#getPageContext().getRequest().getScheme()#//:#cgi.http_host#/items/#rc.id#/#lcase(reReplaceNocase(rc.content.pagetitle, "\s", "+" , "all"))#';
+			rc.URI = variables.utils.buildURI(rc.id, rc.content.pagetitle);
+			// rc.URI = '#getPageContext().getRequest().getScheme()#//:#cgi.http_host#/items/#rc.id#/#lcase(reReplaceNocase(rc.content.pagetitle, "\s", "+" , "all"))#';
 			rc.bc =fileRead(ExpandPath( "./" ) & '/data/bc/#rc.id#.cfm');
 		} 
 		catch(any e) {
@@ -58,6 +90,24 @@ component accessors=true extends="controllers.base.common" {
 		rc['response']['payload'] =  rc.userSession.favorites;
 		renderResult();
 	}
+
+	
+	/**********************************
+	 load all favorites for the logged
+	 in user
+	 ajax :yes
+	************************************/
+	// public void function getRecentlyViewed(struct rc = {}) {
+	// 	param rc.items='';
+
+	// 	rc["response"]["res"] = true;
+	// 	rc['response']['payload'] =  [];
+	// 	if (len(rc.items)) {
+	// 		rc['response']['payload'] =  generalgateway.getItemsByItemno(rc.items);
+	// 	}
+		
+	// 	renderResult();
+	// }
 
 	
 
@@ -161,6 +211,14 @@ component accessors=true extends="controllers.base.common" {
 			 renderResult(abort=true);
 		}	 
 		
+	}
+
+	/******************************
+	 site wide page not found
+	******************************/
+	function notFound(struct rc = {}) {
+		 // Set 404 status code (Page Not Found)
+		 cfheader(statuscode="404");
 	}
 	
 }

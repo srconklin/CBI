@@ -172,7 +172,7 @@ component accessors=true {
 	*********************************************************/
 	private function sendErrorEmail() {
         var mail = variables.config.getSetting('mail');
-		request.showDiagnostics = (variables.config.getSetting('env') eq 'dev') ? true : false;
+		///request.showDiagnostics = (variables.config.getSetting('env') eq 'dev') ? true : false;
         request.stacktrace ='';
 
             savecontent variable='request.stacktrace' {

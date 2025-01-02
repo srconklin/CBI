@@ -86,8 +86,33 @@ setup(build) {
       });
     console.log('cleaning assets folder');
 
-  })
-},
+  });
+
+     // Custom onResolve hook for CSS resolution
+    build.onResolve({ filter: /glide\.core\.min\.css$/ }, args => {
+      try {
+        const resolvedPath = require.resolve(args.path, { paths: [args.resolveDir] });
+        console.log('Resolved Glide CSS path:', resolvedPath);
+        return { path: resolvedPath };
+      } catch (error) {
+        console.error('CSS Resolution Error (Glide):', error);
+        return null;
+      }
+    });
+
+    // Custom onResolve hook for tippy.css resolution
+    build.onResolve({ filter: /tippy\.css$/ }, args => {
+      try {
+        const resolvedPath = require.resolve(args.path, { paths: [args.resolveDir] });
+        console.log('Resolved Tippy CSS path:', resolvedPath);
+        return { path: resolvedPath };
+      } catch (error) {
+        console.error('CSS Resolution Error (Tippy):', error);
+        return null;
+      }
+    });
+
+  },
 }
 
 // autoprefixer only on production build
@@ -112,6 +137,10 @@ const config = {
     plugins : plugins,
     define,
     format: 'esm',
+    // resolveExtensions: ['.js', '.jsx', '.ts', '.css'],
+    // alias: {
+    //   '@glidejs/glide': require.resolve('@glidejs/glide'), // Resolve to the correct path
+    // },
 }
 
 esbuild.build(config)

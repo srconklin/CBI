@@ -4,10 +4,10 @@
         <h1>Terms Of Service</h1>
     </div> --->
 
-    <section class="terms-header mt-2 full-width">
+    <section class="terms-header  full-width">
         <div class="content">
             <h1 class="lead-title">Terms Of Service</h1>
-            <p>Last updated: 01/01/2023</p>
+            <h2>Last updated: 01/01/2023</h2>
         </div>  
 
     </section>

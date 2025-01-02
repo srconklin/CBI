@@ -2,6 +2,7 @@
 	<form 
 		id="inquiryfrm" 
 		method="post" 
+		action="/inquiry"
 		x-data  
 		@submit.prevent="$store.forms.submit('inquiry')">
 
