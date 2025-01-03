@@ -6,7 +6,7 @@ component {
             sessionInvalidate();
             //session.setMaxInactiveInterval(2); 
             // Optional: Log bot detection
-            logBotAccess();
+            //logBotAccess();
         }
     }
     
@@ -78,12 +78,12 @@ component {
         return false;
     }
     
-    private function logBotAccess() {
+    private function logBotAccess(string useragent) {
         // Log bot access with timestamp and details
-        cftrace(var="Bot detected: #getHttpRequestData().headers['user-agent']# from IP #cgi.remote_addr#", text="rc.usersession at begining of the request", type="information", category="bot detection");
+        cftrace(var="Bot detected: #useragent# from IP #cgi.remote_addr#", text="rc.usersession at begining of the request", type="information", category="bot detection");
 
         writeLog(
-            text = "Bot detected: #getHttpRequestData().headers['user-agent']# from IP #cgi.remote_addr#", 
+            text = "Bot detected: #useragent# from IP #cgi.remote_addr#", 
             type = "Information", 
             file = "bot_access_log"
         );

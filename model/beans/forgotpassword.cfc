@@ -19,7 +19,6 @@ component accessors=true extends="model.beans.common" {
 
     function init(config)  {
         variables.config = arguments.config;
-        variables.domain = cgi.https eq 'on'? 'https://' : "http://" & cgi.http_host;
         variables.aeskey = variables.config.getSetting("AESKey");
     }     
 

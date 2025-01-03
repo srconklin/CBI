@@ -8,6 +8,7 @@
     },
     "installPaths":{
         "algoliacfc":"modules/algoliacfc/",
+        "extluceeorgargon2extension1007lex":"extluceeorgargon2extension1007lex/",
         "fw1":"framework/",
         "testbox":"testbox/"
     }
