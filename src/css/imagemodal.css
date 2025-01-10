@@ -37,7 +37,7 @@
     position: absolute;
     right: 13px;
     top: 13px;
-    color: #d84029;
+    color: var(--color-primary);
     /* border: 2px solid;
     border-radius: 99999px; */
     font-weight: 700;

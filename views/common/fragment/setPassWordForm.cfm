@@ -53,7 +53,7 @@
         id="setpassword"
         name="setpassword"
         type="submit" 
-        class="btn btn-red" 
+        class="btn btn-primary" 
         title="reset your password"
         <!--- alpine --->
         :class="{'submitting' :$store.forms.submitting}" 

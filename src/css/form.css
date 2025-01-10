@@ -4,19 +4,20 @@
   form fields
 ***************/
 
+
+
 .form-control {
     width: 100%;
     border-radius: 0.375rem;
     display: block;
-     border-color: rgba(209, 213, 219, 1.0);
+    border: 1px solid var(--color-formfield-border);
     appearance: none;
-    border-width: 1px;
     padding-top: 0.5rem;
     padding-bottom: 0.56rem;
     padding-right: 0.75rem;
     padding-left: 0.75rem;
-    border-style: solid;
-    color: rgb(107, 114, 128);
+    color: var(--color-formfield);
+    /* background-color: var(--color-formfield-bg); */
     line-height: initial;
   }
   
@@ -33,20 +34,20 @@
     height: 18px;
     min-width: 18px;
     padding: 0;
-    background: #fff;
-    border: 1px solid #d1d5db;
+    /* background: var(--color-formfield-bg); */
+    border: 1px solid var(--color-formfield-border);
     border-radius: 4px;
     margin: .1em .5em 0 0;
   }
   
-  .checkbox:checked {
-    background: #d84029;
-  }
+  /* .checkbox:checked {
+    background: var(--color-primary);
+  } */
   
-  .checkbox:focus {
-    outline: 2px solid #d84029;
+  /* .checkbox:focus {
+    outline: 2px solid var(--color-primary);
   }
-  
+   */
   
   .form-row {
     margin-bottom: 20px;
@@ -60,7 +61,7 @@
   }
   
   .form-row .invalid {
-    border-color: darkred;
+    border-color: var(--color-error);
     margin-bottom: 0em;
   }
 
@@ -70,7 +71,7 @@
      margin-bottom: .3rem;
     font-weight: 700;
     display: block;
-    font-size: 14px;
+    /* font-size: 14px; */
     padding-left: 0.1rem;
   }
   
@@ -95,7 +96,7 @@
     background-color: transparent;
     position: absolute;
     padding-left: .5rem;
-    color: #acb1b5;
+    color: var(--color-form-ph);
     font-weight: 600;
     
   }

@@ -100,7 +100,7 @@
 										id="register"
 										name="register"
 										<!--- type="submit"  --->
-										class="btn btn-red btn-heavy" 
+										class="btn btn-primary btn-heavy" 
 										title="create register profile"
 										<!--- alpine --->
 										:class="{'submitting' :$store.forms.submitting}" 
@@ -186,7 +186,7 @@
 										id="login"
 										name="login"
 										<!--- type="submit"  --->
-										class="btn btn-red btn-heavy" 
+										class="btn btn-primary btn-heavy" 
 										title="Log In">
 										Log In
 									</button>

@@ -87,7 +87,7 @@
 						id="login"
 						name="login"
 						type="submit" 
-						class="btn btn-red"
+						class="btn btn-primary"
 						title="login"
 						>
 						Log In

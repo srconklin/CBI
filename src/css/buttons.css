@@ -1,19 +1,19 @@
 /* links */
 
-.redlink {
-  color: #d84029;
+/* .redlink {
+  color: var(--color-primary);
   text-decoration: none;
-}
- 
+} */
+/*  
 .redlink:hover {
   opacity: .7;
-} 
+}  */
 
 /* primary button  */
 .btn {
     /* margin-top: .3rem; */
     border: 2px solid transparent;
-    color: white;
+    color: var(--color-primary-button-text);
     padding-left: 1rem;
     padding-right: 1rem;
     padding-top: 0.5rem;
@@ -26,6 +26,79 @@
     width: fit-content;
   }
 
+
+    /* small button */
+ .btn-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.45rem;
+  border: 2px solid transparent;
+  color:  var(--color-primary-button-text);
+  padding: .3rem .5rem;
+  transition: background-color .2s ease-out;
+  font-size: .8rem;
+  font-weight: 400;
+  opacity: 1;
+  outline: none;
+}
+
+  
+  .btn:hover,
+  .btn-small:hover {
+    color:var(--color-primary-button-text);
+    opacity: .8;
+  } 
+
+  .btn-primary {
+    color:var(--color-primary-button-text);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+  
+  }
+
+
+  .btn-secondary {
+    color:var(--color-primary-button-text);
+    background-color: var(--color-secondary); 
+  }
+
+
+  .btn-tertiary {
+    background-color: var(--color-tertiary);
+    border-color: var(--color-tertiary);
+    color: #333;
+    font-weight: 500;
+  }
+
+  
+  .btn-tertiary:hover{
+    color: #333;
+  }
+  
+  .btn-gray {
+    color: var(--color-util-gray-dark);
+    background-color: transparent;
+    border-color:var(--color-util-gray-dark);
+    font-weight: 500;
+  
+  }
+  
+  .btn-gray:hover {
+       color: var(--color-util-gray-dark);
+    
+  } 
+
+  .btn-hollow {
+    border-color:var(--color-primary-button-text);
+  }
+  
+  .btn-hollow:hover {
+    background-color: var(--color-tertiary);
+    border-color: var(--color-tertiary);
+    color: var(--color-secondary);
+  }
+  
   
   /*  to make a more prominent button (usually on a form) */
   .btn-heavy {
@@ -34,106 +107,9 @@
     font-weight: 600;
     padding-left: 3rem;
     padding-right: 3rem;
-  }
+  } 
 
-  /* small button */
-  .btn-small {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.45rem;
-    border: 2px solid transparent;
-    color: #fff;
-    padding: .3rem .5rem;
-    transition: background-color .2s ease-out;
-    font-size: .8rem;
-    font-weight: 400;
-    opacity: 1;
-    outline: none;
-  }
-  
-  .btn-wy {
-    border-color: white
-  }
-  
-  .btn-wy:hover {
-    background-color: #ffeb00;
-    border-color: #ffeb00;
-    color: #375bbb;
-  }
-  
-  .btn-red {
-    color: white;
-    background-color: #d84029;
-    border-color: #d84029;
-  
-  }
 
-  .btn-white {
-    color: #4B5563; ;
-    background-color: #ffffff;
-    border-color: #ffffff;
-  
-  }
-
-  .btn-yellow {
-    background-color: #ffeb00;
-    border-color: #ffeb00;
-    color: #333;
-    font-weight: 500;
-  }
-
-  
-  .btn-yellow:hover{
-    background-color: #e0c300;;
-    border-color: #e0c300;
-  }
-  
-  
-  .btn-blue-muted {
-    background-color: #375bbbe6; /* Muted blue button */
-  }
-
-  .btn-blue-muted:hover {
-    background-color: #2a4b99; 
-  }
-  
-  .btn-red-muted {
-    background-color: #b74e56; /* Muted red button */
-  }
-
-  .btn-red-muted:hover {
-    background-color: #9a3d46;
-  }
-
-  .btn-red-hollow {
-    color: #d84029;
-  }
-  
-  .btn-red-hollow:hover {
-    color: white;
-    background-color: #d84029;
-  }
-  
-  .btn-red:hover {
-    opacity: .85;
-  }
-  
-  .btn-gray {
-    color: rgba(33, 36, 61, .7);
-    background-color: transparent;
-    border-color: rgba(33, 36, 61, .6);
-    font-weight: 500;
-  
-  }
-  
-  .btn-gray:hover {
-    opacity: .85;
-    color: #d84029;
-    border-color: #d84029;
-  }
-  
-  
   .btn svg,
   .btn-small svg {
     height: 14px;
@@ -141,7 +117,42 @@
     width: 16px;
     margin-top: .2rem;
   }
+
+
+  /* .btn-white {
+    color: #4B5563; ;
+    background-color: #ffffff;
+    border-color: #ffffff;
   
-  .btn-rounded {
-    border-radius: 9999px !important
+  } */
+  
+
+  
+  /* .btn-primary-muted {
+    background-color: #b74e56; 
   }
+
+  .btn-primary-muted:hover {
+    background-color: #9a3d46;
+  } */
+/* 
+  .btn-primary-hollow {
+    color: var(--color-primary);
+  }
+  
+  .btn-primary-hollow:hover {
+    color: white;
+    background-color: var(--color-primary);
+  }
+   */
+
+  /* .btn-primary:hover {
+    opacity: .85;
+  }
+   */
+
+
+  
+  /* .btn-rounded {
+    border-radius: 9999px !important
+  } */

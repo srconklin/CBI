@@ -35,10 +35,6 @@ ol.progress[data-steps="9"] li { width: 11%; } */
     font-weight: bold;
     margin-bottom: 0.6em;
     opacity: 0.3;
-    /* font-size: 1.2rem; */
-    /* height:2em; */
-    /* line-height: 1; */
-
     font-size: 1.1rem;
     line-height: 1.1;
     margin-right: 0.6rem;
@@ -46,31 +42,31 @@ ol.progress[data-steps="9"] li { width: 11%; } */
 }
 
 .progress .step {
-    /* color: black; */
-    border: 3px solid silver;
-    background-color: #cdcdcd;
+    border: 3px solid var(--color-tracker-step-bar);
+    background-color: var(--color-tracker-incomplete-text );
     border-radius: 50%;
     line-height: 1.8;
     width: 2.2em;
     height: 2.2em;
-    /* display: inline-block; */
     z-index: 0;
 }
 
 .progress .step span {
-    opacity: 0.3;
+    /* opacity: 0.4; */
+    color: var(--color-tracker-step-text);
 }
 
 .progress .active .name,
 .progress .active .step span {
     opacity: 1;
     font-weight: bold;
+    color: var(--color-tracker-done-text);
 }
 
 .progress .step:before {
     content: "";
     /* display: block; */
-    background-color: silver;
+    background-color: var(--color-tracker-step-bar);
     height: 0.4em;
     width: 50%;
     position: absolute;
@@ -82,7 +78,7 @@ ol.progress[data-steps="9"] li { width: 11%; } */
 .progress .step:after {
     content: "";
     /* display: block; */
-    background-color: silver;
+    background-color: var(--color-tracker-step-bar);
     height: 0.4em;
     width: 50%;
     position: absolute;
@@ -107,11 +103,11 @@ ol.progress[data-steps="9"] li { width: 11%; } */
 .progress .active .step:before  */
 .progress .done + .active .step:before
 {
-    background-color: yellowgreen;
+    background-color: var(--color-tracker-done)
 }
 
 .progress .done .step,
 .progress .active .step {
-    border: 3px solid yellowgreen;
+    border: 3px solid var(--color-tracker-done)
 }
 

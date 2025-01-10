@@ -112,7 +112,7 @@
 			<!--- </template> --->
 
 			<!--- <div class="modal-footer">
-			<button @click="modal = false" class="btn btn-red">
+			<button @click="modal = false" class="btn btn-primary">
 				Close this modal!
 				</button> 
 			</div> --->

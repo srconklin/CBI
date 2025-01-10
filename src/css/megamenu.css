@@ -5,28 +5,16 @@
 }
 
 .megamenu {
-  /* background-color: #d84029;
-  padding: 0 1rem;
-  display: none; 
-  place-items: center;
-
-  box-shadow: 0px 8px 8px -6px rgb(0 0 0 / 50%); */
-
-
-   background-color:  #d84029;
+    background-color:  var(--color-primary);
     padding: 0 1rem;
     display: none;
     place-items: center;
-    /* box-shadow: 0px 8px 8px -6px rgb(0 0 0 / 50%); */
-    /* border-bottom: 6px solid #d84029; */
+ 
 }
-
-
 
 .megamenu ul {
   display: grid;
 }
-
 
 .megamenu > ul {
   grid-auto-flow: column;
@@ -39,24 +27,15 @@
 
 /* menu buttons/anchors and anchors on dropdown canvas */
 
-/* .megamenu > ul > li .dropdown__title, */
 .megamenu > ul > li a {
   text-decoration: none;
   display: inline-block;
 }
 
-/* .megamenu > ul > li a:focus, */
-/* .megamenu > ul > li .dropdown__title:focus  */
-
-/* .megamenu > ul > li a:focus {
-  outline: none;
-} */
 
 /* menu buttons only  */
 .megamenu > ul > li > .dropdown__title {
-  /* padding: .2rem 0.2rem; */
-  /* padding: .5rem 0.5rem; */
-  color: white;
+  color: var(--color-megamenu-top-links);
   font-size: 1.125rem;
   /* font-size: 16px; */
   line-height: 1.75rem;
@@ -67,7 +46,7 @@
 .megamenu > ul > li > .dropdown__title::after {
   content: "";
   border: none;
-  border-top: 6px solid #fff;
+  border-top: 6px solid var(--color-megamenu-top-links);
   border-left: 6px solid rgba(0, 0, 0, 0);
   border-right: 6px solid rgba(0, 0, 0, 0);
   position: absolute;
@@ -75,28 +54,23 @@
   right: -13px;
 }
 
-/* .megamenu > ul > li .dropdown__title:hover,
-.megamenu > ul > li .dropdown__title:focus {
-  text-decoration: underline;
-} */
 
 /* a dropdown item enbabled menu button  */
 .dropdown {
   position: relative;
 }
 /* upward pointing arrow that pointd to title */
-.dropdown:after {
+/* .dropdown:after {
   content: "";
   border: 0.5rem solid transparent;
-  border-bottom-color:rgb(250 250 250);
+  border-bottom-color:#fafafa;
   position: absolute;
   top: calc(100% - .90rem);
   left: 50%;
   transform: translateX(-50%);
-  /* transition: 180ms all 120ms ease-out; */
   opacity: 0;
   will-change: opacity;
-}
+} */
 
 .dropdown__title {
   /* neeed if you wanted to adda down arrow using :after  */
@@ -107,21 +81,6 @@
   font-family: inherit;
 }
 
-/* .dropdown .dropdown__title::after {
-    content: "";
-    border: 0.35rem solid transparent;
-    border-top-color:rgba(25, 39, 230,.60);
-    margin-left: 0.25em;
-    transform: translateY(0.15em);
-}  */
-
-/* the menu button/achnor text */
-/* .dropdown__title {
-    background-color: transparent;
-    border: none;
-    font-family: inherit;
-  } */
-
 /* the dropdown menu canvas */
 .dropdown__menu {
   visibility: hidden;
@@ -130,7 +89,7 @@
   box-shadow: 0 0.15em 0.25em rgba(0, 0, 0, 0.25);
   padding: 0.5em 0;
   min-width: 15ch;
-  background-color: rgb(250 250 250);
+  background-color: var(--color-megamenu-dd-bg);
   white-space: nowrap;
   z-index: 10;
 }
@@ -192,9 +151,10 @@
 /* links on the dropdown canvas either direct or in a mega group */
 .dropdown__menu > li > a,
 .dropdown__mglinks > li > a {
-  color: rgb(55 91 187 / 1);
+  color: var(--color-secondary);
   line-height: 27px;
   opacity: 0;
+  font-weight: 500;
   /* transition: 180ms all 120ms ease-out; */
   /* font-size: 15px; */
 }
@@ -242,7 +202,7 @@
 
 .megamenu-sidepanel > .panel-container {
   transition-duration: .3s;
-  background-color: #efefef;
+  background-color: var(--color-megamenu-dd-bg);
   overflow: hidden;
   max-width: 20rem;
   width: 100%;
@@ -259,11 +219,11 @@
   right: 1rem;
   top: 1rem;
   position: fixed;
-	color: rgba(156, 163, 175, 1.0);
+	color: var(--color-util-gray-dark2);
 }
 
 .megamenu-sidepanel > .panel-container > .closebutton:hover {
-	color:#d84029;  
+	color:var(--color-primary);  
 }
 
 .megamenu-sidepanel > .panel-container > .content {
@@ -281,24 +241,19 @@
 
 /* show categories */
 .categoryheader {
-  /* padding-bottom: 2rem;
-  margin-top: -16px; */
-
   padding-bottom: .9rem;
   margin-top: -8px;
 } 
 
 /* Style the links inside the sidenav */
 .categoryheader .slider {
-  background-color: #d84029;
+  background-color: var(--color-primary);
   position: absolute;
   left: -127px;
   transition: 0.3s;
-  /* padding: 8px; */
   padding-left: 8px;
   padding-right: 8px;
   width: 157px;
-  color: white;
   border-radius: 0 5px 5px 0;
   display: flex;
   justify-content: space-between;
@@ -311,7 +266,7 @@
 } */
 .categoryheader a {
   text-decoration: none;
-  color:white;
+  color: var(--color-megamenu-top-links);
 }
 
 .megamenu-sidepanel nav .accordian {
@@ -319,7 +274,7 @@
 }
 
 .megamenu-sidepanel nav .accordian > div.active {
-  background-color: #d84029;
+  background-color: var(--color-primary);
   
 }
 
@@ -328,26 +283,23 @@
 }
 
 .megamenu-sidepanel nav .accordian:last-child {
-  border-bottom: 1px solid #c8c4c0;
+  border-bottom: 1px solid var(--color-megamenu-side-divide);
 }
 
 .megamenu-sidepanel nav a {
   padding: 14px 28px 14px 30px;
-  color: rgb(55 91 187 / 1);
+  color: var(--color-secondary);
   line-height: 27px;
   display: block;
   /* transition: 0.4s;  */
   text-decoration: none;
   outline: none;
+  font-weight: 600;
 }
 
 .megamenu-sidepanel nav a:hover { 
   text-decoration: underline;
 }
-
-/* .megamenu-sidepanel .accordian-title {
-  
-}   */
 
 .megamenu-sidepanel nav .accordian a > svg {
   width: 22px;
@@ -355,27 +307,14 @@
   font-weight: bold;
 }  
 
-/* .megamenu-sidepanel .chevron-down {
-  display: none;
-} */
-
-/* 
-.megamenu-sidepanel nav .accordian > a:after {
-  content: '\003E';
-  font-weight: bold;
-   color: #d84029;
-  float: right;
-} */
 
 .megamenu-sidepanel nav .panel {
-  /* display: none; */
   padding: 10px 18px;
-
 }
 
 .megamenu-sidepanel .nav-header
 {
   text-align: center;
   padding: 1rem;
-  color: red;
+  color: var(--color-primary)
 }

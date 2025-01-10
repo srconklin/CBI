@@ -2,6 +2,8 @@
 /*****************
 facet placeholders
 ******************/
+
+
 #algolia {
 	overflow: hidden;
 	visibility: hidden;
@@ -17,28 +19,6 @@ facet placeholders
 	visibility: visible;
  }
 
-/* #algolia {
-	visibility: hidden;
-	opacity: 0;
-	-webkit-transition: opacity 0.75s ease-in-out;
-    -moz-transition: opacity 0.75s ease-in-out;
-    transition: opacity 0.75s ease-in-out;
-	width:0px;
-	height:0px;
-	position: absolute; 
-	top: -99999px;
-} */
-
-/* #algolia.show {
-	visibility: visible;
-	opacity: 1;
-	height: auto;
-	width: auto;
-	position: static;
-	top: 0;
-  
-  }
-   */
 
 #categories {
 	margin-bottom: 2rem;
@@ -50,7 +30,7 @@ facet placeholders
   
    }
   
-   #searchbox {
+#searchbox {
 	/* width: 26vw; */
 	width: 90%;
 	/* when  search box is on same row as links and logo */
@@ -58,16 +38,12 @@ facet placeholders
 	max-width: 800px;
     
 	box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-
-
-	/* margin-right: 1.5rem; */
   }
   
-  #searchbox.searchbox-abbr {
+  /* #searchbox.searchbox-abbr {
 	width: 40vw;
-	/* display:none; */
   }
-  
+   */
   #stats, #statsfilter {
 	font-weight: bold;
 	font-style: italic;
@@ -78,6 +54,10 @@ facet placeholders
 	margin-right: 1rem;
   } */
    
+  #refinements.highlight {
+    background-color: var(--color-primary-compl1);
+	}
+
   #clear-refinements {
 	/* margin-right:2rem; */
 	display: flex;
@@ -104,27 +84,13 @@ facet placeholders
 	margin-bottom: 0.5rem;
   }
   
-  /* #clear-refinements .btn-small {
-	font-weight: 500;
-  } */
-  
+
   /********************* 
   breadcrumb
 *********************/
   
 .breadcrumb {
     margin-top: 1.75rem;
-    /* margin-bottom: .75rem; */
-	/* padding: .5rem 2rem .5rem 2rem; */
-	/* background-color: #ffeb00; */
-	 /* background-color: #e5e7eb;  */
-	 /* background-color: #eceef3; */
-	 /* display:flex; */
-	 /* align-items: center; */
-	
-	 /* border-bottom:  solid 1px #e5e7eb; */
-	/* border-color: rgba(209, 213, 219, 1.0); */
-	/* box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px */
   }
 
   .ais-Breadcrumb {
@@ -161,17 +127,17 @@ facet placeholders
 	position: relative;
   } 
   
-  .togglebc {
+  /* .togglebc {
 	position: absolute;
 	top: 7px;
 	left: 13px;
 	bottom: 1px;
 	visibility: hidden;
-  }
+  } */
   
-  .togglebc-closed-pos {
+  /* .togglebc-closed-pos {
 	top: 8px;
-  }
+  } */
 
 
   
@@ -189,7 +155,6 @@ facet placeholders
  .hit,
  .hit .ais-Highlight-nonHighlighted,
  .hit .ais-Highlight {
-	/* color: #21243d; */
 	font-size: 14px;
 	
   
@@ -216,8 +181,7 @@ facet placeholders
 	margin: auto;
 	/* width: 174px; */
 	width: 90%;
-	border-bottom: 1px solid rgba(229, 231, 235, 1.0);
-	/* box-shadow: 0 2px 5px 0 #e3e5ec; */
+	border-bottom: 1px solid var(--color-util-gray-primary);
 	padding: .5rem;
   }
   
@@ -230,7 +194,7 @@ facet placeholders
   .hit-svg {
 	width: 1rem;
 	height: 1rem;
-	color: rgb(134 139 146);
+	color: var(--color-util-gray-dark2);
 	float: right;
 
   } 
@@ -254,7 +218,7 @@ facet placeholders
    .category .ais-Highlight,
    .category .ais-Highlight-nonHighlighted
    {
-	color: #192ebb;
+	color: var(--color-category);
 	font-size: 12px;
 	font-weight: 800;
 	line-height: 1;
@@ -298,11 +262,9 @@ facet placeholders
   }
   
   .hit-price {
-	/* margin-top:  .5rem; */
 	letter-spacing: 0.05em;
-	color: rgba(75, 85, 99, 1.0);
 	font-weight: 600;
-	color: #d84029;
+	color: var(--color-primary);
   }
   
   .hit-qty {
@@ -318,28 +280,53 @@ facet placeholders
 	/* padding-bottom: 0.5rem; */
 	padding-top: 0.5rem;
 	flex-wrap: wrap;
-	border-top: 1px solid rgba(229, 231, 235, 1.0);
+	border-top: 1px solid var(--color-util-gray-primary);
 	font-size: 0.875rem;
 	line-height: 1.25rem;
 	margin-top: .5rem;
   }
   
   
-  .hit-footer .itemno {
-	color: rgba(107, 114, 128, 1.0);
-  }
-  
+   
   /**************************
    algolia theme overrides
    *************************/
   
-   /* [class^=ais-] {
-	font-size: unset;
-   } */
+   .ais-SearchBox-form {
+    /* display: block; */
+    position: relative;
+  }
+
+   .ais-HierarchicalMenu-list, 
+   /* .ais-Menu-list, 
+   .ais-NumericMenu-list, 
+   .ais-RatingMenu-list,  */
+   .ais-RefinementList-list {
+    font-weight: normal;
+    	/* line-height: 1.5; */
+	}
+
+	.ais-Breadcrumb-item--selected, 
+	.ais-HierarchicalMenu-item--selected
+	 /* .ais-Menu-item--selected  */ 
+	 {
+    	font-weight: bold;
+	}
+
+	.ais-HierarchicalMenu-list .ais-HierarchicalMenu-list {
+		margin-left: 1em;
+	}
 
    .ais-RefinementList-label {
     display: flex;
     align-items: center;
+   }
+
+   .ais-HierarchicalMenu-count, .ais-Menu-count, .ais-RefinementList-count, .ais-ToggleRefinement-count {
+    padding: 0.1rem 0.4rem;
+    font-size: 0.8rem;
+    background-color: var(--color-util-gray-primary);
+    border-radius: 8px;
    }
 
    .ais-RefinementList-checkbox {
@@ -353,14 +340,47 @@ facet placeholders
    }
    .ais-SearchBox-loadingIndicator, .ais-SearchBox-reset, .ais-SearchBox-submit { 
 	 z-index: 0;
+	 
    }
+
+   .ais-SearchBox-submit, .ais-SearchBox-reset, .ais-SearchBox-loadingIndicator {
+    appearance: initial;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    right: 0.3rem;
+    transform: translateY(-50%);
+}
   
+   .ais-HierarchicalMenu-searchBox > *, .ais-Menu-searchBox > *, .ais-RefinementList-searchBox > * {
+    margin-bottom: 0.5rem;
+}
+
+.ais-RefinementList-showMore {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-out;
+    outline: none;
+}
   
-   .ais-RefinementList-showMore, .ais-Pagination-item--selected .ais-Pagination-link {
-	background-color: #d84029;
-	border-color: #d84029;
+
+.ais-Pagination-link {
+    padding: 0.3rem 0.6rem;
+    display: block;
+    border: 1px solid #c4c8d8;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-out;
+}
+
+.ais-RefinementList-showMore, .ais-Pagination-item--selected .ais-Pagination-link {
+	background-color: var(--color-primary);
+	border-color: var(--color-primary);
+	color:var(--color-primary-button-text);
   }
   
+
   .ais-ClearRefinements-button:focus, .ais-ClearRefinements-button:hover, .ais-CurrentRefinements-reset:focus, .ais-CurrentRefinements-reset:hover, .ais-GeoSearch-redo:focus, .ais-GeoSearch-redo:hover, .ais-GeoSearch-reset:focus, .ais-GeoSearch-reset:hover, .ais-HierarchicalMenu-showMore:focus,  .ais-InfiniteHits-loadMore:focus, .ais-InfiniteHits-loadMore:hover, .ais-InfiniteHits-loadPrevious:focus, .ais-InfiniteHits-loadPrevious:hover, .ais-InfiniteResults-loadMore:focus, .ais-InfiniteResults-loadMore:hover, .ais-Menu-showMore:focus, .ais-Menu-showMore:hover  {
 	background-color: transparent;
 	opacity: .7;
@@ -368,71 +388,79 @@ facet placeholders
   }
   
   .ais-RefinementList-showMore:hover {
-	background-color: #d84029;
+	background-color: var(--color-primary);
 	opacity: .7;
   }
   .ais-SortBy-select {
 	padding: .2rem 2rem .2rem .3rem;
-	border: none;
+    appearance: none;
+    max-width: 100%;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M0 7.3l2.8-2.8 9.2 9.3 9.2-9.3 2.8 2.8-12 12.2z' fill='%233A4570' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 10px 10px;
+    background-position: 92% 50%;
+	border: 1px solid var(--color-formfield-border);
+    border-radius: 5px;
+
+	
   }
-  .ais-SortBy-select, .ais-SortBy-option {
+  .ais-SortBy-select, .ais-SortBy-option, .ais-Stats-text {
 	font-size: .9rem;
   
   }
   .ais-Panel-header {
-	color: #d84029;
+	color: var(--color-primary);
 	font-size: 1rem;
 	display: flex;
     align-items: center;
     justify-content: space-between;
-	background-color: #f1f1f1;
+	background-color: var(--site-bg);
     padding: .5rem;
     border-radius: 4px;
 	border-bottom: none;
+	margin-bottom: 0.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+
   }
   
 
-  .ais-Panel--collapsible .ais-Panel-collapseButton {
+  /* .ais-Panel--collapsible .ais-Panel-collapseButton {
 	  position: unset;
   }
-  
-  /* .ais-SearchBox-input:focus {
-	outline-color: #FF0000;
-  } */
+   */
   
   .ais-SearchBox-input {
 	padding-left: .5rem;
 	padding-right: .5rem;
 	padding-top: 0.2rem;
     padding-bottom: 0.2rem;
-	/* line-height: 1.25; */
-	color: rgba(55, 65, 81, 1.0);
+    appearance: none;
+    width: 100%;
+    position: relative;
+    border: 1px solid var(--color-formfield-border);
+    border-radius: 5px;
   
   }
-  
-  .ais-SearchBox-submit {
-	color:  #192ebb;
-  }
-  
+
+
   .ais-Panel-collapseButton {
 	font-size: 2rem;
-	  color: rgb(134 139 146);
-	  /* top: -11px; */
-	  /* margin-top: -11px; */
+	color: var(--color-util-gray-dark2);
+  }
+
+  .ais-Panel--collapsible.ais-Panel--collapsed .ais-Panel-body, .ais-Panel--collapsible.ais-Panel--collapsed .ais-Panel-footer {
+    display: none; 
   }
   
   /* Hits */
   .ais-Hits-item {
-	border: 1px solid #e5e7eb;
+	border: 1px solid var(--color-util-gray-primary);
 	box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 	border-radius: 0.5rem;
 	width: 100%;
-    /* max-width: 22rem; */
-	/* width: calc(33% - 1rem); */
-	/* max-width: 20rem; */
-	/* min-width: 18rem; */
-	/* margin-left: 0rem; */
-	margin:0
+   	margin:0;
+	padding: 1rem;
   
   }
   
@@ -440,8 +468,8 @@ facet placeholders
 	
 	margin:0;
 	/* flex on very small screens; grid does not lay out right */
-	display: flex;
-	/* display: grid; */
+	/* display: flex; */
+	display: grid;
 	grid-gap: 20px;
 	justify-content: center;
 	grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
@@ -457,25 +485,45 @@ facet placeholders
   }
   
   .ais-HierarchicalMenu-link, .ais-Menu-link, .ais-Pagination-link, .ais-RatingMenu-link {
-	color: #000066;
+	color: var(--color-font-primary);
+	transition: color 0.2s ease-out;
   }
   
-  .ais-Breadcrumb-link {
-	color: #777;
+
+  .ais-Pagination-item--disabled .ais-Pagination-link {
+    opacity: 0.6;
+    cursor: not-allowed;
+    color: var(--color-disabled);
   }
 
-  .ais-Breadcrumb-link:hover, .ais-HierarchicalMenu-link:hover, .ais-Menu-link:hover, .ais-Pagination-link:hover, .ais-RatingMenu-link:hover {
-	color: #FF0000
-  }
+  .ais-Pagination-item + .ais-Pagination-item {
+    margin-left: 0.3rem;
+}
 
+  .ais-Breadcrumb-link,
   .ais-Breadcrumb-link.no-hover:hover {
-	color: #777;
+	color:var(--color-font-light);
   }
+
+  .ais-Breadcrumb-link:hover, 
+  .ais-HierarchicalMenu-link:hover, 
+  .ais-Menu-link:hover, 
   
-  .ais-Breadcrumb, .ais-ClearRefinements, .ais-CurrentRefinements, .ais-GeoSearch, .ais-HierarchicalMenu, .ais-Hits, .ais-HitsPerPage, .ais-InfiniteHits, .ais-InfiniteResults, .ais-Menu, .ais-MenuSelect, .ais-NumericMenu, .ais-NumericSelector, .ais-Pagination, .ais-Panel, .ais-PoweredBy, .ais-RangeInput, .ais-RangeSlider, .ais-RatingMenu, .ais-RefinementList, .ais-Results, .ais-ResultsPerPage, .ais-SearchBox, .ais-SortBy, .ais-Stats, .ais-ToggleRefinement {
-	color: #444;
+  .ais-RatingMenu-link:hover {
+	color: var(--color-link-hover);
   }
-  
+
+  .ais-Pagination-link:hover {
+	background-color: var(--color-util-gray-primary);
+	color: var(--color-font-primary);
+  }
+
+  /* .ais-Breadcrumb-item, */
+  .ais-Breadcrumb-list,  .ais-Pagination-list, .ais-RangeInput-form, .ais-RatingMenu-link, .ais-PoweredBy {
+    display: flex;
+    align-items: center;
+	justify-content: center;
+}
   .ais-Breadcrumb-separator {
 	margin-right: .2rem;
 	margin-left: 0;
@@ -504,11 +552,32 @@ facet placeholders
   }
 
   .ais-SearchBox-submit {
-     left: unset; 
-	 right: .6rem;
-
+     /* left: unset; 
+	 right: .6rem; */
+    appearance: none; 
+    position: absolute;
+    /* z-index: 1; */
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    right: 0.3rem;
+    transform: translateY(-50%);
 }
-  
+
+.ais-SearchBox-submitIcon {
+    width: 14px;
+    height: 14px;
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
 .ais-SearchBox-reset {
     right: 2.0rem;
+}
+
+.ais-SearchBox-resetIcon {
+    width: 12px;
+    height: 12px;
 }

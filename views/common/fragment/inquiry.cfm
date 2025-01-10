@@ -60,7 +60,7 @@
 				id="sendInquiry"
 				name="sendInquiry"
 				type="submit" 
-				class="btn btn-red" 
+				class="btn btn-primary" 
 				title="send your inquiry"
 				<!--- alpinie --->
 				:class="{'submitting' :$store.forms.submitting}" 

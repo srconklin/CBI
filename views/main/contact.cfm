@@ -134,7 +134,7 @@
                 id="submit"
                 name="submit"
                 type="submit" 
-                class="btn btn-red" 
+                class="btn btn-primary" 
                 title="submit"
                 <!--- alpine --->
                 :class="{'submitting' :$store.forms.submitting}" 

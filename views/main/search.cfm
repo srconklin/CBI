@@ -14,7 +14,7 @@
 
   <!--- show/hide filters (red button)  --->
   <div id="filterbar" class="filterbar" :class="{'remove-margin' : showFilter}">
-    <button class="filter btn btn-red" :class="{'opened' : showFilter}" type="button"
+    <button class="filter btn btn-primary" :class="{'opened' : showFilter}" type="button"
     <!--- $dispatch('blur-bg', !showFilter); --->
       @click.prevent=" showFilter = !showFilter">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

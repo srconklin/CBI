@@ -18,7 +18,7 @@
 }
  
 .verttabs .activeBtn {
-    color: #d84029;
+    color: var(--color-primary);
 }
   
 
@@ -32,7 +32,6 @@
     flex-wrap: nowrap;
     flex-direction: column;
     display: flex;
-    /* border-bottom: 1px solid   #c2c3c5; */
   
 }
 
@@ -45,7 +44,7 @@
 
  .tabs > ul li a, .verttabs > ul li a {
 
-    background-color: white;
+    /* background-color: white; */
     display: block;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -58,8 +57,10 @@
 }
 
 .verttabs > ul li a {
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid var(--color-util-gray-primary);
+    border-top: 1px solid var(--color-util-gray-primary);
     padding: 1.0rem;
+    font-size: 17px;
 }  
 
 .tabs > ul li a {
@@ -67,22 +68,22 @@
 }
 
 .tabs .activeBtn {
-    /* color:white; */
-    color: #d84029;
-    border: 1px solid  #c2c3c5;
+    color: var(--color-primary);
+    border: 1px solid  var(--color-form-border);
     border-radius: 0.25rem;
-    background-color:#f7f7f7
+    background-color:var(--color-form-bg)
 }
 
 .tabs .inActiveBtn, .verttabs .inActiveBtn  { 
-    color: #4b5563;
-    border: 1px solid  #c2c3c5;
+    color: var(--color-util-gray-dark2);
+    border: 1px solid  var(--color-form-border);
     border-radius: 0.25rem;
 }
 
 .tabs .inActiveBtn:hover, .verttabs .inActiveBtn:hover { 
-  color: rgba(156, 163, 175, 1.0);
-}
+  /* color: var(--color-disabled); */
+  opacity: .8;
+}  
 
 .tabcontent {
     padding: 1rem;
@@ -94,11 +95,8 @@
 
 .tabs .tabcontent {
     border-radius: 0.25rem;
-    background-color: #f7f7f7;
-    /* border-left: 1px solid #c2c3c5;
-    border-right: 1px solid #c2c3c5;
-    border-bottom: 1px solid #c2c3c5; */
-    border: 1px solid #c2c3c5;
+    background-color:var(--color-form-bg);
+    border: 1px solid var(--color-form-border);
 }
 
 

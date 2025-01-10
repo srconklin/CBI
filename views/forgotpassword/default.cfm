@@ -33,7 +33,7 @@
                       <button 
                           id="=resetpassword"
                           name="=resetpassword"
-                          class="btn btn-red" 
+                          class="btn btn-primary" 
                           type="submit" 
                           title="Send reset email"
                           <!--- onclick="submitCap('frmForgotPassword', '/myprofile')" --->

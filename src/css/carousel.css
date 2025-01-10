@@ -22,12 +22,12 @@
 
 .carousel-button {
 	/* width: 2rem; */
-	color: rgba(156, 163, 175, 1.0);
+	color:  var(--color-util-gray-dark2);
 
 }
 
 .carousel-button:hover {
-	color:#d84029;  
+	color:var(--color-primary);  
 }
 
 .carousel-slider {
@@ -37,7 +37,6 @@
     overflow-x: auto;
 	
 }
-
 
 .carousel-slide  { 
 	scroll-snap-align: start;

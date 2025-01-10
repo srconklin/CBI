@@ -16,7 +16,7 @@
         <div class="unlock-text">
           <h1 >Unlock Full Profile Settings</h1>
           <p>Sign in to access and personalize your profile settings, including adding a location, setting notification preferences, and managing your offers and favorites.</p>
-           <button class="btn btn-red" type="button" onclick="location.href='/login'">Sign In</button>
+           <button class="btn btn-primary" type="button" onclick="location.href='/login'">Sign In</button>
         </div>
    </div>
   </div>

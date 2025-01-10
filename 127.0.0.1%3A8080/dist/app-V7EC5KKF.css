@@ -2963,7 +2963,7 @@ hr {
   border-color: #ffeb00;
   color: #375bbb;
 }
-.btn-red {
+.btn-primary {
   color: white;
   background-color: #fa0114;
   border-color: #fa0114;
@@ -2973,14 +2973,14 @@ hr {
   background-color: #ffffff;
   border-color: #ffffff;
 }
-.btn-red-hollow {
+.btn-primary-hollow {
   color: #fa0114;
 }
-.btn-red-hollow:hover {
+.btn-primary-hollow:hover {
   color: white;
   background-color: #fa0114;
 }
-.btn-red:hover {
+.btn-primary:hover {
   opacity: .85;
 }
 .btn-gray {

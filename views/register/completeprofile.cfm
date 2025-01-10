@@ -10,7 +10,7 @@
             <div class="instruction">#rc.instruction#</div>
            
             <!--- <cfif structKeyExists(rc, 'gotoSetPassword')>  
-               <a href="/completeprofile" class="btn btn-red" >Next &raquo;</a> --->
+               <a href="/completeprofile" class="btn btn-primary" >Next &raquo;</a> --->
             <cfif structKeyExists(rc, 'showPasswordMgr')>  
                <!--- a complete password form with configurable destination --->
                #view( 'common/fragment/setPassWordForm',
@@ -20,7 +20,7 @@
                         buttonlabel=' Create Password'
                      })#  
             <cfelseif rc.allowResend>
-               <a href="/resendlink" class="btn btn-red" >Resend Email</a>  
+               <a href="/resendlink" class="btn btn-primary" >Resend Email</a>  
             </cfif>
 
         </div>

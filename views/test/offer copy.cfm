@@ -155,7 +155,7 @@
 				id="makeoffer"
 				name="makeoffer"
 				type="submit" 
-				class="btn btn-red" 
+				class="btn btn-primary" 
 				title="make your offer"
 				<!--- alpine --->
 				:class="{'submitting' :$store.forms.submitting}" 

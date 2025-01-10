@@ -1,5 +1,5 @@
-.login {
-  background-color: rgb(55 91 187 / .9);
+/* .login {
+  background-color: var(--color-util-gray-secondary);
   padding-top: 3rem;
   padding-bottom: 3rem;
   line-height: 1.5;
@@ -27,7 +27,7 @@
   text-align: center;
   font-weight: 700;
   font-size: 1.5rem;
-}
+} */
 
 .pwdrequirements p {
   margin-bottom: .5rem;

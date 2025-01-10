@@ -8,7 +8,7 @@
 /* #nav {
     position: static;
 } */
-.pac-icon {
+/* .pac-icon {
     display: none;
 }
 
@@ -24,19 +24,11 @@
 
 .pac-item-query {
      font-size: 16px;
-}
+} */
 
-.input-gray {
-    background-color: #F0F2F2;
-    color: #333;
-}
 
 .location-panel {
     padding: .5rem;
-    /* border: 1px solid #dedede;
-    border-radius: 4px;
-    background-color: whitesmoke;
-    margin-bottom: 20px; */
     display: none;
 }
 
@@ -47,7 +39,7 @@
 
 .loc-value {
     font-weight: bold;
-    color: #d84029;
+    color: var(--color-primary);
     
 }
 #myprofilefrm > div {
@@ -59,10 +51,10 @@
     margin-top: 0.1rem; 
 }  
 
-#myprofile .email-status {
+/* #myprofile .email-status {
     font-weight: bold;
     column-gap: 8px;
-    background-color: #e6f4ea;
+    background-color: var(--color-success-bg);
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
     display: inline-flex;
@@ -70,7 +62,7 @@
     border-radius: 4px;
     color: #666;
     font-size: 14px;
-}
+} */
 
 /* unlock settings teaser */
 .unlock-container {
@@ -83,11 +75,9 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    /* background-color: #eaeaea;   */
-    /* border-radius: 8px; */
     margin-bottom: 30px;
     margin-top: 30px;
-    border-left: 3px solid #666; /* Slightly darker border to add emphasis */
+    border-left: 3px solid var(--color-util-gray-dark);
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  */
   }
   
@@ -98,11 +88,10 @@
    .unlock-text h1 {
     font-size:  1.5rem;
     margin-bottom: 5px;
-    /* color: #333; */
   } *
   
   .unlock-text p {
     /* font-size: 14px; */
-    color: #666;
+    color: var(--color-util-gray-dark);
     margin-bottom: 15px;
   }

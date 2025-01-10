@@ -6,7 +6,7 @@
 
 
 .table th {
-    background-color: white;
+    background-color: var(--color-table-th);
     padding-top: 0.875rem;
     padding-bottom: 0.875rem;
     
@@ -15,8 +15,6 @@
 .table td  {
     padding-top: 1rem;
     padding-bottom: 1rem;
-    /* white-space: nowrap; */
-    color: rgb(107 114 128 / 1);
 }    
 
 .table td, .table th {
@@ -28,16 +26,16 @@
 
 
 .table tr:nth-child(even) {
-    background-color:rgb(245 247 248);
+    background-color: var(--color-table-tr-even);
 }
 
 .table tr:hover {
-    background-color: #ffcbcb; /* #b2dcee*/
+    background-color: var(--color-table-tr-hover);
     cursor: pointer;    
 }
 
 .table tr {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--color-table-tr-border);
  }
 
  /* tbody {
@@ -65,21 +63,20 @@
         .table tr {
              margin: 0 0 1rem 0;
              border-bottom: none;
-             border: 1px solid #ccc;
+             border: 1px solid var(--color-table-tr-small);
              border-radius: 4px;
         }
         
         .table td {
             /* Behave  like a "row" */
             border: none;
-          
             position: relative;
             padding-left: 50%;
             padding-top: .5rem;
             padding-bottom: .5rem;
         }
         .table td:not(:last-child) {
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--color-table-td-small);
 
         }
 
@@ -103,10 +100,10 @@
         That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. 
         Lea Verou has a clever way to handle with text-shadow.
         */
-        .table td:nth-of-type(1):before { content: "Ref #"; }
-        .table td:nth-of-type(2):before { content: "Date"; }
-        .table td:nth-of-type(3):before { content: "Type"; }
-        .table td:nth-of-type(4):before { content: "Item ID"; }
-        .table td:nth-of-type(5):before { content: "Description"; }
+        #myoffers .table td:nth-of-type(1):before { content: "Ref #"; }
+        #myoffers .table td:nth-of-type(2):before { content: "Date"; }
+        #myoffers .table td:nth-of-type(3):before { content: "Type"; }
+        #myoffers .table td:nth-of-type(4):before { content: "Item ID"; }
+        #myoffers .table td:nth-of-type(5):before { content: "Description"; }
            
 	}

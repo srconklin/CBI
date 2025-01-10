@@ -15,27 +15,16 @@
 
         <cfoutput>
             <div class="mb-4">
-                <!--- <p>#rc.userSession.email#</p>  color:##2f855a;" --->
+                
                 <cfif rc.userSession.isEmailVerified>
                     <div class="message-box success"> 
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"  style="color:##2f855a; width:1.5rem; height: 1.5rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" >
                              <path fill-rule="evenodd" d="M8.603 3.799A4.49 4.49 0 0 1 12 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 0 1 3.498 1.307 4.491 4.491 0 0 1 1.307 3.497A4.49 4.49 0 0 1 21.75 12a4.49 4.49 0 0 1-1.549 3.397 4.491 4.491 0 0 1-1.307 3.497 4.491 4.491 0 0 1-3.497 1.307A4.49 4.49 0 0 1 12 21.75a4.49 4.49 0 0 1-3.397-1.549 4.49 4.49 0 0 1-3.498-1.306 4.491 4.491 0 0 1-1.307-3.498A4.49 4.49 0 0 1 2.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 0 1 1.307-3.497 4.49 4.49 0 0 1 3.497-1.307Zm7.007 6.387a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z" clip-rule="evenodd" />
                         </svg>
                         <span>
                             <b>#rc.userSession.email#</b>&nbsp;VERIFIED!
                         </span>
                     </div>
-    
-                <!--- <cfelse>
-                    <div class="message-box error">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="color:##b91c1c;">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                        </svg>
-                        <span>
-                            <b>#rc.userSession.email#</b> has been not verified yet!<br><a href="/resendlink">Send</a>&nbsp;an email to confirm your account now.
-                        </span>
-                        
-                    </div> --->
                 </cfif>
             </div> 
 
@@ -47,7 +36,7 @@
 
 
     <!--- <cfif (rc.userSession.validated eq 2)> --->
-	<div class="panel" style="border-top: 1px solid #e5e5e5; border-radius:0">
+	<div class="panel" style="border-top: 1px solid var(--color-util-gray-primary); border-radius:0">
 
 		<div class="verttabs" x-data>
 			<ul>
@@ -105,7 +94,7 @@
                                     id="updatecontactinfo"
                                     name="updatecontactinfo"
                                     type="submit" 
-                                    class="btn btn-red" 
+                                    class="btn btn-primary" 
                                     title="save changes"
                                     <!--- alpine --->
                                     :class="{'submitting' :$store.forms.submitting}" 
@@ -198,7 +187,7 @@
 								id="changepassword"
 								name="changepassword"
 								type="submit" 
-								class="btn btn-red" 
+								class="btn btn-primary" 
 								title="Change Password"
 								<!--- alpine --->
 								:class="{'submitting' :$store.forms.submitting}" 
@@ -408,7 +397,7 @@
                                         id="savemyaddress"
                                         name="savemyaddress"
                                         type="submit" 
-                                        class="btn btn-red" 
+                                        class="btn btn-primary" 
                                         title="Save Address"
                                         <!--- alpine --->
                                         :class="{'submitting' :$store.forms.submitting}" 
@@ -491,7 +480,7 @@
                         id="updatecommprefs"
                         name="updatecommprefs"
                         type="submit" 
-                        class="btn btn-red" 
+                        class="btn btn-primary" 
                         title="Save Changes"
                         <!--- alpine --->
                         :class="{'submitting' :$store.forms.submitting}" 
@@ -516,7 +505,7 @@
 </div>
 </div>
 
- <script  src="/dist/aac-7OZXH6JT.js" type="module"></script>
+ <script  src="/dist/aac-EU2IF47H.js" type="module"></script>
 
  <cfif len(rc.myaddress.LocGID)>
 

@@ -9,9 +9,9 @@
 }
 
 .footer {
-    background-color: #383941;
+    background-color: var(--color-footer);
     /* background-color: rgb(11 23 54 / 90%); */
-    color: white;
+    color: var(--color-footer-font);
     padding-top: 3rem;
     padding-bottom: 3rem;
     padding-left: 3rem;
@@ -34,13 +34,13 @@
   
   .footer-links li a,
   .footer-admin li a {
-    color: white;
+    color: var(--color-footer-font);
     text-decoration: none;
   }
   
   .footer-links li a:hover,
   .footer-admin li a:hover {
-    color: #d84029;
+    color: var(--color-primary);
   }
   
   .footer-address {

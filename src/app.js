@@ -2,22 +2,21 @@
 
 import 'modern-normalize/modern-normalize';
 import "./css/customReset.css";
-import 'instantsearch.css/themes/algolia';
+///import 'instantsearch.css/themes/algolia';
 import 'intl-tel-input/build/css/intlTelInput';
 import 'tippy.js/dist/tippy.css'; 
+import './css/root.css'; 
 import './css/site.css'; 
- 
 import './css/buttons.css'; 
 import './css/header.css'; 
 import './css/footer.css'; 
 import './css/toasts.css'; 
 import './css/modal.css'; 
 import './css/form.css'; 
-import './css/algolia.css'; 
+import './css/myalgolia.css'; 
 import './css/carousel.css'; 
 import './css/landing.css';
-import './css/register.css'; 
-import './css/login.css'; 
+import './css/pwd.css'; 
 import './css/imagemodal.css'; 
 import './css/tabs.css'; 
 import './css/item.css'; 
@@ -36,7 +35,6 @@ import { asyncSearch } from './js/instantsearch'
 import smoothscroll from 'smoothscroll-polyfill'
 import { createPopper } from '@popperjs/core';
 import tippy from 'tippy.js';
-
 
 
 import Alpine from 'alpinejs';

@@ -1,0 +1,95 @@
+:root {
+    /* base */
+    --site-bg :#f1f1f1;
+    --color-primary :#d84029;
+    --color-secondary :#375bbb; 
+    --color-tertiary  :#ffeb00;
+    --color-primary-compl1 :#fff0f0;
+
+    /* header */
+    --color-hamburger-button: white;
+    --color-header-links: white;
+    --color-header-usericon: white;
+
+
+    /* footer */
+    --color-footer : #383941;
+    --color-footer-font : #ffffff;
+    
+    
+    /* grays */
+    --color-util-gray-primary :#e5e7eb;
+    --color-util-gray-secondary :#e3e3e3;
+    --color-util-gray-dark :#777;
+    --color-util-gray-dark2 : #868b92; 
+    --color-disabled : #a5abc4;
+    /* former carousel button  and user actions share and favorite 
+    color: #9ca3af;
+    9ca3af
+    */
+    
+    /* fonts */
+    --color-font-primary : #4c5373;
+    
+    --color-font-light : #777;
+    --color-link-hover : #d84029; 
+
+    /* buttons */
+    --color-primary-button-text : #ffffff; 
+    
+    /* utility notices, msgboxes. toasts */
+    --color-success : #2f855a;
+    --color-success-bg :  #dcfce7;
+    --color-success-border :#9ae6b4;
+    --color-success-icon: #38b2ac;
+
+    --color-error : #b91c1c;
+    --color-error-bg :  #fee2e2;
+
+    --color-info :#2f5385;
+    --color-info-border : #4299e1;
+    --color-info-bg :  #ebf8ff;
+    --color-info-icon :  #3056aa;
+
+    /* forms */
+    --color-form-border :#c2c3c5;
+    --color-form-bg :#f7f7f7;
+    --color-form-ph :#cbd5e0;
+    --color-formfield-border :#d1d5db;
+    --color-formfield-bg :#ffffff;
+    /* --color-formfield :#333333; */
+    --color-formfield :#6b7280;
+    --color-formfield-focus: #4299e180;
+
+    /* megamenu */
+    --color-megamenu-top-links : #ffffff;
+    --color-megamenu-dd-bg : #fafafa;
+    --color-megamenu-side-divide: #c8c4c0;
+
+    /* progress tracker */
+    --color-tracker-done : #43c785;
+    --color-tracker-incomplete-text : #e5e7eb;
+    --color-tracker-step-bar: silver;
+    --color-tracker-done-text : white;
+    --color-tracker-step-text: silver;
+
+    
+    /* tables */
+    --color-table-th : white;
+    --color-table-tr-even : #f5f7f8;
+    --color-table-tr-border : #d1d5db;
+    --color-table-tr-hover : #fff0f0;
+    --color-table-td-small : #e3e3e3;
+    --color-table-tr-small : #ccc;
+
+    
+    /* generic */
+    --color-category :#192ebb;
+    --color-item-emphasis :#2bbb19;
+    --color-megamenu-bg : #ffffff;
+    --color-minitem-content: #64748b;
+    --color-notify-badge: gold;
+
+
+
+  }

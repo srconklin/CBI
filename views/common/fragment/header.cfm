@@ -55,12 +55,25 @@
 						:aria-controls="$id('userMenu')">
 							<cfoutput>
 								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 64 64" version="1.1">
-									<circle fill="##FFFFFF" cx="32" width="64" height="64" cy="32" r="32"/>
-									<text x="50%" y="50%" fill="##d84029" style="color: ##d84029; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="30" font-weight="600" dy=".1em" dominant-baseline="middle" >#rc.userSession.avatar#</text></svg>
+									<circle
+									fill="var(--color-header-usericon)" cx="32" width="64" height="64" cy="32" r="32"/>
+										<text 
+											x="50%" 
+											y="50%" 
+											fill="var(--color-primary)" 
+											alignment-baseline="middle" 
+											text-anchor="middle" 
+											font-size="30" 
+											font-weight="600" 
+											dy=".1em" 
+											dominant-baseline="middle" >
+											#rc.userSession.avatar#
+										</text>
+								</svg>
 							</cfoutput>
 						</button>
 						<cfif !rc.userSession.isEmailVerified>
-							<a href="/myprofile" title="Verify your eamil" style="opacity:1;"><div class="notify-badge" style=" background-color: gold;" >!</div></a>
+							<a href="/myprofile" title="Verify your eamil" style="opacity:1;"><div class="notify-badge" style=" background-color: var(--color-notify-badge);" >!</div></a>
 						</cfif>
 
 					<!-- drop down menu -->
@@ -88,10 +101,7 @@
 						</div>
 						<div class="divide"></div>
 						<a href="/myprofile" class="entry">
-							<!--- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-								<path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-								<path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
-							  </svg> --->
+							
 							  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" >
 								<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
 							  </svg>
@@ -124,7 +134,7 @@
 				<a href="/login">
 					Log In
 				</a>
-				<button class="btn btn-wy o80" type="button" onclick="location.href='/register'">Register</button>
+				<button class="btn btn-hollow o80" type="button" onclick="location.href='/register'">Register</button>
 			</cfif>
 			
 			
@@ -149,21 +159,7 @@
 			</button>
 		</div>
 		</div>
-		<!--- search bar --->
-		
-			<!--- <div class="header-searchbar">
-				
-				<div id="searchbox"></div>
-				<!--- <cfif local.route eq 'default'>
-					<h2 class="header-title"><span style="font-style:italic;color:#ffeb00">Your source for used semiconductor and scientific equipment</span></h2>
-					<!--- <h2 class="header-title"><span style="font-style:italic;color:#ffeb00">equipped to succeed</span> - start your
-						search
-					</h2> --->
-				</cfif>	 --->
-			</div> --->
-
-			
-			  
+					  
 	  </header>
 	  <cfoutput>
 		#view( 'common/fragment/megamenu')#

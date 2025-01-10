@@ -178,7 +178,6 @@
 										<span x-show="!expanded" aria-hidden="true" class="ml-4">&plus;</span>
 									</button>
 
-								 <div  x-show="expanded"  class="horizontal-divider"></div>
 								<div x-show="expanded" class="form-responder" x-collapse >
 									<div class="px-6 pb-4">
 										<cfoutput>
@@ -214,7 +213,6 @@
 											<span x-show="!expanded" aria-hidden="true" class="ml-4">&plus;</span>
 										</button>
 
-									<div  x-show="expanded"  class="horizontal-divider"></div>
 									<div x-show="expanded" class="form-responder" x-collapse >
 										<div class="px-6 pb-4">
 											<cfoutput>
@@ -235,8 +233,19 @@
 											<div class="notify-badge pill-green" x-show="deal.status == 'Answered' && index==0">New!</div>
 												<div class="deal-head"> 
 												<svg x-show='!deal.transdir' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 64 64" version="1.1">
-												<circle fill="##FFFFFF" cx="32" width="64" height="64" cy="32" r="32"></circle>
-												<text x="50%" y="50%" fill="##d84029" style="color: ##d84029; line-height: 1;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;" alignment-baseline="middle" text-anchor="middle" font-size="30" font-weight="600" dy=".1em" dominant-baseline="middle">SC</text>
+													<circle fill="##FFFFFF" cx="32" width="64" height="64" cy="32" r="32"></circle>
+														<text 
+															x="50%" 
+															y="50%" 
+															fill="var(--color-primary)" 
+															alignment-baseline="middle" 
+															text-anchor="middle" 
+															font-size="30" 
+															font-weight="600" 
+															dy=".1em" 
+															dominant-baseline="middle">
+															SC
+													</text>
 												</svg>
 												<div x-show='deal.transdir' class="flex align-center">
 													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
