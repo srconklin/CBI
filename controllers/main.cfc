@@ -39,7 +39,19 @@ component accessors=true extends="controllers.base.common" {
 		param url.mfrs='';
 		param rc.term='';
 
-		if ( len(url.query) || len(url.mfrs) || arrayContains(application.arValidMenus, urlDecode(urlDecode(rc.term))) ) {
+		// Extract and decode the term from cgi.PATH_INFO
+		var pathInfo = cgi.PATH_INFO;
+    
+		// Remove "/search/" base path
+		if (left(pathInfo, len("/search/")) eq "/search/") {
+			pathInfo = removeChars(pathInfo, 1, len("/search/"));
+		}
+	
+		// Decode the path info
+		rc.path =  urlDecode(urldecode(pathInfo));
+
+	
+		if ( len(url.query) || len(url.mfrs) || arrayContains(application.arValidMenus, rc.path) ) {
 			variables.fw.setView('main.search');
 		} else
 		   renderResult('/');
