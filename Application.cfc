@@ -29,7 +29,7 @@ component extends="framework.one" output="false" accessors=true {
 		// diLocations = "model, controllers",
 		 diConfig = {
 			loadListener : function( di1 ) { di1.load(); },
-		  	exclude: ['/model/base/', ',model/beans/common.cfc']
+		  	exclude: ['/model/base/', 'model/beans/common.cfc']
 		},
 		// reloadApplicationOnEveryRequest = false,
         routes = [
@@ -204,19 +204,15 @@ component extends="framework.one" output="false" accessors=true {
 		 traceSessionScope(rc); 
     }
 
-	public function setupResponse(struct rc) {
-		//var isDev = getEnvironment() === "dev" ? true : false;
-	//	botSessionManager.detectAndManageBotSessions();
+	// public function setupResponse(struct rc) {
 		
-	}
+	// }
 
 	// public string function onMissingView(struct rc = {}) {
-	// 	//return "Error 404 - Page not found.";
 	// 	return view( 'main/notFound' );
 	// }
 
-		
-
+	
 	// Function to trace session scope
 	private function traceSessionScope(rc) {
 		if (!utils.isAjaxRequest() && getEnvironment() === "dev" && this.debug)  {

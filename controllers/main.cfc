@@ -39,6 +39,8 @@ component accessors=true extends="controllers.base.common" {
 		param url.mfrs='';
 		param rc.term='';
 
+
+		writedump(var="#rc#",  abort="true");
 		// Extract and decode the term from cgi.PATH_INFO
 		var pathInfo = cgi.PATH_INFO;
     

@@ -1,2 +1,0 @@
-<cfset pwdmgr = view( 'common/fragment/pwd', {label = 'New Password', store='resetpassword'}) />
-<cfoutput>#view( 'common/fragment/setpwdform', {pwdmgr = pwdmgr, buttonlabel=' Create Password'})# </cfoutput> 
